@@ -79,6 +79,7 @@ alias l='ls -CF'
 alias x='exit'
 alias clr='clear'
 alias tmux='tmux -2 attach'
+alias sudo='sudo '
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
