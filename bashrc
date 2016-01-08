@@ -14,42 +14,28 @@ shopt -s globstar
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-# set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
-fi
+#PS1="\[\033[38;5;220m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\[$(tput sgr0)\]\[\033[38;5;7m\]\H \[$(tput sgr0)\]\[\033[38;5;8m\]- \[$(tput sgr0)\]\[\033[38;5;244m\]\d \t - \[$(tput sgr0)\]\[\033[38;5;220m\]\$? \n\[$(tput sgr0)\]\[\033[38;5;7m\]\w \[$(tput sgr0)\]\[\033[38;5;220m\]\\$ \[$(tput sgr0)\]"
 
-# set a fancy prompt (non-color, unless we know we "want" color)
-case "$TERM" in
-    xterm-color) color_prompt=yes;;
-esac
-
-# uncomment for a colored prompt, if the terminal has the capability; turned
-# off by default to not distract the user: the focus in a terminal window
-# should be on the output of commands, not on the prompt
-force_color_prompt=yes
-
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
-    else
-	color_prompt=yes
-    fi
-fi
-
-if [ "$color_prompt" = yes ]; then
-	if [[ $EUID -ne 0 ]]; then
-		PS1="\[\033[38;5;81m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\[$(tput sgr0)\]\[\033[38;5;7m\]\H \[$(tput sgr0)\]\[\033[38;5;8m\]- \[$(tput sgr0)\]\[\033[38;5;244m\]\d \t - \[$(tput sgr0)\]\[\033[38;5;81m\]\$? \n\[$(tput sgr0)\]\[\033[38;5;7m\]\w \[$(tput sgr0)\]\[\033[38;5;81m\]\\$ \[$(tput sgr0)\]"
-	else
-		PS1="\[\033[38;5;9m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\[$(tput sgr0)\]\[\033[38;5;7m\]\H \[$(tput sgr0)\]\[\033[38;5;8m\]- \[$(tput sgr0)\]\[\033[38;5;244m\]\d \t - \[$(tput sgr0)\]\[\033[38;5;81m\]\$? \n\[$(tput sgr0)\]\[\033[38;5;7m\]\w \[$(tput sgr0)\]\[\033[38;5;81m\]\\$ \[$(tput sgr0)\]"
-	fi
+if [[ $EUID -ne 0 ]]; then
+	PROMPT_PRE="\[\033[38;5;220m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\[$(tput sgr0)\]\[\033[38;5;7m\]\H \[$(tput sgr0)\]\[\033[38;5;8m\]- \[$(tput sgr0)\]\[\033[38;5;244m\]\d \t - \[$(tput sgr0)\]\[\033[38;5;220m\]\$?"
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+	PROMPT_PRE="\[\033[38;5;9m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\[$(tput sgr0)\]\[\033[38;5;7m\]\H \[$(tput sgr0)\]\[\033[38;5;8m\]- \[$(tput sgr0)\]\[\033[38;5;244m\]\d \t - \[$(tput sgr0)\]\[\033[38;5;220m\]\$?"
 fi
-unset color_prompt force_color_prompt
+
+PROMPT_SUF="\n\[$(tput sgr0)\]\[\033[38;5;7m\]\w \[$(tput sgr0)\]\[\033[38;5;220m\]\\$ \[$(tput sgr0)\]"
+
+PS1=$PROMPT_PRE'$(git branch &>/dev/null;\
+if [ $? -eq 0 ]; then \
+	echo "$(echo `git status` | grep "nothing to commit" > /dev/null 2>&1; \
+	if [ "$?" -eq "0" ]; then \
+		echo "\[\033[38;5;28m\]"$(__git_ps1 " (%s)"); \
+	else \
+		echo "\[\033[38;5;124m\]"$(__git_ps1 " (%s)"); \
+	fi) '$PROMPT_SUF'"; \
+else \
+# @2 - Prompt when not in GIT repo
+	echo " '$PROMPT_SUF'"; \
+fi)'
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
@@ -106,3 +92,9 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+# enable git completion
+source ~/.git-completion.bash
+
+# enable git prompt
+source ~/.git-prompt
