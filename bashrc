@@ -48,21 +48,6 @@ esac
 
 alias less='less -R'
 
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-fi
-
-# some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias lla='ll -A'
-alias l='ls -CF'
-
-alias x='exit'
-alias clr='clear'
-alias less='less -R'
-
 alias ls='ls -CF --color=always'
 alias ll='ls -lFa'
 alias lll='ll | less'
@@ -94,6 +79,8 @@ alias histg='history | grep'
 alias x='exit'
 alias clr='clear'
 alias tmx='tmux'
+alias tmux='tmux -2 attach'
+alias sudo='sudo '
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
