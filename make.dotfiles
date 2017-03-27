@@ -8,12 +8,16 @@
 
 dir=~/dotfiles													# dotfiles directory
 olddir=~/.dotfile_backups										# old dotfiles backup directory
-files="bashrc bash_logout git-completion.bash git-prompt gitconfig inputrc nanorc profile tmux.conf"		# list of files/folders to symlink in homedir
+
+# list of files/folders to symlink in homedir
+files="bashrc bash_logout git-completion.bash git-prompt gitconfig inputrc nanorc profile tmux.conf"
 
 ##########
 
 # create dotfiles_old in homedir
 echo -n "Creating $olddir for backup of any existing dotfiles in ~ ..."
+touch $olddir
+rm -r $olddir
 mkdir -p $olddir
 echo "done"
 
@@ -24,8 +28,9 @@ echo "done"
 
 # move any existing dotfiles in homedir to dotfiles_old directory, then create symlinks from the homedir to any files in the ~/dotfiles directory specified in $files
 for file in $files; do
-    echo "Moving any existing dotfiles from ~ to $olddir"
-    mv ~/.$file ~/.dotfile_backups/
+    echo "Moving old dotfiles from ~ to $olddir"
+    cp -RL ~/.$file $olddir/
+    rm -rf ~/.$file
     echo "Creating symlink to $file in home directory."
     ln -s $dir/$file ~/.$file
 done

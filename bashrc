@@ -46,12 +46,7 @@ xterm*|rxvt*)
     ;;
 esac
 
-# enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    alias dir='dir --color=auto'
-    alias vdir='vdir --color=auto'
+alias less='less -R'
 
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
@@ -66,6 +61,41 @@ alias l='ls -CF'
 
 alias x='exit'
 alias clr='clear'
+=======
+alias less='less -R'
+
+alias ls='ls -CF --color=always'
+alias ll='ls -lFa'
+alias lll='ll | less'
+alias lsl='ls | less'
+alias la='ls -CFa'
+alias lal='ls -CFa | less'
+alias dir='dir --color=auto'
+alias vdir='vdir --color=auto'
+
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+
+alias fhere='find . -name '
+alias df='df -Tha --total'
+alias du='du -ach | sort -h'
+alias dul='du | less'
+alias free='free -mt'
+alias ps='ps auxf'
+alias psl='ps | less'
+alias psg='ps aux | grep -v grep | grep -i -e VSZ -e'
+alias mkdir='mkdir -pv'
+alias histg='history | grep'
+alias x='exit'
+alias clr='clear'
+alias tmx='tmux'
+>>>>>>> 97e7266938b0ef7fac6224866577054b98ec5618
 alias tmux='tmux -2 attach'
 alias sudo='sudo '
 
