@@ -111,3 +111,5 @@ source ~/.git-completion.bash
 
 # enable git prompt
 source ~/.git-prompt
+
+export PDSH_RCMD_TYPE=ssh
