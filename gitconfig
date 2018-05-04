@@ -2,6 +2,6 @@
 	email = mcdermottpa@gmail.com
 	name = Peter McDermott
 [credential]
-	helper = cache --timeout=7200
+	helper = cache --timeout=28800
 [push]
 	default = simple
