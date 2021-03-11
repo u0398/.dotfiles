@@ -232,9 +232,6 @@ set softwrap
 # bind kdel backspace all
 
 
-## Nanorc files
-include "/usr/share/nano/nanorc.nanorc"
-
 ## C/C++
 include "/usr/share/nano/c.nanorc"
 
@@ -297,3 +294,13 @@ include "/usr/share/nano/pov.nanorc"
 
 ## XML-type files
 include "/usr/share/nano/xml.nanorc"
+
+## Dockerfiles
+include "~/.nano/Dockerfile.nanorc"
+
+## YAML Files
+include "~/.nano/yaml.nanorc"
+
+## Nanorc files
+include "/usr/share/nano/nanorc.nanorc"
+

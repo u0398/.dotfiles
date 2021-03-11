@@ -1,0 +1,50 @@
+## Syntax highlighting for Dockerfiles
+syntax "Dockerfile" "Dockerfile[^/]*$"
+
+## Keywords
+color red "^(ONBUILD\s+)?(CMD|RUN|SHELL)[[:space:]]"
+color brightyellow "^FROM[[:space:]]"
+color brightyellow "[[:space:]]AS[[:space:]]"
+color yellow "^(ONBUILD\s+)?(MAINTAINER|LABEL)[[:space:]]"
+color brightgreen "^(ONBUILD\s+)?(ARG|ENV)[[:space:]]"
+color brightmagenta "^(ONBUILD\s+)?(ADD|COPY|VOLUME)[[:space:]]"
+color magenta "^(ONBUILD\s+)?(USER|WORKDIR)[[:space:]]"
+color brightred "^(ONBUILD\s+)?(EXPOSE|HEALTHCHECK|STOPSIGNAL|ENTRYPOINT)[[:space:]]"
+
+
+## Brackets & parenthesis
+color brightgreen "(\(|\)|\[|\])"
+
+## Double ampersand
+color brightmagenta "&&"
+
+## Strings, single-quoted
+color brightwhite "'([^']|(\\'))*'" "%[qw]\{[^}]*\}" "%[qw]\([^)]*\)" "%[qw]<[^>]*>" "%[qw]\[[^]]*\]" "%[qw]\$[^$]*\$" "%[qw]\^[^^]*\^" "%[qw]![^!]*!"
+## Strings, double-quoted
+color brightwhite ""([^"]|(\\"))*"" "%[QW]?\{[^}]*\}" "%[QW]?\([^)]*\)" "%[QW]?<[^>]*>" "%[QW]?\[[^]]*\]" "%[QW]?\$[^$]*\$" "%[QW]?\^[^^]*\^" "%[QW]?![^!]*!"
+
+## Common commands.
+color brightblue "[[:space:]]\<(apt|apt-get|awk|bash|cat|cd|ch(grp|mod|own)|cp|cut|dpkg-reconfigure|echo|env|ex|grep|head|ln|make|mkdir|mv|nexit|policy-rc|popd|printf|pushd|rm|rmdir|sed|service|set|sort|ssh-keygen|tail|tar|touch|umask|unset|update-rc.d|useradd)\>"
+
+
+
+## Quote marks
+color brightyellow "('|\")"
+
+## Trailing backslashes & semicolons
+color yellow "[[:space:]]\\$"
+color yellow ";$"
+
+## Pipes
+color yellow "\|"
+
+# All caps
+#color green "\<[A-Z_]{2,}\>"
+
+## Comments
+color cyan "(^|[[:space:]]+)#.*"
+color brightcyan "^[[:space:]]*##.*"
+#color cyan "^\s*#.*"
+
+## Blank space at EOL
+color ,green "[[:space:]]+$"
