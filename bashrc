@@ -15,7 +15,7 @@ shopt -s globstar
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # PS1 settings. using PRE and SUF for git status insertion
-if [[ $EUID -eq 0 ]]; then
+if [[ $EUID -ne 0 ]]; then
   PROMPT_PRE="\[\033[38;5;81m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\[$(tput sgr0)\]\[\033[38;5;7m\]\H \[$(tput sgr0)\]\[\033[38;5;8m\]- \[$(tput sgr0)\]\[\033[38;5;244m\]\d \t - \[$(tput sgr0)\]\[\033[38;5;81m\]\$?"
   PROMPT_SUF="\n\[$(tput sgr0)\]\[\033[38;5;7m\]\w \[$(tput sgr0)\]\[\033[38;5;81m\]\\$ \[$(tput sgr0)\]"
 else
@@ -33,18 +33,9 @@ if [ $? -eq 0 ]; then \
 		echo "\[\033[38;5;124m\]"$(__git_ps1 " (%s)"); \
 	fi) '$PROMPT_SUF'"; \
 else \
-# @2 - Prompt when not in GIT repo
+# prompt when not in repo
 	echo " '$PROMPT_SUF'"; \
 fi)'
-
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
 
 # Aliases
 if [ -f ~/.bash_aliases ]; then
@@ -56,9 +47,7 @@ if [ -f ~/.bash_functions ]; then
     . ~/.bash_functions
 fi
 
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
+# enable programmable completion features
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
     . /usr/share/bash-completion/bash_completion
@@ -68,9 +57,7 @@ if ! shopt -oq posix; then
 fi
 
 # enable git completion
-source ~/.git-completion.bash
+source ~/.git-completion
 
 # enable git prompt
 source ~/.git-prompt
-
-export PDSH_RCMD_TYPE=ssh
