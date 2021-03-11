@@ -22,6 +22,6 @@ if [ -d "$HOME/bin" ] ; then
 fi
 
 # set PATH so it includes awscli bin if it exists
-if [ -d "$HOME/bin" ] ; then
+if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
