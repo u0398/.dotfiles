@@ -59,6 +59,11 @@ docker-clean-ps()
     fi
 }
 
+function dfs
+{
+    df $* | sed -n '1p;/^\//p;'
+}
+
 alias less='less -R'
 
 alias ls='ls -CF --color=always'
@@ -81,8 +86,9 @@ alias .....='cd ../../../..'
 
 alias fhere='find . -name '
 alias df='df -Tha --total'
-alias du='du -ach | sort -h'
-alias dul='du | less'
+alias du='du -ach'
+alias dus='du | sort -h'
+alias dul='dus | less'
 alias free='free -mt'
 alias ps='ps auxf'
 alias psl='ps | less'
