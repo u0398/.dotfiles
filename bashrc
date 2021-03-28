@@ -97,8 +97,6 @@ alias mkdir='mkdir -pv'
 alias histg='history | grep'
 alias x='exit'
 alias clr='clear'
-alias tmx='tmux'
-alias tmux='tmux -2 attach'
 alias sudo='sudo '
 
 alias juju-status='watch -c juju status --color'
