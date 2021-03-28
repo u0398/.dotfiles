@@ -25,3 +25,10 @@ fi
 if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
+
+# if tmux is installed, attach to the main session, or create it
+if [ `command -v tmux` > /dev/null ]; then
+  if [ ! "$TMUX" ]; then
+    tmux -2 attach -t main || tmux -2 new -s main
+  fi
+fi
