@@ -10,7 +10,7 @@ dir=~/dotfiles              # dotfiles directory
 olddir=~/.dotfile_backups   # old dotfiles backup directory
 
 # list of files/folders to symlink in homedir
-files="bashrc bash_logout git-completion git-prompt gitconfig inputrc nano nanorc profile tmux.conf oh-my-zsh zshrc p10k.zsh"
+files="bashrc bash_logout git-completion git-prompt gitconfig inputrc nano nanorc profile tmux.conf"
 
 ##########
 
