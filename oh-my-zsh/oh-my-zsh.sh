@@ -7,6 +7,8 @@ if [[ -z "$ZSH_CACHE_DIR" ]]; then
   ZSH_CACHE_DIR="$ZSH/cache"
 fi
 
+DISABLE_AUTO_UPDATE=true
+
 # Check for updates on initial load...
 if [ "$DISABLE_AUTO_UPDATE" != "true" ]; then
   source $ZSH/tools/check_for_upgrade.sh
