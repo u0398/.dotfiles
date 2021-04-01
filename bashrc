@@ -86,7 +86,7 @@ alias .....='cd ../../../..'
 
 alias fhere='find . -name '
 alias df='df -Tha --total'
-alias du='du -ach'
+alias du='du -ch'
 alias dus='du | sort -h'
 alias dul='dus | less'
 alias free='free -mt'
