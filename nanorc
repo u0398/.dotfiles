@@ -242,7 +242,7 @@ include "/usr/share/nano/css.nanorc"
 include "/usr/share/nano/debian.nanorc"
 
 ## Gentoo files
-include "/usr/share/nano/gentoo.nanorc"
+#include "/usr/share/nano/gentoo.nanorc"
 
 ## HTML
 include "/usr/share/nano/html.nanorc"
@@ -275,7 +275,7 @@ include "/usr/share/nano/perl.nanorc"
 include "/usr/share/nano/python.nanorc"
 
 ## Ruby
-include "/usr/share/nano/ruby.nanorc"
+#include "/usr/share/nano/ruby.nanorc"
 
 ## Java
 include "/usr/share/nano/java.nanorc"
