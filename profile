@@ -10,7 +10,9 @@
 
 # Mount Google Drive
 if [ -d "$HOME/Google Drive" ] ; then
-    google-drive-ocamlfuse ~/Google\ Drive
+    if ! [ 'mount | grep "Google Drive"' ]; then
+        google-drive-ocamlfuse ~/Google\ Drive
+    fi
 fi
 
 # set PATH so it includes user's private bin if it exists
