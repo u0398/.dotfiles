@@ -37,6 +37,16 @@ else \
 	echo " '$PROMPT_SUF'"; \
 fi)'
 
+# disable terminal freeze/unfreeze behavior
+stty -ixon
+
+# bind forward search history to ctrl-e
+bind "\C-t":"forward-search-history"
+
+# bind beginning of line to ctrl-s
+bind "\C-s":"beginning-of-line"
+
+
 docker-clean-images()
 {
     # If there are dangling docker images, remove them

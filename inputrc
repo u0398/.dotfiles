@@ -67,4 +67,7 @@ $endif
 "\e[A": history-search-backward
 "\e[B": history-search-forward
 
+# remapping i-search
+"\C-s": nop
+
 $endif
