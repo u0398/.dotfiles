@@ -12,14 +12,14 @@ shopt -s checkwinsize
 shopt -s globstar
 
 # make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+#[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # PS1 settings. using PRE and SUF for git status insertion
 if [[ $EUID -ne 0 ]]; then
   PROMPT_PRE="\[\033[38;5;10m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\[$(tput sgr0)\]\[\033[38;5;7m\]\H \[$(tput sgr0)\]\[\033[38;5;8m\]- \[$(tput sgr0)\]\[\033[38;5;244m\]\d \t - \[$(tput sgr0)\]\[\033[38;5;10m\]\$?"
   PROMPT_SUF="\n\[$(tput sgr0)\]\[\033[38;5;7m\]\w \[$(tput sgr0)\]\[\033[38;5;10m\]\\$ \[$(tput sgr0)\]"
 else
-  PROMPT_PRE="\[\033[38;5;9m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\[$(tput sgr0)\]\[\033[38;5;7m\]\H \[$(tput sgr0)\]\[\033[38;5;8m\]- \[$(tput sgr0)\]\[\033[38;5;244m\]\d \t - \[$(tput sgr0)\]\[\033[38;5;9m\]\$?"
+  PROMPT_PRE="\[\033[38;5;9m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\[$(tput sgr0)\]\[\033[38;5;7m\]\H \[$(tput sgr0)\]\[\033[38;5;8m\]- \[$(tput sgr0)\]\[\033[38;5;244m\]\d \t - \[$(tput sgr0)\]\[\033[38;5;10m\]\$?"
   PROMPT_SUF="\n\[$(tput sgr0)\]\[\033[38;5;7m\]\w \[$(tput sgr0)\]\[\033[38;5;9m\]# \[$(tput sgr0)\]"
 fi
 
@@ -129,13 +129,14 @@ source ~/.git-completion
 source ~/.git-prompt
 
 # if tmux is installed, attach to the main session, or create it
-if [ `command -v tmux` > /dev/null ]; then
-  if [ ! "$TMUX" ]; then
-    tmux -2 attach -t main || tmux -2 new -s main
-  else
-    source ~/.profile
+if [[ $EUID -ne 0 ]]; then
+  if [ `command -v tmux` > /dev/null ]; then
+    if [ ! "$TMUX" ]; then
+      tmux -2 attach -t main || tmux -2 new -s main
+    else
+      source ~/.profile
+    fi
   fi
 fi
-
 # keep tmux block at the bottom so everything else is loaded first
 
