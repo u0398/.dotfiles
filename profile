@@ -35,18 +35,3 @@ if [ -d "/home/linuxbrew" ] ; then
     PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 fi
 
-# if running bash and not tmux
-if [ -n "$BASH_VERSION" ]; then
-  if [ `command -v tmux` > /dev/null ]; then
-    if [ ! "$TMUX" ]; then
-	    if [ -f "$HOME/.bashrc" ]; then
-	      . "$HOME/.bashrc"
-      fi
-    fi
-  else
-    if [ -f "$HOME/.bashrc" ]; then
-	    . "$HOME/.bashrc"
-    fi
-  fi
-fi
-
