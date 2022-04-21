@@ -137,6 +137,9 @@ if [[ $EUID -ne 0 ]]; then
       source ~/.profile
     fi
   fi
+else
+  source ~/.profile
 fi
+
 # keep tmux block at the bottom so everything else is loaded first
 
