@@ -125,8 +125,8 @@ if ! shopt -oq posix; then
 fi
 
 # enable git completion & prompt
-source ~/.bash_git-completion
-source ~/.bash_git-prompt
+source ~/.config/.bash_git-completion
+source ~/.config/.bash_git-prompt
 
 # if tmux is installed, attach to the main session, or create it
 if [[ $EUID -ne 0 ]]; then
