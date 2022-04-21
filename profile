@@ -1,4 +1,4 @@
-# ~/.profile: executed by the command interpreter for login shells.
+ # ~/.profile: executed by the command interpreter for login shells.
 # This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
 # exists.
 # see /usr/share/doc/bash/examples/startup-files for examples.
@@ -22,11 +22,6 @@ fi
 
 # set PATH so it includes user's .local  bin if it exists
 if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/.local/bin:$PATH"
-fi
-
-# set PATH so it includes awscli bin if it exists
-if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
