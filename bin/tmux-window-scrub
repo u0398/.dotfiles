@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Create a tmux window to monitor btrfs scrub
+tmux rename-window 'btrfs Scrub'
+tmux split-window -v -b -l 30 'htop -d 100'
+tmux split-window -v -l 16 'sudo watch -n 10 btrfs scrub status /storage-attached'
+tmux split-window -h sudo watch -n 10 'btrfs device stats /storage-attached | grep -vE ' 0$''
+tmux select-pane -D
+tmux split-window -v -b -l 32 'sudo dmesg -Hkuw'
+tmux select-pane -D
