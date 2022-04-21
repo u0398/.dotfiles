@@ -6,11 +6,11 @@
 
 ########## Variables
 
-dir=~/dotfiles              # dotfiles directory
+dir=~/.dotfiles              # dotfiles directory
 olddir=~/.dotfile_backups   # old dotfiles backup directory
 
 # list of files/folders to symlink in homedir
-files="bashrc bash_logout bash_git-completion bash_git-prompt gitconfig inputrc nano nanorc profile tmux.conf"
+files="bash_profile bashrc bash_logout bash_git-completion bash_git-prompt gitconfig inputrc nano nanorc profile tmux.conf"
 
 ##########
 
