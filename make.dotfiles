@@ -38,8 +38,8 @@ done
 
 for file in $config_files; do
   echo "Moving old .config/$file from ~ to $olddir/config"
-  [[ -e ~/.config/.$file ]] && cp -RL ~/.config/.$file $olddir/
-  [[ -e ~/.config/.$file ]] && rm -rf ~/.config/.$file
+  [[ -e ~/.config/.$file ]] && cp -RL ~/.config/$file $olddir/
+  [[ -e ~/.config/.$file ]] && rm -rf ~/.config/$file
   echo "Creating symlink to $file in home directory."
-  ln -s $dir/config/$file ~/.config/.$file
+  ln -s $dir/config/$file ~/.config/$file
 done
