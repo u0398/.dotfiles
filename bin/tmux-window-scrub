@@ -1,10 +1,22 @@
-#!/bin/sh
+#!/bin/bash
+
+USAGE() { echo -e "Usage: tmux-window-scrub <dir> \n" 1>&2; exit 1; }
+
+if [ $# -eq 0 ] ;then
+  USAGE
+fi
+
+if ! mount | grep -E 'on '${1%/}' type btrfs' &> /dev/null ; then
+  if [[ ${1} != '/' ]]; then
+    echo -e "Error: '$1' Does not appear to be a mounted btrfs volume.\n"; exit 1
+  fi
+fi
 
 # Create a tmux window to monitor btrfs scrub
 tmux rename-window 'btrfs Scrub'
 tmux split-window -v -b -l 30 'htop -d 100'
-tmux split-window -v -l 16 'sudo watch -n 10 btrfs scrub status /storage-attached'
-tmux split-window -h sudo watch -n 10 'btrfs device stats /storage-attached | grep -vE ' 0$''
+tmux split-window -v -l 16 'sudo watch -n 10 btrfs scrub status '$1
+tmux split-window -h sudo watch -n 10 'btrfs device stats '$1' | grep -vE ' 0$''
 tmux select-pane -D
 tmux split-window -v -b -l 32 'sudo dmesg -Hkuw'
 tmux select-pane -D
