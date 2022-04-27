@@ -3,7 +3,8 @@ case $- in
       *) return;;
 esac
 
-HISTSIZE=1000
+HISTFILE=~/.histfile
+HISTSIZE=3000
 HISTFILESIZE=10000
 HISTCONTROL=ignoreboth
 
