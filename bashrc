@@ -77,7 +77,8 @@ function dfs
 alias less='less -R'
 
 alias ls='ls -CF --color=always'
-alias ll='ls -lFa'
+alias ll='ls -lF'
+alias lla='ll -a'
 alias lll='ll | less'
 alias lsl='ls | less'
 alias la='ls -CFa'
@@ -125,8 +126,8 @@ if ! shopt -oq posix; then
 fi
 
 # enable git completion & prompt
-source ~/.config/bash_git-completion
-source ~/.config/bash_git-prompt
+source ~/.config/git-completion.bash
+source ~/.config/git-prompt.sh
 
 # if tmux is installed, attach to the main session, or create it
 if [[ $EUID -ne 0 ]]; then
