@@ -286,11 +286,15 @@ fpath=(~/.config/zsh/functions $fpath)
 # enable completion system
 autoload -Uz compinit && compinit
 
+## zsh-autosuggestions plugin
 
-## zsh-autosuggestions
+xsource ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=30
 
-source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+## dirhistory plugin
 
+xsource ~/.config/zsh/dirhistory.plugin.zsh
 
 ## Key bindings
 
