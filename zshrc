@@ -40,6 +40,19 @@ bindkey "^[[B" history-beginning-search-forward
 # disable terminal freeze/unfreeze behavior
 stty -ixon
 
+# bind forward search history to ctrl-t
+bindkey "^T" forward-search-history
+
+# bind beginning of line to ctrl-s
+bindkey "^S" beginning-of-line
+
+# fix some other binds
+bindkey "^[f" forward-word
+bindkey "^[b" backward-word
+bindkey "^K" kill-line
+bindkey "^E" end-of-line
+bindkey "^O" accept-line-and-down-history
+
 # variation of our manzsh() function; pick you poison:
 #manzsh()  { /usr/bin/man zshall |  most +/"$1" ; }
 
