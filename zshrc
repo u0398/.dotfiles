@@ -286,6 +286,12 @@ fpath=(~/.config/zsh/functions $fpath)
 # enable completion system
 autoload -Uz compinit && compinit
 
+
+## zsh-autosuggestions
+
+source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+
 ## Key bindings
 
 # use vi mode binds
