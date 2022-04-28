@@ -174,6 +174,48 @@ precmd() {
   fi
 }
 
+
+# ohmyzsh functions
+# ------------------------------------------------------------------------------
+# * Oh My Zsh functions - https://github.com/ohmyzsh/
+
+top20() {
+  fc -l 1 \
+    | awk '{ CMD[$2]++; count++; } END { for (a in CMD) print CMD[a] " " CMD[a]*100/count "% " a }' \
+    | grep -v "./" | sort -nr | head -n 20 | column -c3 -s " " -t | nl
+}
+
+takedir() {
+  mkdir -p $@ && cd ${@:$#}
+}
+
+takeurl() {
+  local data thedir
+  data="$(mktemp)"
+  curl -L "$1" > "$data"
+  tar xf "$data"
+  thedir="$(tar tf "$data" | head -n 1)"
+  rm "$data"
+  cd "$thedir"
+}
+
+takegit() {
+  git clone "$1"
+  cd "$(basename ${1%%.git})"
+}
+
+take() {
+  if [[ $1 =~ ^(https?|ftp).*\.tar\.(gz|bz2|xz)$ ]]; then
+    takeurl "$1"
+  elif [[ $1 =~ ^([A-Za-z0-9]\+@|https?|git|ssh|ftps?|rsync).*\.git/?$ ]]; then
+    takegit "$1"
+  else
+    takedir "$@"
+  fi
+}
+# ------------------------------------------------------------------------------
+
+
 ## Set important settings &options early
 
 xsource /etc/default/locale
@@ -317,6 +359,10 @@ bindkey "^T" forward-search-history
 # bind beginning of line to ctrl-s
 bindkey "^S" beginning-of-line
 
+# autosuggest
+bindkey '^ ' autosuggest-accept
+bindkey '^\' autosuggest-execute
+
 # fix some other binds
 bindkey "^[f" forward-word
 bindkey "^[b" backward-word
@@ -427,6 +473,204 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && (echo terminal; exit 
 #alias -g T='|tail'
 #alias -g V='| vim -'
 
+
+# Systemd aliases
+# ------------------------------------------------------------------------------
+# * Oh My Zsh systemd plugin - https://github.com/ohmyzsh/
+
+user_commands=(
+  cat
+  get-default
+  help
+  is-active
+  is-enabled
+  is-failed
+  is-system-running
+  list-dependencies
+  list-jobs
+  list-sockets
+  list-timers
+  list-unit-files
+  list-units
+  show
+  show-environment
+  status
+)
+
+sudo_commands=(
+  add-requires
+  add-wants
+  cancel
+  daemon-reexec
+  daemon-reload
+  default
+  disable
+  edit
+  emergency
+  enable
+  halt
+  import-environment
+  isolate
+  kexec
+  kill
+  link
+  list-machines
+  load
+  mask
+  preset
+  preset-all
+  reenable
+  reload
+  reload-or-restart
+  reset-failed
+  rescue
+  restart
+  revert
+  set-default
+  set-environment
+  set-property
+  start
+  stop
+  switch-root
+  try-reload-or-restart
+  try-restart
+  unmask
+  unset-environment
+)
+
+power_commands=(
+  hibernate
+  hybrid-sleep
+  poweroff
+  reboot
+  suspend
+)
+
+for c in $user_commands; do
+  alias "sc-$c"="systemctl $c"
+  alias "scu-$c"="systemctl --user $c"
+done
+
+for c in $sudo_commands; do
+  alias "sc-$c"="sudo systemctl $c"
+  alias "scu-$c"="systemctl --user $c"
+done
+
+for c in $power_commands; do
+  alias "sc-$c"="systemctl $c"
+done
+
+unset c user_commands sudo_commands power_commands
+
+# --now commands
+alias sc-enable-now="sc-enable --now"
+alias sc-disable-now="sc-disable --now"
+alias sc-mask-now="sc-mask --now"
+
+alias scu-enable-now="scu-enable --now"
+alias scu-disable-now="scu-disable --now"
+alias scu-mask-now="scu-mask --now"
+# ------------------------------------------------------------------------------
+
+# sudo or sudo -e (replacement for sudoedit) will be inserted before the command
+# ------------------------------------------------------------------------------
+# * Dongweiming <ciici123@gmail.com>
+# * Subhaditya Nath <github.com/subnut>
+# * Marc Cornellà <github.com/mcornella>
+# * Carlo Sala <carlosalag@protonmail.com>
+
+__sudo-replace-buffer() {
+  local old=$1 new=$2 space=${2:+ }
+
+  # if the cursor is positioned in the $old part of the text, make
+  # the substitution and leave the cursor after the $new text
+  if [[ $CURSOR -le ${#old} ]]; then
+    BUFFER="${new}${space}${BUFFER#$old }"
+    CURSOR=${#new}
+  # otherwise just replace $old with $new in the text before the cursor
+  else
+    LBUFFER="${new}${space}${LBUFFER#$old }"
+  fi
+}
+
+sudo-command-line() {
+  # If line is empty, get the last run command from history
+  [[ -z $BUFFER ]] && LBUFFER="$(fc -ln -1)"
+
+  # Save beginning space
+  local WHITESPACE=""
+  if [[ ${LBUFFER:0:1} = " " ]]; then
+    WHITESPACE=" "
+    LBUFFER="${LBUFFER:1}"
+  fi
+
+  {
+    # If $SUDO_EDITOR or $VISUAL are defined, then use that as $EDITOR
+    # Else use the default $EDITOR
+    local EDITOR=${SUDO_EDITOR:-${VISUAL:-$EDITOR}}
+
+    # If $EDITOR is not set, just toggle the sudo prefix on and off
+    if [[ -z "$EDITOR" ]]; then
+      case "$BUFFER" in
+        sudo\ -e\ *) __sudo-replace-buffer "sudo -e" "" ;;
+        sudo\ *) __sudo-replace-buffer "sudo" "" ;;
+        *) LBUFFER="sudo $LBUFFER" ;;
+      esac
+      return
+    fi
+
+    # Check if the typed command is really an alias to $EDITOR
+
+    # Get the first part of the typed command
+    local cmd="${${(Az)BUFFER}[1]}"
+    # Get the first part of the alias of the same name as $cmd, or $cmd if no alias matches
+    local realcmd="${${(Az)aliases[$cmd]}[1]:-$cmd}"
+    # Get the first part of the $EDITOR command ($EDITOR may have arguments after it)
+    local editorcmd="${${(Az)EDITOR}[1]}"
+
+    # Note: ${var:c} makes a $PATH search and expands $var to the full path
+    # The if condition is met when:
+    # - $realcmd is '$EDITOR'
+    # - $realcmd is "cmd" and $EDITOR is "cmd"
+    # - $realcmd is "cmd" and $EDITOR is "cmd --with --arguments"
+    # - $realcmd is "/path/to/cmd" and $EDITOR is "cmd"
+    # - $realcmd is "/path/to/cmd" and $EDITOR is "/path/to/cmd"
+    # or
+    # - $realcmd is "cmd" and $EDITOR is "cmd"
+    # - $realcmd is "cmd" and $EDITOR is "/path/to/cmd"
+    # or
+    # - $realcmd is "cmd" and $EDITOR is /alternative/path/to/cmd that appears in $PATH
+    if [[ "$realcmd" = (\$EDITOR|$editorcmd|${editorcmd:c}) \
+      || "${realcmd:c}" = ($editorcmd|${editorcmd:c}) ]] \
+      || builtin which -a "$realcmd" | command grep -Fx -q "$editorcmd"; then
+      __sudo-replace-buffer "$cmd" "sudo -e"
+      return
+    fi
+
+    # Check for editor commands in the typed command and replace accordingly
+    case "$BUFFER" in
+      $editorcmd\ *) __sudo-replace-buffer "$editorcmd" "sudo -e" ;;
+      \$EDITOR\ *) __sudo-replace-buffer '$EDITOR' "sudo -e" ;;
+      sudo\ -e\ *) __sudo-replace-buffer "sudo -e" "$EDITOR" ;;
+      sudo\ *) __sudo-replace-buffer "sudo" "" ;;
+      *) LBUFFER="sudo $LBUFFER" ;;
+    esac
+  } always {
+    # Preserve beginning space
+    LBUFFER="${WHITESPACE}${LBUFFER}"
+
+    # Redisplay edit buffer (compatibility with zsh-syntax-highlighting)
+    zle redisplay
+  }
+}
+
+zle -N sudo-command-line
+
+# Defined shortcut keys: [Esc] [Esc]
+bindkey -M emacs '\e\e' sudo-command-line
+bindkey -M vicmd '\e\e' sudo-command-line
+bindkey -M viins '\e\e' sudo-command-line
+# ------------------------------------------------------------------------------
 
 ## miscellaneous code ##
 
