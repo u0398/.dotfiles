@@ -1,73 +1,20 @@
+# Use a color terminal
 export TERM='xterm-256color'
+
+# Exit if non-interactive
 case $- in
   *i*) ;;
     *) return;;
 esac
 
-## Settings for umask
+# Settings for umask
 if (( EUID == 0 )); then
     umask 002
 else
     umask 022
 fi
 
-source ~/.config/git-prompt.sh
-
-zstyle ':completion:*:*:git:*' script ~/.config/git-completion.bash
-zstyle ':completion:*' completer _expand _complete _ignored _approximate
-zstyle ':completion:*' max-errors 2 numeric
-zstyle ':completion:*' prompt '1'
-zstyle :compinstall filename '/home/peterm/.zshrc'
-
-# add custom functions to fpath
-fpath=(~/.config/zsh/functions $fpath)
-
-# enable completion system
-autoload -Uz compinit && compinit
-
-# enable parameter expansion, command substitution and arithmetic expansion in prompts
-setopt PROMPT_SUBST
-
-HISTFILE=~/.histfile
-HISTSIZE=3000
-SAVEHIST=10000
-
-# bind up/down arrows to search history
-bindkey -v
-bindkey "^[[A" history-beginning-search-backward
-bindkey "^[[B" history-beginning-search-forward
-
-# disable terminal freeze/unfreeze behavior
-stty -ixon
-
-# bind forward search history to ctrl-t
-bindkey "^T" forward-search-history
-
-# bind beginning of line to ctrl-s
-bindkey "^S" beginning-of-line
-
-# fix some other binds
-bindkey "^[f" forward-word
-bindkey "^[b" backward-word
-bindkey "^K" kill-line
-bindkey "^E" end-of-line
-bindkey "^O" accept-line-and-down-history
-
-# variation of our manzsh() function; pick you poison:
-#manzsh()  { /usr/bin/man zshall |  most +/"$1" ; }
-
-# Switching shell safely and efficiently? http://www.zsh.org/mla/workers/2001/msg02410.html
-#bash() {
-#    NO_SWITCH="yes" command bash "$@"
-#}
-#restart () {
-#    exec $SHELL $SHELL_ARGS "$@"
-#}
-
-# Handy functions for use with the (e::) globbing qualifier (like nt)
-#contains() { grep -q "$*" $REPLY }
-#sameas() { diff -q "$*" $REPLY &>/dev/null }
-#ot () { [[ $REPLY -ot ${~1} ]] }
+## Functions
 
 # List all occurrences of programm in current PATH
 plap() {
@@ -149,6 +96,70 @@ dfs() {
     df $* | sed -n '1p;/^\//p;'
 }
 
+# creates an alias and precedes the command with sudo if $EUID is not zero.
+salias() {
+  emulate -L zsh
+  local only=0 ; local multi=0
+  local key val
+  while getopts ":hao" opt; do
+    case $opt in
+      o) only=1 ;;
+      a) multi=1 ;;
+      h)
+        printf 'usage: salias [-hoa] <alias-expression>\n'
+        printf '  -h      shows this help text.\n'
+        printf '  -a      replace '\'' ; '\'' sequences with '\'' ; sudo '\''.\n'
+        printf '          be careful using this option.\n'
+        printf '  -o      only sets an alias if a preceding sudo would be needed.\n'
+        return 0
+        ;;
+      *) salias -h >&2; return 1 ;;
+    esac
+  done
+  shift "$((OPTIND-1))"
+
+  if (( ${#argv} > 1 )) ; then
+    printf 'Too many arguments %s\n' "${#argv}"
+    return 1
+  fi
+
+  key="${1%%\=*}" ;  val="${1#*\=}"
+  if (( EUID == 0 )) && (( only == 0 )); then
+    alias -- "${key}=${val}"
+  elif (( EUID > 0 )) ; then
+    (( multi > 0 )) && val="${val// ; / ; sudo }"
+    alias -- "${key}=sudo ${val}"
+  fi
+
+  return 0
+}
+
+# Check if we can read given files and source those we can.
+function xsource () {
+  if (( ${#argv} < 1 )) ; then
+    printf 'usage: xsource FILE(s)...\n' >&2
+    return 1
+  fi
+
+  while (( ${#argv} > 0 )) ; do
+    [[ -r "$1" ]] && source "$1"
+    shift
+  done
+  return 0
+}
+
+# Check if we can read a given file and 'cat(1)' it.
+xcat() {
+  emulate -L zsh
+  if (( ${#argv} != 1 )) ; then
+    printf 'usage: xcat FILE\n' >&2
+    return 1
+  fi
+
+  [[ -r $1 ]] && cat $1
+  return 0
+}
+
 # start timer
 preexec() {
   timer=${timer:-$SECONDS}
@@ -163,43 +174,69 @@ precmd() {
   fi
 }
 
-NEWLINE=$'\n'
-PROMPT_PRE='%(!.%F{9}.%F{10})%n%F{15}@%F{7}%m %F{243}- %D{%a %b %d %H:%M:%S} - %(?.%F{10}0.%F{9}%?)%f'
-PROMPT_SUF='${EXECUTETIME}${NEWLINE}%F{7}%0~%f%b %(!.%F{9}.%F{10})%#%F{7} '
+## Set important settings &options early
 
-# insert git status if repo
-PROMPT=$PROMPT_PRE'$(git branch &>/dev/null;\
-if [ $? -eq 0 ]; then \
-  echo "$(echo `git status` | grep "nothing to commit" > /dev/null 2>&1; \
-  if [ "$?" -eq "0" ]; then \
-    echo "%F{28}"$(__git_ps1 " (%s)"); \
-  else \
-    echo "%F{1}"$(__git_ps1 " (%s)"); \
-  fi) '$PROMPT_SUF'"; \
-else \
-  echo " '$PROMPT_SUF'"; \
-fi)'
+xsource /etc/default/locale
 
-## use the vi navigation keys (hjkl) besides cursor keys in menu completion
-#bindkey -M menuselect 'h' vi-backward-char        # left
-#bindkey -M menuselect 'k' vi-up-line-or-history   # up
-#bindkey -M menuselect 'l' vi-forward-char         # right
-#bindkey -M menuselect 'j' vi-down-line-or-history # bottom
+# enable parameter expansion, command substitution and arithmetic expansion in prompts
+setopt PROMPT_SUBST
 
-## set command prediction from history, see 'man 1 zshcontrib'
-#is4 && zrcautoload predict-on && \
-#zle -N predict-on         && \
-#zle -N predict-off        && \
-#bindkey "^X^Z" predict-on && \
-#bindkey "^Z" predict-off
+# append history list to the history file; this is the default but we make sure
+# because it's required for share_history.
+setopt append_history
 
-## define word separators (for stuff like backward-word, forward-word, backward-kill-word,..)
-#WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>' # the default
-#WORDCHARS=.
-#WORDCHARS='*?_[]~=&;!#$%^(){}'
-#WORDCHARS='${WORDCHARS:s@/@}'
+# import new commands from the history file also in other zsh-session
+setopt share_history
 
-#bindkey '\eq' push-line-or-edit
+# save each command's beginning timestamp and the duration to the history file
+setopt extended_history
+
+# remove command lines from the history list when the first character on the
+# line is a space
+setopt histignorespace
+
+# if a command is issued that can't be executed as a normal command, and the
+# command is the name of a directory, perform the cd command to that directory.
+setopt auto_cd
+
+# in order to use #, ~ and ^ for filename generation grep word
+# *~(*.gz|*.bz|*.bz2|*.zip|*.Z) -> searches for word not in compressed files
+# don't forget to quote '^', '~' and '#'!
+setopt extended_glob
+
+# display PID when suspending processes as well
+setopt longlistjobs
+
+# report the status of backgrounds jobs immediately
+setopt notify
+
+# whenever a command completion is attempted, make sure the entire command path
+# is hashed first.
+setopt hash_list_all
+
+# not just at the end
+setopt completeinword
+
+# Don't send SIGHUP to background processes when the shell exits.
+setopt nohup
+
+# make cd push the old directory onto the directory stack.
+setopt auto_pushd
+
+# avoid "beep"ing
+setopt nobeep
+
+# don't push the same dir twice.
+setopt pushd_ignore_dups
+
+# * shouldn't match dotfiles. ever.
+setopt noglobdots
+
+# use zsh style word splitting
+setopt noshwordsplit
+
+# don't error out when unset parameters are used
+setopt unset
 
 # add `|' to output redirections in the history
 setopt histallowclobber
@@ -223,9 +260,99 @@ setopt interactivecomments
 # one, the older command is removed from the list
 setopt histignorealldups
 
+# History file settings
+HISTFILE=~/.histfile
+HIST_STAMPS="yyyy-mm-dd"
+HISTSIZE=3000
+SAVEHIST=10000
+
+## Completion and git prompt setup
+
+xsource ~/.config/git-prompt.sh
+
+zstyle ':completion:*:*:git:*' script ~/.config/git-completion.bash
+zstyle ':completion:*' completer _expand _complete _ignored _approximate
+zstyle ':completion:*' max-errors 2 numeric
+zstyle ':completion:*' prompt '1'
+
 # provides '.' completion
 zstyle ':completion:*' special-dirs true
 
+zstyle :compinstall filename '/home/peterm/.zshrc'
+
+# add custom functions to fpath
+fpath=(~/.config/zsh/functions $fpath)
+
+# enable completion system
+autoload -Uz compinit && compinit
+
+## Key bindings
+
+# use vi mode binds
+bindkey -v
+
+# bind up/down arrows to search history
+autoload -U history-search-end
+zle -N history-beginning-search-backward-end history-search-end
+zle -N history-beginning-search-forward-end history-search-end
+bindkey "^[OA" history-beginning-search-backward-end
+bindkey "^[OB" history-beginning-search-forward-end
+
+# disable terminal freeze/unfreeze behavior
+stty -ixon
+
+# bind forward search history to ctrl-t
+bindkey "^T" forward-search-history
+
+# bind beginning of line to ctrl-s
+bindkey "^S" beginning-of-line
+
+# fix some other binds
+bindkey "^[f" forward-word
+bindkey "^[b" backward-word
+bindkey "^K" kill-line
+bindkey "^E" end-of-line
+bindkey "^O" accept-line-and-down-history
+
+## use the vi navigation keys (hjkl) besides cursor keys in menu completion
+#bindkey -M menuselect 'h' vi-backward-char        # left
+#bindkey -M menuselect 'k' vi-up-line-or-history   # up
+#bindkey -M menuselect 'l' vi-forward-char         # right
+#bindkey -M menuselect 'j' vi-down-line-or-history # bottom
+
+## set command prediction from history, see 'man 1 zshcontrib'
+#is4 && zrcautoload predict-on && \
+#zle -N predict-on         && \
+#zle -N predict-off        && \
+#bindkey "^X^Z" predict-on && \
+#bindkey "^Z" predict-off
+
+## define word separators (for stuff like backward-word, forward-word, backward-kill-word,..)
+#WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>' # the default
+#WORDCHARS=.
+#WORDCHARS='*?_[]~=&;!#$%^(){}'
+#WORDCHARS='${WORDCHARS:s@/@}'
+
+#bindkey '\eq' push-line-or-edit
+
+# Prompt
+
+NEWLINE=$'\n'
+PROMPT_PRE='%(!.%F{9}.%F{10})%n%F{15}@%F{7}%m %F{243}- %D{%a %b %d %H:%M:%S} - %(?.%F{10}0.%F{9}%?)%f'
+PROMPT_SUF='${EXECUTETIME}${NEWLINE}%F{7}%0~%f%b %(!.%F{9}.%F{10})%#%F{7} '
+
+# insert git status if repo
+PROMPT=$PROMPT_PRE'$(git branch &>/dev/null;\
+if [ $? -eq 0 ]; then \
+  echo "$(echo `git status` | grep "nothing to commit" > /dev/null 2>&1; \
+  if [ "$?" -eq "0" ]; then \
+    echo "%F{28}"$(__git_ps1 " (%s)"); \
+  else \
+    echo "%F{1}"$(__git_ps1 " (%s)"); \
+  fi) '$PROMPT_SUF'"; \
+else \
+  echo " '$PROMPT_SUF'"; \
+fi)'
 
 ## aliases ##
 
@@ -235,6 +362,7 @@ alias ls='ls -CF --color=always'
 alias ll='ls -lF'
 alias lla='ll -a'
 alias lll='ll | less'
+alias llal='lla | less'
 alias lsl='ls | less'
 alias la='ls -CFa'
 alias lal='ls -CFa | less'
@@ -265,12 +393,9 @@ alias x='exit'
 alias clr='clear'
 alias sudo='sudo '
 
-#alias juju-status='watch -c juju status --color'
-
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && (echo terminal; exit 0) || (echo error; exit 1))" "$([ $? = 0 ] && echo Task finished || echo Something went wrong!)" "$(history | sed -n "\$s/^\s*[0-9]\+\s*\(.*\)[;&|]\s*alert\$/\1/p")"'
 
 ## global aliases (for those who like them) ##
 
@@ -300,7 +425,6 @@ export MANWIDTH=${MANWIDTH:-80}
 
 # Set a search path for the cd builtin
 cdpath=(.. ~)
-
 
 ## tmux autoload ##
 
