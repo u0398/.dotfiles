@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-email_report="$(printf '%s' ${HOSTNAME} | sed -E 's/\..*//') $(uptime | sed -E 's/.*(up[^,]*),.*/\1/' | sed -E 's/ +/ /') on $(uname -r)"$'\n\n'
-#email_report="Hostname: $(printf '%s' $HOSTNAME) \n"
-#email_report+="Uptime:   $(uptime -p)\n"
-
-$(printf "%s" "$email_report")
