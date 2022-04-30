@@ -30,8 +30,8 @@ while getopts $optstring opt; do
 	esac
 done
 
-# get paths
-paths=( `df -T | grep btrfs | grep -v "/var/lib" | sed -E "s/.*% //" | tr '\n' ' '` )
+# get paths, but only those including '.root'
+paths=( `df -T | grep btrfs | sed '/.root\|blah/!d' | grep -v "/var/lib" | sed -E "s/.*% //" | tr '\n' ' '` )
 longest_path=10
 
 # get lsblk info, make it flat per disk
@@ -103,7 +103,7 @@ do
 	fi
 	# regex: get what's after the space (the number value)
 	rawvalue=$(echo $p | sed -E "s/.* +//")
-	
+
 	if [ "${verbose}" == "0" ]; then
 		device="$(printf "%s" "${lsblk}" | grep "${key}" | awk '{printf $1}' | sed -E "s/\/dev\///")"
 	else
@@ -126,11 +126,11 @@ do
 	# if the key changed, and it wasn't blank, put a newline
 	if [ "${key}" != "${lastkey}" ] && [ "${lastkey}" != "" ]; then
 		echo ""
-	fi 
+	fi
 
 	# if the key changed, put key value, otherwise just value
 	if [ "${key}" != "${lastkey}" ]; then
-		printf "%-${longest_path}s  %-${mapping_length}.${mapping_length}s  %-${longest_device}s  %${valuesize}s" "${path}" "${key}" "${device}" "${value}" 
+		printf "%-${longest_path}s  %-${mapping_length}.${mapping_length}s  %-${longest_device}s  %${valuesize}s" "${path}" "${key}" "${device}" "${value}"
 	else
 		if [ "${verbose}" == "0" ]; then
 			printf "%${valuesize}s" "${value}"

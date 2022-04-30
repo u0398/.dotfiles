@@ -130,8 +130,18 @@ function check_dependencies {
 	return ${retval}
 }
 
+
 function get_block_devices {
-	printf "%s " `lsblk -l -o NAME,TYPE -n | grep disk | grep sd | sed 's/ .*//' | tr '\n' ' '`
+  devs=`lsblk -l -o NAME,TYPE -n | grep disk | grep sd | sed 's/ .*//' | tr '\n' ' '`
+  #printf "%s " `lsblk -l -o NAME,TYPE -n | grep disk | grep sd | sed 's/ .*//' | tr '\n' ' '`
+  for dev in ${devs[@]}
+  do
+    if smartctl /dev/$dev|grep -q 'ATA device successfully opened'; then
+      devs_checked="$devs_checked $dev"
+    fi
+  done
+
+  printf "%s " $devs_checked
 }
 
 function get_headers {
