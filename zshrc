@@ -395,6 +395,8 @@ bindkey "^O" accept-line-and-down-history
 
 NEWLINE=$'\n'
 
+GIT_PS1_SHOWDIRTYSTATE=yes
+
 # remote connections show host
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
 PROMPT_PRE='%(!.%F{9}.%F{10})%n%F{15}@%F{7}%m %F{243}- %D{%a %b %d %H:%M:%S} - %(?.%F{10}0.%F{9}%?)%f'
