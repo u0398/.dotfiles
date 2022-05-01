@@ -394,7 +394,14 @@ bindkey "^O" accept-line-and-down-history
 # Prompt
 
 NEWLINE=$'\n'
+
+# remote connections show host
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
 PROMPT_PRE='%(!.%F{9}.%F{10})%n%F{15}@%F{7}%m %F{243}- %D{%a %b %d %H:%M:%S} - %(?.%F{10}0.%F{9}%?)%f'
+else
+  PROMPT_PRE='%(!.%F{9}.%F{10})%n%F{15} %F{243}- %D{%a %b %d %H:%M:%S} - %(?.%F{10}0.%F{9}%?)%f'
+fi
+
 PROMPT_SUF='${EXECUTETIME}${NEWLINE}%F{7}%0~%f%b %(!.%F{9}.%F{10})%#%F{7} '
 
 # insert git status if repo
@@ -684,12 +691,15 @@ cdpath=(.. ~)
 
 ## tmux autoload ##
 
-# if tmux is installed, attach to the main session, or create it
-if [ `command -v tmux` > /dev/null ]; then
-  if [ ! "$TMUX" ]; then
-    tmux -2 attach -t main || tmux -2 new -s main
-  else
-    source ~/.profile
+# if remote connection
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+  # if tmux is installed, attach to the main session, or create it
+  if [ `command -v tmux` > /dev/null ]; then
+    if [ ! "$TMUX" ]; then
+      tmux -2 attach -t main || tmux -2 new -s main
+    else
+      source ~/.profile
+    fi
   fi
 fi
 
