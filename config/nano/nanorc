@@ -50,7 +50,7 @@ set fill -4
 
 ## Draw a vertical stripe at the given column, to help judge text width.
 ## (This option does not have a default value.)
-# set guidestripe 75
+# set guidestripe 80
 
 ## Remember the used search/replace strings for the next session.
 set historylog
@@ -79,7 +79,7 @@ set locking
 
 ## Suppress the title bar and show the filename plus a cursor-position
 ## percentage in the space of the status bar.
-# set minibar
+set minibar
 
 ## Enable mouse support, if available for your system.  When enabled,
 ## mouse clicks can be used to place the cursor, set the mark (with a
@@ -200,16 +200,16 @@ set tabstospaces
 
 ## Paint the interface elements of nano.  These are examples; there are
 ## no colors by default, except for errorcolor and spotlightcolor.
-# set titlecolor bold,white,blue
+set titlecolor grey
 # set promptcolor lightwhite,grey
 # set statuscolor bold,white,green
 # set errorcolor bold,white,red
 # set spotlightcolor black,lightyellow
 # set selectedcolor lightwhite,magenta
-# set stripecolor ,yellow
+# set stripecolor ,grey
 # set scrollercolor cyan
-# set numbercolor cyan
-# set keycolor cyan
+set numbercolor bold,black
+set keycolor cyan
 # set functioncolor green
 
 ## In root's .nanorc you might want to use:
