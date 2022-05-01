@@ -302,6 +302,9 @@ setopt interactivecomments
 # one, the older command is removed from the list
 setopt histignorealldups
 
+# do not auto remove /'s
+unsetopt AUTO_REMOVE_SLASH
+
 # History file settings
 HISTFILE=~/.histfile
 HIST_STAMPS="yyyy-mm-dd"
