@@ -216,7 +216,7 @@ take() {
 # ------------------------------------------------------------------------------
 
 gco() {
-  message="$@"
+  message="@"
   git commit -m '$message'
 }
 
@@ -470,7 +470,7 @@ alias gad='git add'
 alias gbr='git branch'
 #alias gco (see gco function)
 alias gdf='git diff'
-alias gco='git checkout'
+alias gck='git checkout'
 alias glo='git log --pretty=format:"%h %ad | %s%d [%an]" --graph --date=short --max-count=40'
 
 # Add an "alert" alias for long running commands.  Use like so:
