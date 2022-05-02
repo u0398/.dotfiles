@@ -216,6 +216,12 @@ take() {
 # ------------------------------------------------------------------------------
 
 
+gcom() {
+  message="'$@'"
+  git commit -m $message
+}
+
+
 ## Set important settings &options early
 
 xsource /etc/default/locale
