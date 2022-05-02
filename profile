@@ -24,8 +24,13 @@ if [ -d "$HOME/.local/bin" ] ; then
 fi
 
 # set PATH so it includes homebrew if it exists
-if [ -d "/home/linuxbrew" ] ; then
-    PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+if [ -d "$HOME/.linuxbrew" ] ; then
+    PATH="$HOME/.linuxbrew/bin:$PATH"
+fi
+
+# set PATH so it includes deno if it exists
+if [ -d "$HOME/.deno" ] ; then
+    PATH="$HOME/.deno/bin:$PATH"
 fi
 
 # Mount Google Drive
