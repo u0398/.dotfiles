@@ -1,11 +1,14 @@
 #!/bin/bash
 
+# Usage message
 USAGE() { echo -e "Usage: tmux-window-scrub <dir> \n" 1>&2; exit 1; }
 
+# Output usage message if there are no options
 if [ $# -eq 0 ] ;then
   USAGE
 fi
 
+# Make sure first option is a valid btrfs mount point
 if ! mount | grep -E 'on '${1%/}' type btrfs' &> /dev/null ; then
   if [[ ${1} != '/' ]]; then
     echo -e "Error: '$1' Does not appear to be a mounted btrfs volume.\n"; exit 1
