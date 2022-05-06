@@ -473,6 +473,10 @@ alias gdf='git diff'
 alias gck='git checkout'
 alias glo='git log --pretty=format:"%h %ad | %s%d [%an]" --graph --date=short --max-count=40'
 
+alias v='nvim'
+alias vi='nvim'
+alias vim='nvim'
+
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && (echo terminal; exit 0) || (echo error; exit 1))" "$([ $? = 0 ] && echo Task finished || echo Something went wrong!)" "$(history | sed -n "\$s/^\s*[0-9]\+\s*\(.*\)[;&|]\s*alert\$/\1/p")"'
