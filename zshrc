@@ -474,6 +474,8 @@ alias gbr='git branch'
 alias gdf='git diff'
 alias gck='git checkout'
 alias glo='git log --pretty=format:"%h %ad | %s%d [%an]" --graph --date=short --max-count=40'
+alias gps='git push'
+alias gpl='git pull'
 
 alias v='nvim'
 alias vi='nvim'
