@@ -217,7 +217,7 @@ take() {
 
 gco() {
   message=$@
-  git commit -m \'${message}\'
+  git commit -m '${@}'
 }
 
 lll() {
