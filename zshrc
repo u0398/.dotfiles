@@ -216,10 +216,18 @@ take() {
 # ------------------------------------------------------------------------------
 
 gco() {
-  message="@"
-  git commit -m '$message'
+  message=$@
+  git commit -m \'${message}\'
 }
 
+lll() {
+  message="@"
+  ls -lF '$message' | less
+}
+
+llal() {
+  ls -lFa '@' | less
+}
 
 ## Set important settings &options early
 
@@ -433,8 +441,8 @@ alias less='less -R'
 alias ls='ls -CF --color=always'
 alias ll='ls -lF'
 alias lla='ll -a'
-alias lll='ll | less'
-alias llal='lla | less'
+#alias lll (see lll function)
+#alias llal (see llal function)
 alias lsl='ls | less'
 alias la='ls -CFa'
 alias lal='ls -CFa | less'
