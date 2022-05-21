@@ -217,7 +217,7 @@ take() {
 
 gco() {
   str="$*"
-  git commit -m $str
+  git commit -m "$str"
 }
 
 lll() {
