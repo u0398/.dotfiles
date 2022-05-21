@@ -213,21 +213,34 @@ take() {
     takedir "$@"
   fi
 }
-# test------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 gco() {
   str="$*"
   git commit -m "$str"
 }
 
+lsl() {
+  str="$*"
+  ls --color=always $str | less -R
+}
+
+lal() {
+  str="$*"
+  ls -CFa --color=always | less -R
+}
+
 lll() {
-  message="@"
-  ls -lF '$message' | less
+  str="$*"
+  ls -lF --color=always $str | less -R
 }
 
 llal() {
-  ls -lFa '@' | less
+  str=""$*
+  ls -lFa --color=always $str | less -R
 }
+
+
 
 ## Set important settings &options early
 
@@ -441,11 +454,11 @@ alias less='less -R'
 alias ls='ls -CF --color=always'
 alias ll='ls -lF'
 alias lla='ll -a'
+alias la='ls -CFa'
+#alias lsl (see lsl function)
+#alias lal (see lal function)
 #alias lll (see lll function)
 #alias llal (see llal function)
-alias lsl='ls | less'
-alias la='ls -CFa'
-alias lal='ls -CFa | less'
 alias dir='dir --color=auto'
 alias vdir='vdir --color=auto'
 
