@@ -227,7 +227,7 @@ lsl() {
 
 lal() {
   str="$*"
-  ls -CFa --color=always | less -R
+  ls -CFa --color=always $str | less -R
 }
 
 lll() {
