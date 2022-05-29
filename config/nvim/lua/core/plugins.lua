@@ -48,11 +48,11 @@ return packer.startup(function(use)
     config = function() require'colorizer'.setup() end
   }
 
-  use "sainnhe/sonokai"
+  use({ "sainnhe/sonokai" })
 
-  use ({"sunjon/Shade.nvim", config = get_config("shade") })
+  use({ "sunjon/Shade.nvim", config = get_config("shade") })
 
-  use ({"famiu/bufdelete.nvim"}) -- config = get_config("bufdelete")})
+  use({ "famiu/bufdelete.nvim" }) -- config = get_config("bufdelete")})
 
   use({ -- view line in context :33
     "nacro90/numb.nvim",
@@ -60,7 +60,8 @@ return packer.startup(function(use)
     event = "BufRead",
   })
 
-  use ({"windwp/nvim-autopairs", -- Autopairs, integrates with both cmp and treesitter
+  use({
+    "windwp/nvim-autopairs", -- Autopairs, integrates with both cmp and treesitter
     config = get_config("autopairs"),
     after = 'nvim-cmp',
     -- event = "BufRead",
@@ -75,10 +76,14 @@ return packer.startup(function(use)
     config = get_config("neoscroll"),
   })
 
+  use({ "ryanoasis/vim-devicons" })
+  use({ "kyazdani42/nvim-web-devicons" })
+
   use({"romgrk/barbar.nvim",
     config = get_config("barbar"),
 
   })
+
 
 --  use({"kdheepak/tabline.nvim",
 --    config = get_config("tabline"),
@@ -103,10 +108,6 @@ return packer.startup(function(use)
 --    }
 --  })
 
-  use({
-    "EdenEast/nightfox.nvim",
-    config = get_config("nightfox")
-  })
     --use ({"JoosepAlviste/nvim-ts-context-commentstring"})
 --    use ({"JoosepAlviste/nvim-ts-context-commentstring",
 --        event = "BufReadPost",
@@ -130,27 +131,30 @@ return packer.startup(function(use)
 
   use ({'monkoose/matchparen.nvim', config = get_config("matchparen") })
 
-    -- colorschemes
---    use ({"mvpopuk/inspired-github.vim"})
---    use ({'tanvirtin/monokai.nvim'})
---    use({"EdenEast/nightfox.nvim"})
---    use({"ellisonleao/gruvbox.nvim", requires = { "rktjmp/lush.nvim" } })
---    use "Shatur/neovim-ayu"
---    use 'marko-cerovac/material.nvim'
---    use("shaunsingh/nord.nvim")
---    use({"navarasu/onedark.nvim"})
---    use({"cocopon/iceberg.vim"})
---    use({"folke/tokyonight.nvim"})
---    use({"lunarvim/darkplus.nvim"})
---    use("Mofiqul/dracula.nvim")
---    use({
+  -- colorschemes
+  use({
+    "EdenEast/nightfox.nvim",
+    config = get_config("nightfox")
+  })
+--  use ({"mvpopuk/inspired-github.vim"})
+--  use ({'tanvirtin/monokai.nvim'})
+--  use({"ellisonleao/gruvbox.nvim", requires = { "rktjmp/lush.nvim" } })
+--  use "Shatur/neovim-ayu"
+--  use 'marko-cerovac/material.nvim'
+--  use("shaunsingh/nord.nvim")
+--  use({"navarasu/onedark.nvim"})
+--  use({"cocopon/iceberg.vim"})
+--  use({"folke/tokyonight.nvim"})
+--  use({"lunarvim/darkplus.nvim"})
+--  use("Mofiqul/dracula.nvim")
+--  use({
 --    'rose-pine/neovim',
---        as = 'rose-pine',
---        tag = 'v1.*',
-        -- config = function()
-        --     vim.cmd('colorscheme rose-pine')
-        -- end
---    })
+--     as = 'rose-pine',
+--     tag = 'v1.*',
+--     config = function()
+--       vim.cmd('colorscheme rose-pine')
+--     end
+--  })
 --	use({
 --		"catppuccin/nvim",
 --		as = "catppuccin"
@@ -161,16 +165,15 @@ return packer.startup(function(use)
     -- the Vim window with the open file. wmctrl is already packaged for most
     -- distributions. (autoswap dependency)
 --    use({ "gioele/vim-autoswap" })
---	use ({"DanilaMihailov/beacon.nvim", config = get_setup("beacon") }) -- show cursor on jumps
-    --use ({"kyazdani42/nvim-web-devicons", module = "nvim-web-devicons",})
---    use "kyazdani42/nvim-web-devicons"
---    use ({"kyazdani42/nvim-tree.lua",
-		-- opt = true,
-		-- cmd = { 'NvimTreeToggle' },
---		config = get_setup("nvim-tree")
---	})
---    use ({"akinsho/bufferline.nvim", config = get_setup("bufferline")})
-    -- use {
+	use ({"DanilaMihailov/beacon.nvim", config = get_config("beacon") }) -- show cursor on jumps
+  -- use ({"kyazdani42/nvim-web-devicons", module = "nvim-web-devicons",})
+  use ({"kyazdani42/nvim-tree.lua",
+		opt = true,
+    cmd = { 'NvimTreeToggle' },
+    config = get_config("nvim-tree")
+  })
+--  use ({"akinsho/bufferline.nvim", config = get_config("bufferline")})
+  -- use {
     --     'romgrk/barbar.nvim',
     --     requires = {'kyazdani42/nvim-web-devicons'},
     --     config = get_setup("barbar")
@@ -191,8 +194,8 @@ return packer.startup(function(use)
 --    }) -- This is needed to fix lsp doc highlight
 
 --    use 'tjdevries/nlua.nvim'
---    use({ "nathom/filetype.nvim", config = get_setup("filetype") })
-    --use "folke/which-key.nvim"
+  use({ "nathom/filetype.nvim", config = get_config("filetype") })
+  use "folke/which-key.nvim"
 
     -- cmp plugins
   use ({"hrsh7th/nvim-cmp", config = get_config("cmp") }) -- The completion plugin

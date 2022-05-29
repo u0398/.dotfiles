@@ -281,7 +281,10 @@ map("c", "<C-e>", "<end>")
 --map("v", ".", ":norm .<cr>")
 
 -- close buffer without loosing the opened window
---map("n", "<C-c>", ":new|bd #<CR>", { silent = true })
+map("n", "<C-c>", ":new|bd #<CR>", { silent = true })
+
+-- close buffer
+map("n", "<C-x>", ":BufferClose<CR>", { silent = true })
 
 --map('n', '<leader>d', '<cmd>lua require("core.utils").squeeze_blank_lines()<cr>')
 
@@ -456,6 +459,7 @@ map("n", "<A-9>", ":BufferLast<CR>")
 -- Close buffer
 map("n", "<A-c>", ":BufferPin<CR>")
 
+map("n", "<C-n>", ":NvimTreeToggle<CR>")
 -- Wipeout buffer
 -- :BufferWipeout<CR>
 -- Close commands
