@@ -8,12 +8,6 @@ if not status_ok then
 	return
 end
 
--- empty setup using defaults: add your own options
-require'nvim-tree'.setup {
-}
-
--- OR
-
 -- setup with all defaults
 -- each of these are documented in `:help nvim-tree.OPTION_NAME`
 require'nvim-tree'.setup { -- BEGIN_DEFAULT_OPTS
@@ -29,7 +23,7 @@ require'nvim-tree'.setup { -- BEGIN_DEFAULT_OPTS
   sort_by = "name",
   update_cwd = false,
   view = {
-    width = 30,
+    width = 40,
     height = 30,
     hide_root_folder = false,
     side = "left",
