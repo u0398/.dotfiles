@@ -1,4 +1,4 @@
--- aliases
+
 local opt  = vim.opt -- global
 local g  = vim.g     -- global for let options
 local wo = vim.wo    -- window local
@@ -106,6 +106,15 @@ vim.cmd('command! ReloadConfig lua require("utils").ReloadConfig()')
 
 --vim.cmd([[highlight RedundantSpaces ctermbg=red guibg=red ]])
 --vim.cmd([[match RedundantSpaces /\s\+$/]])
+
+vim.api.nvim_create_autocmd("BufEnter", {
+  nested = true,
+  callback = function()
+    if #vim.api.nvim_list_wins() == 1 and vim.api.nvim_buf_get_name(0):match("NvimTree_") ~= nil then
+      vim.cmd "quit"
+    end
+  end
+})
 
 local options = {
 --    ssop = vim.opt.ssop - { "blank", "help", "buffers" } + { "terminal" },
