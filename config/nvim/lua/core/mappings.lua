@@ -100,7 +100,7 @@ map('n', '<capslock>', 'ns')
 -- Notice: There are other mappings in the which-key file settings!
 --         but they will only work after some delay
 --         you can also call "vertical and float" terminals
---map("n", "<leader>t", "<cmd>new term://zsh<cr>")
+map("n", "<leader>t", "<cmd>new term://zsh<cr>")
 
 -- copy to the primary selection on mouse release
 --map("v", "<LeftRelease>", '"*y')
