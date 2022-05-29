@@ -15,16 +15,16 @@ vim.g.mapleader = ","
 
 -- Normal --
 -- Better window navigation
--- map("n", "<C-h>", "<C-w>h")
--- map("n", "<C-j>", "<C-w>j")
--- map("n", "<C-k>", "<C-w>k")
--- map("n", "<C-l>", "<C-w>l")
+map("n", "<C-h>", "<C-w>h")
+map("n", "<C-j>", "<C-w>j")
+map("n", "<C-k>", "<C-w>k")
+map("n", "<C-l>", "<C-w>l")
 
 -- Resize with arrows
---map("n", "<C-Up>", ":resize -2<CR>", {silent = true})
---map("n", "<C-Down>", ":resize +2<CR>", {silent = true})
--- map("n", "<C-Left>", ":vertical resize -2<CR>")
--- map("n", "<C-Right>", ":vertical resize +2<CR>")
+map("n", "<A-k>", ":resize -2<CR>", {silent = true})
+map("n", "<A-j>", ":resize +2<CR>", {silent = true})
+map("n", "<A-h>", ":vertical resize -2<CR>")
+map("n", "<A-l>", ":vertical resize +2<CR>")
 
 -- 
 map('n', '<capslock>', 'ns')
@@ -121,7 +121,7 @@ map("n", "<leader>t", "<cmd>new term://zsh<cr>")
 --map("i", "<F4>", "<c-o>:set invpaste paste?<cr>")
 
 -- Update Plugins
---map("n", "<Leader>u", ":PackerSync<CR>")
+map("n", "<Leader>u", ":PackerSync<CR>")
 
 -- Open nvimrc file
 --map("n", "<Leader>v", "<cmd>drop $MYVIMRC<CR>")
@@ -395,14 +395,12 @@ map("n", "<A-Down>", "<C-W><C-J>", { silent = true })
 map("n", "<A-Up>", "<C-W><C-K>", { silent = true })
 map("n", "<A-Right>", "<C-W><C-L>", { silent = true })
 map("n", "<A-Left>", "<C-W><C-H>", { silent = true })
-map("n", "<A-j>", "<C-W><C-J>", { silent = true })
-map("n", "<A-k>", "<C-W><C-K>", { silent = true })
-map("n", "<A-l>", "<C-W><C-L>", { silent = true })
-map("n", "<A-h>", "<C-W><C-H>", { silent = true })
+--map("n", "<A-j>", "<C-W><C-J>", { silent = true })
+--map("n", "<A-k>", "<C-W><C-K>", { silent = true })
+--map("n", "<A-l>", "<C-W><C-L>", { silent = true })
+--map("n", "<A-h>", "<C-W><C-H>", { silent = true })
 map("n", "<A-[>;", "<C-W>-", { silent = true })
 map("n", "<A-]>;", "<C-W>+", { silent = true })
---map("n", "<A-]>;", "<C-W>+", { silent = true })
---map("n", "<A-]>;", "<C-W>+", { silent = true })
 --map("n", "<Leader>[", "<C-W>_", { silent = true })
 --map("n", "<Leader>[", "<C-W>_", { silent = true })
 --map("n", "<Leader>]", "<C-W>|", { silent = true })
