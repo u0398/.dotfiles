@@ -85,29 +85,6 @@ return packer.startup(function(use)
   })
 
 
---  use({"kdheepak/tabline.nvim",
---    config = get_config("tabline"),
---  })
---    require'tabline'.setup {
---      -- Defaults configuration options
---      enable = true,
---      options = {
---        -- If lualine is installed tabline will use separators configured in lualine by default.
---        -- These options can be used to override those settings.
---        --section_separators = {'', ''},
---        --component_separators = {'', ''},
---        max_bufferline_percent = 66, -- set to nil by default, and it uses vim.o.columns * 2/3
---        show_tabs_always = true, -- this shows tabs only when there are more than one tab or if the first tab is named
---        show_devicons = false, -- this shows devicons in buffer section
---        show_bufnr = false, -- this appends [bufnr] to buffer section,
---        show_filename_only = false, -- shows base filename only instead of relative path in filename
---        modified_icon = "+ ", -- change the default modified icon
---        modified_italic = false, -- set to true by default; this determines whether the filename turns italic if modified
---        show_tabs_only = false -- this shows only tabs instead of tabs + buffers
---      }
---    }
---  })
-
     --use ({"JoosepAlviste/nvim-ts-context-commentstring"})
 --    use ({"JoosepAlviste/nvim-ts-context-commentstring",
 --        event = "BufReadPost",
@@ -172,14 +149,13 @@ return packer.startup(function(use)
     cmd = { 'NvimTreeToggle' },
     config = get_config("nvim-tree")
   })
---  use ({"akinsho/bufferline.nvim", config = get_config("bufferline")})
-  -- use {
     --     'romgrk/barbar.nvim',
     --     requires = {'kyazdani42/nvim-web-devicons'},
     --     config = get_setup("barbar")
     -- }
---    use ({"nvim-lualine/lualine.nvim", config = get_setup("lualine")})
-    -- use ({"akinsho/toggleterm.nvim", config = get_setup("toggleterm")})
+  use ({"nvim-lualine/lualine.nvim", config = get_config("lualine")})
+  use ({"akinsho/toggleterm.nvim", config = get_config("toggleterm")})
+  
     -- use "ahmedkhalf/project.nvim"
 --    use ({"lewis6991/impatient.nvim", config = get_setup("impatient")})
 --    use ({"lukas-reineke/indent-blankline.nvim",
