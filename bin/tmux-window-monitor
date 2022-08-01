@@ -2,6 +2,6 @@
 
 # Create a tmux window to monitor system
 tmux rename-window 'monitor'
-tmux split-window -v -b -l 50 'bashtop'
+tmux split-window -v -b -l 50 'btop'
 tmux select-pane -D
 sudo dmesg -Hkuw
