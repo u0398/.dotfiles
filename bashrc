@@ -130,6 +130,10 @@ fi
 source ~/.config/git-completion.bash
 source ~/.config/git-prompt.sh
 
+# SDKMAN variable and init script 
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
 # if tmux is installed, attach to the main session, or create it
 if [[ $EUID -ne 0 ]]; then
   if [ `command -v tmux` > /dev/null ]; then
@@ -144,4 +148,3 @@ else
 fi
 
 # keep tmux block at the bottom so everything else is loaded first
-
