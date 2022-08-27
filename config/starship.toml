@@ -1,0 +1,125 @@
+add_newline = false
+
+format = """
+$username\
+$hostname\
+$localip\
+$shlvl\
+$singularity\
+$kubernetes\
+$vcsh\
+$git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
+$git_status\
+$hg_branch\
+$docker_context\
+$package\
+$c\
+$cmake\
+$cobol\
+$daml\
+$dart\
+$deno\
+$dotnet\
+$elixir\
+$elm\
+$erlang\
+$golang\
+$haskell\
+$helm\
+$java\
+$julia\
+$kotlin\
+$lua\
+$nim\
+$nodejs\
+$ocaml\
+$perl\
+$php\
+$pulumi\
+$purescript\
+$python\
+$raku\
+$rlang\
+$red\
+$ruby\
+$rust\
+$scala\
+$swift\
+$terraform\
+$vlang\
+$vagrant\
+$zig\
+$buf\
+$nix_shell\
+$conda\
+$spack\
+$memory_usage\
+$aws\
+$gcloud\
+$openstack\
+$azure\
+$env_var\
+$crystal\
+$custom\
+$sudo\
+$time\
+$status\
+$cmd_duration\
+$line_break\
+$directory\
+$jobs\
+$battery\
+$container\
+$shell\
+$character"""
+
+[character]
+success_symbol = "[❯](bold fg:4)"
+error_symbol = "[❯](bold red)"
+vicmd_symbol = "[❯](bold green)"
+vimcmd_replace_one_symbol = "[❮](bold purple)"
+vimcmd_replace_symbol = "[❮](bold purple)"
+vimcmd_visual_symbol = "[❮](bold yellow)"
+
+[cmd_duration]
+min_time = 0
+format = "[$duration]($style)"
+style = "fg:239"
+
+[directory]
+style = "fg:7"
+read_only =" 🔒"
+
+[hostname]
+ssh_only = false
+format = "@[$hostname]($style) "
+style = "fg:246"
+
+[package]
+disabled = false
+
+[status]
+success_symbol = "[$status](bold fg:green)"
+not_executable_symbol = "[$status](bold fg:red)"
+not_found_symbol = "[$status](bold fg:red)"
+sigint_symbol = "[$status](bold fg:red)"
+signal_symbol = "[$status](bold fg:red)"
+format = '[$symbol]($style) '
+recognize_signal_code = false
+map_symbol = true
+disabled = false
+
+[time]
+disabled = false
+format = "[$time]($style) "
+style = "fg:242"
+time_format = "%a %b %d %H:%M:%S"
+
+[username]
+show_always = true
+format = "[$user]($style)"
+style_root = "bold fg:4"
+style_user = "bold fg:4"
