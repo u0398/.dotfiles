@@ -1,5 +1,7 @@
-  # Use a color terminal
-  export TERM='xterm-256color'
+# Use a color terminal
+export TERM='xterm-256color'
+
+export EDITOR='/bin/nvim'
 
 # Exit if non-interactive
 case $- in
