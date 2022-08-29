@@ -498,8 +498,8 @@ alias glo='git log --pretty=format:"%h %ad | %s%d [%an]" --graph --date=short --
 alias gps='git push'
 alias gpl='git pull'
 
-alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-
+alias dotbare='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias dotlazy='/usr/local/bin/lazygit -w ~ -g ~/.dotfiles'
 alias v='nvim'
 alias vi='nvim'
 alias vim='nvim'
