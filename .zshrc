@@ -1,5 +1,5 @@
-# Use a color terminal
-export TERM='xterm-256color'
+  # Use a color terminal
+  export TERM='xterm-256color'
 
 # Exit if non-interactive
 case $- in
@@ -357,6 +357,12 @@ fpath=(~/.config/zsh/functions $fpath)
 # enable completion system
 autoload -Uz compinit && compinit
 
+## dotbare plugin
+
+export DOTBARE_DIR="$HOME/.dotfiles"
+export DOTBARE_TREE="$HOME"
+xsource ~/.dotbare/dotbare.plugin.zsh
+
 ## zsh-autosuggestions plugin
 
 xsource ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -498,8 +504,8 @@ alias glo='git log --pretty=format:"%h %ad | %s%d [%an]" --graph --date=short --
 alias gps='git push'
 alias gpl='git pull'
 
-alias dotbare='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-alias dotlazy='/usr/local/bin/lazygit -w ~ -g ~/.dotfiles'
+alias dotgit='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias dotlazy='/usr/local/bin/lazygit -w $HOME -g $HOME/.dotfiles'
 alias v='nvim'
 alias vi='nvim'
 alias vim='nvim'
