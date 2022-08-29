@@ -506,6 +506,7 @@ alias gpl='git pull'
 
 alias dotgit='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias dotlazy='/usr/local/bin/lazygit -w $HOME -g $HOME/.dotfiles'
+
 alias v='nvim'
 alias vi='nvim'
 alias vim='nvim'
