@@ -431,7 +431,7 @@ NEWLINE=$'\n'
 
 GIT_PS1_SHOWDIRTYSTATE=yes
 
-PROMPT_COLOR="%F{10}"
+PROMPT_COLOR="%F{203}"
 
 # remote connections show host
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
