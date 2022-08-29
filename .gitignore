@@ -3,3 +3,8 @@
 .dotfiles
 .local
 .ssh
+.cache
+.histfile
+.zcompdump
+.lesshst
+.landscape
