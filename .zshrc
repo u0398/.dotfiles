@@ -752,11 +752,11 @@ if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
   if [ `command -v tmux` > /dev/null ]; then
     if [ ! "$TMUX" ]; then
       tmux -2 attach -t main || tmux -2 new -s main
-    else
-      source ~/.profile
     fi
   fi
 fi
+
+source ~/.profile
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 #export SDKMAN_DIR="$HOME/.sdkman"
