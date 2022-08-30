@@ -139,12 +139,10 @@ if [[ $EUID -ne 0 ]]; then
   if [ `command -v tmux` > /dev/null ]; then
     if [ ! "$TMUX" ]; then
       tmux -2 attach -t main || tmux -2 new -s main
-    else
-      source ~/.profile
     fi
   fi
-else
-  source ~/.profile
 fi
+
+source ~/.config/profile
 
 # keep tmux block at the bottom so everything else is loaded first
