@@ -1,6 +1,8 @@
 -- File: /home/sergio/.config/nvim/lua/user/barbar.lua
 -- Last Change: Fri, 22 Apr 2022 19:25
 
+BufferCurrent = { bg_current ='#000000' }
+
 -- Set barbar's options
 vim.g.bufferline = {
     -- Enable/disable animations
@@ -33,11 +35,11 @@ vim.g.bufferline = {
     -- highlight group. By default, the Buffer*Icon group is linked to the
     -- Buffer* group (see Highlighting below). Otherwise, it will take its
     -- default value as defined by devicons.
-    icon_custom_colors = false,
+    icon_custom_colors = true,
 
     -- Configure icons on the bufferline.
-    icon_separator_active = '▎',
-    icon_separator_inactive = '▎',
+    icon_separator_active = '▍',
+    icon_separator_inactive = '▍',
     icon_close_tab = 'x',
     icon_close_tab_modified = '●',
     icon_pinned = '車',

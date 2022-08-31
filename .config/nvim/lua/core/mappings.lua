@@ -439,8 +439,8 @@ map("n", "<S-Tab>", ":bprevious<CR>", { silent = true})
 --	{ silent = true, noremap = true } )
 
 -- -- Move to previous/next (tabline)
-map("n", "<A-,>", ":BufferNext<CR>")
-map("n", "<A-.>", ":BufferPrevious<CR>")
+map("n", "<A-.>", ":BufferNext<CR>")
+map("n", "<A-,>", ":BufferPrevious<CR>")
 
 -- -- Re-order to previous/next
 map("n", "<A-<>", ":BufferMovePrevious<CR>")

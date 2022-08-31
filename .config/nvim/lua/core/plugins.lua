@@ -113,6 +113,7 @@ return packer.startup(function(use)
     "EdenEast/nightfox.nvim",
     config = get_config("nightfox")
   })
+--	use ({"tanvirtin/monokai.nvim", config = get_config("monokai") }) -- show cursor on jumps
 --  use ({"mvpopuk/inspired-github.vim"})
 --  use ({'tanvirtin/monokai.nvim'})
 --  use({"ellisonleao/gruvbox.nvim", requires = { "rktjmp/lush.nvim" } })
