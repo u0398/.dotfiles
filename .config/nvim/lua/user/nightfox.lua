@@ -1,5 +1,5 @@
 local options = {
-  transparent = true,
+  transparent = false,
   dim_inactive = true,
   barbar = true,
   styles = {
@@ -9,7 +9,16 @@ local options = {
   }
 }
 
-local palettes = {}
+--local palettes = {
+--  all = {
+--    black = { base = "#000000", bright = "#000000", dim = "#000000" },
+--    bg0 = "#000000",
+--    bg1 = "#000000",
+--    bg2 = "#000000",
+--    bg3 = "#000000",
+--    bg4 = "#000000",
+--  },
+--}
 
 local specs = {}
 
@@ -32,7 +41,7 @@ local groups = {
     BufferInactiveTarget = { bg = "#444444", fg = "#bbbbbb" },
     BufferTabpage = { bg = "#1c1c1c", fg = "#ffffff" },
     BufferTabpageFill = { bg = "#1c1c1c", fg = "#1c1c1c" },
-    Normal = { bg = "#111111" }
+    Normal = { bg = "#000000" },
   }
 }
 
