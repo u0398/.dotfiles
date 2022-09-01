@@ -13,103 +13,47 @@ vim.g.mapleader = ","
 --   term_mode = "t",
 --   command_mode = "c",
 
--- Normal --
--- Better window navigation
-map("n", "<C-h>", "<C-w>h")
-map("n", "<C-j>", "<C-w>j")
-map("n", "<C-k>", "<C-w>k")
-map("n", "<C-l>", "<C-w>l")
 
--- Resize with arrows
-map("n", "<A-k>", ":resize -2<CR>", {silent = true})
-map("n", "<A-j>", ":resize +2<CR>", {silent = true})
-map("n", "<A-h>", ":vertical resize -2<CR>")
-map("n", "<A-l>", ":vertical resize +2<CR>")
+-- Normal Block ----------------------------------------------------------------
 
--- 
-map('n', '<capslock>', 'ns')
+-- Better split navigation
+map("n", "<C-h>", "<C-w>h", { silent = true })
+map("n", "<C-j>", "<C-w>j", { silent = true })
+map("n", "<C-k>", "<C-w>k", { silent = true })
+map("n", "<C-l>", "<C-w>l", { silent = true })
 
+-- Better split movement
+map("n", "<A-h>", "<C-W><C-H>", { silent = true })
+map("n", "<A-j>", "<C-W><C-J>", { silent = true })
+map("n", "<A-k>", "<C-W><C-K>", { silent = true })
+map("n", "<A-l>", "<C-W><C-L>", { silent = true })
+
+-- Better split resizing
+map("n", "<C-A-h>", ":vertical resize -2<CR>")
+map("n", "<C-A-j>", ":resize +2<CR>", {silent = true})
+map("n", "<C-A-k>", ":resize -2<CR>", {silent = true})
+map("n", "<C-A-l>", ":vertical resize +2<CR>")
+
+-- Expand current split horizontally
+map("n", "<Leader>[", "<C-W>_", { silent = true })
+
+-- Expand current split vertically
+map("n", "<Leader>]", "<C-W>|", { silent = true })
+
+-- Balance splits
+map("n", "<Leader>=", "<C-W>=", { silent = true })
 
 -- Move text up and down
---map("n", "<A-j>", "<Esc>:m .+1<CR>==gi")
---map("n", "<A-k>", "<Esc>:m .-2<CR>==gi")
--- Move text up and down
---map("v", "<A-j>", ":m .+1<CR>==")
---map("v", "<A-k>", ":m .-2<CR>==")
--- keymap("v", "p", '"_dP')
+map("n", "<A-->", ":m .+1<CR>==")
+map("n", "<A-=>", ":m .-2<CR>==")
 
--- Visual --
--- Stay in indent mode
---map("v", "<", "<gv")
---map("v", ">", ">gv")
+-- Jump to the last changed spot
+map("n", "gl", "`.")
 
--- Visual Block --
--- Move text up and down
---map("x", "J", ":move '>+1<CR>gv-gv")
---map("x", "K", ":move '<-2<CR>gv-gv")
---map("x", "<A-j>", ":move '>+1<CR>gv-gv")
---map("x", "<A-k>", ":move '<-2<CR>gv-gv")
-
--- Terminal --
--- Better terminal navigation
--- keymap("t", "<C-h>", "<C-\\><C-N><C-w>h", term_opts)
--- keymap("t", "<C-j>", "<C-\\><C-N><C-w>j", term_opts)
--- keymap("t", "<C-k>", "<C-\\><C-N><C-w>k", term_opts)
--- keymap("t", "<C-l>", "<C-\\><C-N><C-w>l", term_opts)
-
----- line text-objects (inner and whole line text-objects)
----- I am trying now to create some "inner next object", "around last object" and
----- these mappings conflict with the mappings bellow, so, I am disabling those for a while
---map("x", "al", ":<C-u>norm! 0v$<cr>")
---map("x", "il", ":<C-u>norm! _vg_<cr>")
---map("o", "al", ":norm! val<cr>")
---map("o", "il", ":norm! vil<cr>")
-
--- other interesting text objects
--- reference: https://www.reddit.com/r/vim/comments/adsqnx/comment/edjw792
--- TODO: detect if we are over the first char and jump to the right
---local chars = { "_", "-", ".", ":", ",", ";", "<bar>", "/", "<bslash>", "*", "+", "%", "#", "`" }
---for k, v in ipairs(chars) do
---    map("x", "i" .. v, ":<C-u>norm! T" .. v .. "vt" .. v .. "<CR>")
---    map("x", "a" .. v, ":<C-u>norm! F" .. v .. "vf" .. v .. "<CR>")
---    map("o", "a" .. v, ":normal! va" .. v .. "<CR>")
---    map("o", "i" .. v, ":normal! vi" .. v .. "<CR>")
---end
-
--- charactere under the cursor
---local char = vim.fn.strcharpart(vim.fn.strpart(vim.fn.getline("."), vim.fn.col(".") - 1), 0, 1)
---print(char)
-
--- for k, v in ipairs(chars) do
---     map("o", "an" .. v, ":norm! f" .. v .. "vf" .. v .. "<CR>")
---     map("o", "in" .. v, ":norm! f" .. v .. "lvt" .. v .. "<CR>")
---     map("o", "al" .. v, ":norm! F" .. v .. "vF" .. v .. "<CR>")
---     map("o", "il" .. v, ":norm! F" .. v .. "hvT" .. v .. "<CR>")
---     map("x", "an" .. v, ":<c-u>norm! f" .. v .. "vf" .. v .. "<CR>")
---     map("x", "in" .. v, ":<c-u>norm! f" .. v .. "lvt" .. v .. "<CR>")
---     map("x", "al" .. v, ":<c-u>norm! F" .. v .. "vF" .. v .. "<CR>")
---     map("x", "il" .. v, ":<c-u>norm! F" .. v .. "hvT" .. v .. "<CR>")
--- end
-
---map("v", "<Leader>y", '"+y')
-
--- glow (markdow preview)
---map('n', '<C-M-g', '<cmd>Glow<CR>')
-
--- terminal mappings
--- Notice: There are other mappings in the which-key file settings!
---         but they will only work after some delay
---         you can also call "vertical and float" terminals
-map("n", "<leader>t", "<cmd>new term://zsh<cr>")
-
--- copy to the primary selection on mouse release
---map("v", "<LeftRelease>", '"*y')
-
--- jump to the last changed spot
---map("n", "gl", "`.")
+map("n", "<space>", ":")
 
 -- Nvim Tree
--- map("n", "<leader>e", ":PackerLoad nvim-tree.lua | NvimTreeToggle<CR>", { silent = true })
+--map("n", "<leader>e", ":PackerLoad nvim-tree.lua | NvimTreeToggle<CR>", { silent = true })
 --map("n", "<leader>e", ":PackerLoad nvim-tree.lua<cr>:NvimTreeToggle<CR>", { silent = true })
 --map("n", "<leader>e", ":NvimTreeToggle<CR>", { silent = true })
 --map("n", "<F11>", ":PackerLoad nvim-tree.lua<cr>:NvimTreeFindFile<CR>", { silent = true })
@@ -117,11 +61,40 @@ map("n", "<leader>t", "<cmd>new term://zsh<cr>")
 -- two commands at once to load plugin and then use it!
 -- map("n", "<F4>", ":PackerLoad undotree<cr>:UndotreeToggle<cr>", { silent = true })
 
---map("n", "<F4>", ":set invpaste paste?<cr>")
---map("i", "<F4>", "<c-o>:set invpaste paste?<cr>")
+-- terminal mappings
+-- Notice: There are other mappings in the which-key file settings!
+--         but they will only work after some delay
+--         you can also call "vertical and float" terminals
+map("n", "<leader>t", "<cmd>new term://zsh<CR>")
 
 -- Update Plugins
 map("n", "<Leader>u", ":PackerSync<CR>")
+
+-- map("n", "<F3>", '<cmd>lua require("harpoon.mark").add_file(vim.fn.expand("%:p"))<cr>')
+-- map("n", "<S-F3>", '<cmd>lua require("harpoon.ui").toggle_quick_menu()<cr>')
+
+-- https://stackoverflow.com/a/37897322
+-- https://neovim.discourse.group/t/how-to-append-mappings-in-lua/2118
+-- use maparg
+-- https://vi.stackexchange.com/a/36950/7339
+-- nnoremap n nzz:call FlashCursorLine()<CR>Nn
+map('n', 'n', 'nzz:lua require("core.utils").flash_cursorline()<CR>Nn')
+map('n', 'N', 'Nzz:lua require("core.utils").flash_cursorline()<CR>nN')
+--map('n', '*', '*:lua require("core.utils").flash_cursorline()<CR><CR>')
+--map('n', '#', '#:lua require("core.utils").flash_cursorline()<CR><CR>')
+
+--map("n", "J", "mzJ`z")
+--map("n", "<C-o>", '<C-o>zv:lua require("core.utils").flash_cursorline()<CR>')
+--map("n", "<C-i>", '<C-i>zv:lua require("core.utils").flash_cursorline()<CR>')
+-- map("n", "<c-o>", '<c-o>zv:Beacon<cr>', { silent = true })
+-- map("n", "<c-i>", '<c-i>zv:Beacon<cr>', { silent = true })
+
+-- -- TODO: include neoscroll command
+-- map("n", "<c-d>", ':lua require("neoscroll").scroll(vim.wo.scroll, true, 300)<CR><BAR>lua require("core.utils").flash_cursorline()<cr>', { silent = true })
+-- map("n", "<c-u>", ':lua require("neoscroll").scroll(-10, true, 300)<CR><BAR>lua require("core.utils").flash_cursorline()<cr>', { silent = true })
+
+-- glow (markdow preview)
+--map('n', '<C-M-g', '<cmd>Glow<CR>')
 
 -- Open nvimrc file
 --map("n", "<Leader>v", "<cmd>drop $MYVIMRC<CR>")
@@ -136,149 +109,18 @@ map("n", "<Leader>u", ":PackerSync<CR>")
 -- nvim file
 --map('n', '<Leader>n', "<cmd>lua require('core.files').nvim_files()<CR>")
 
--- Make visual yanks place the cursor back where started
--- map("v", "y", "ygv<Esc>")
--- https://ddrscott.github.io/blog/2016/yank-without-jank/
---vim.cmd([[vnoremap <expr>y "my\"" . v:register . "y`y"]])
-
 -- Easier file save
 --map("n", "<Delete>", "<cmd>:update!<CR>")
 --map("n", "<F9>", "<cmd>update<cr>")
---map("i", "<F9>", "<c-o>:update<cr>")
-
--- Cheatsheet plugin (show your mappings)
---map("n", "<F12>", "<cmd>Cheatsheet<cr>")
-
--- discard buffer
--- fixing a temporary issue: https://github.com/dstein64/nvim-scrollview/issues/10
--- famiu/bufdelete.nvim
---map("n", "<leader>x", ":wsh | up | sil! bdelete<cr>", { silent = true })
---map("n", "<leader>w", ":bwipeout!<cr>", { silent = true })
-
--- select last paste in visual mode
---map("n", "<leader>p", "'`[' . strpart(getregtype(), 0, 1) . '`]'", { expr = true })
-
--- It adds motions like 25j and 30k to the jump list, so you can cycle
--- through them with control-o and control-i.
--- source: https://www.vi-improved.org/vim-tips/
---map("n", "j", [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'j' : 'gj']], { expr = true })
---map("n", "k", [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'k' : 'gk']], { expr = true })
-
--- type c* (perform your substitution Esc) then "n" and "."
---map("n", "<leader><leader>", ":b#<cr>")
---map("n", "c*", "*<c-o>cgn")
---map("n", "c#", "#<c-o>cgn")
--- map("n", "<leader>g", "*<c-o>cgn")
-
--- avoid clipboard hacking security issue
--- http://thejh.net/misc/website-terminal-copy-paste
--- inoremap <C-R>+ <C-r><C-o>+
---map("i", "<C-r>+", "<C-r><C-o>+")
---map("i", "<S-Insert>", "<C-r><C-o>+")
-
--- two clicks in a word makes a count
---map("n", "<2-LeftMouse>", [[:lua require('core.utils').CountWordFunction()<cr>]], { silent = true })
---map("n", "<RightMouse>", "<cmd>match none<cr>")
 
 -- show current buffer
 -- map("n", "<C-m-t>", [[:lua require('notify')(vim.fn.expand('%:p'))<cr>:lua require('core.utils').flash_cursorline()<cr>]])
-
--- deletes the rest of the line in command mode
---map("c", "<c-k>", [[<c-\>egetcmdline()[:getcmdpos()-2]<CR>]])
-
--- <Tab> to navigate the completion menu
---map("i", "<Tab>", 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', { expr = true })
---map("i", "<S-Tab>", 'pumvisible() ? "\\<C-p>" : "\\<Tab>"', { expr = true })
-
--- More molecular undo of text
--- map("i", ",", ",<c-g>u")
---map("i", ".", ".<c-g>u")
---map("i", "!", "!<c-g>u")
---map("i", "?", "?<c-g>u")
---map("i", ";", ";<c-g>u")
---map("i", ":", ":<c-g>u")
---map("i", "]", "]<c-g>u")
---map("i", "}", "}<c-g>u")
-
--- map("n", "<F3>", '<cmd>lua require("harpoon.mark").add_file(vim.fn.expand("%:p"))<cr>')
--- map("n", "<S-F3>", '<cmd>lua require("harpoon.ui").toggle_quick_menu()<cr>')
-
--- https://stackoverflow.com/a/37897322
--- https://neovim.discourse.group/t/how-to-append-mappings-in-lua/2118
--- use maparg
--- https://vi.stackexchange.com/a/36950/7339
--- nnoremap n nzz:call FlashCursorLine()<CR>Nn
---map('n', 'n', 'nzz:lua require("core.utils").flash_cursorline()<CR>Nn')
---map('n', 'N', 'Nzz:lua require("core.utils").flash_cursorline()<CR>nN')
---map('n', '*', '*:lua require("core.utils").flash_cursorline()<CR><CR>')
---map('n', '#', '#:lua require("core.utils").flash_cursorline()<CR><CR>')
-
---map("n", "J", "mzJ`z")
---map("n", "<C-o>", '<C-o>zv:lua require("core.utils").flash_cursorline()<CR>')
---map("n", "<C-i>", '<C-i>zv:lua require("core.utils").flash_cursorline()<CR>')
--- map("n", "<c-o>", '<c-o>zv:Beacon<cr>', { silent = true })
--- map("n", "<c-i>", '<c-i>zv:Beacon<cr>', { silent = true })
-
--- -- TODO: include neoscroll command
--- map("n", "<c-d>", ':lua require("neoscroll").scroll(vim.wo.scroll, true, 300)<CR><BAR>lua require("core.utils").flash_cursorline()<cr>', { silent = true })
--- map("n", "<c-u>", ':lua require("neoscroll").scroll(-10, true, 300)<CR><BAR>lua require("core.utils").flash_cursorline()<cr>', { silent = true })
-
--- better gx mapping
--- https://sbulav.github.io/vim/neovim-opening-urls/
---map("", "gx", '<Cmd>call jobstart(["xdg-open", expand("<cfile>")], {"detach": v:true})<CR>', {})
 
 -- quickfix mappings
 --map('n', '[q', ':cprevious<CR>')
 --map('n', ']q', ':cnext<CR>')
 --map('n', ']Q', ':clast<CR>')
 --map('n', '[Q', ':cfirst<CR>')
-
--- Reselect visual when indenting
---map("x", ">", ">gv")
---map("x", "<", "<gv")
-
--- Selecting your pasted text
--- map gp `[v`]
--- https://www.reddit.com/r/vim/comments/4aab93 ]]
--- map("n", "gV", "`[V`]")
---map("n", "gV", [['`[' . strpart(getregtype(), 0, 1) . '`]']], { expr = true })
-
--- -- if there is a fold under cursor open it by pressing <CR> otherwise do
--- -- what <CR> does
--- map('n', '<CR>', [[@=(foldlevel('.')?'za':"\<Space>")<CR>]], map_opts)
-
---map( "n", "<C-l>", [[ (&hls && v:hlsearch ? ':nohls' : ':set hls')."\n" <BAR> redraw<CR>]], { silent = true, expr = true })
-
--- Make Y yank to end of the line
---map("n", "Y", "yg_")
-
--- shortcuts to jump in the command line
-map("c", "<C-s>", "<home>")
-map("c", "<C-e>", "<end>")
-
---map("i", "<s-cr>", "<c-o>o")
---map("i", "<c-cr>", "<c-o>O")
-
---nnoremap <expr> oo 'm`' . v:count1 . 'o<Esc>``'
---nnoremap <expr> OO 'm`' . v:count1 . 'O<Esc>``'
-
---map("n", "ç", ":")
---map("n", "<space>", "/")
-
--- Better window movement
--- map("n", "<C-h>", "<C-w>h", { silent = true })
--- map("n", "<C-j>", "<C-w>j", { silent = true })
--- map("n", "<C-k>", "<C-w>k", { silent = true })
--- map("n", "<C-l>", "<C-w>l", { silent = true })
-
--- Line bubbling
--- Move selected line / block of text in visual mode
---map("x", "K", ":move '<-2<CR>gv-gv", { noremap = true, silent = true })
---map("x", "J", ":move '>+1<CR>gv-gv", { noremap = true, silent = true })
-
--- Make the dot command work as expected in visual mode (via
--- https://www.reddit.com/r/vim/comments/3y2mgt/
---map("v", ".", ":norm .<cr>")
 
 -- close buffer without loosing the opened window
 map("n", "<C-c>", ":new|bd #<CR>", { silent = true })
@@ -291,7 +133,6 @@ map("n", "<C-x>", ":BufferClose<CR>", { silent = true })
 --map("n", "<space>fb", "<cmd>lua require 'telescope'.extensions.file_browser.file_browser()<CR>", { noremap = true })
 
 -- telescope mappings
-
 map('n', '<leader>ff', [[<cmd>lua require('telescope.builtin').find_files()<cr>]])
 map('n', '<leader>fg', [[<cmd>lua require('telescope.builtin').live_grep()<cr>]])
 map('n', '<leader>fb', [[<cmd>lua require('telescope.builtin').buffers()<cr>]])
@@ -370,6 +211,201 @@ map('n', '<leader>ft', [[<cmd>lua require('telescope.builtin').treesitter()<cr>]
 --map("n", "<leader>cd", '<cmd>lua require("telescope.builtin").lsp_document_diagnostics()<cr>')
 --map("n", "<leader>cr", '<cmd>lua require("telescope.builtin").lsp_references()<cr>')
 
+-- Cheatsheet plugin (show your mappings)
+--map("n", "<F12>", "<cmd>Cheatsheet<cr>")
+
+-- discard buffer
+-- fixing a temporary issue: https://github.com/dstein64/nvim-scrollview/issues/10
+-- famiu/bufdelete.nvim
+--map("n", "<leader>x", ":wsh | up | sil! bdelete<cr>", { silent = true })
+--map("n", "<leader>w", ":bwipeout!<cr>", { silent = true })
+
+-- select last paste in visual mode
+--map("n", "<leader>p", "'`[' . strpart(getregtype(), 0, 1) . '`]'", { expr = true })
+
+-- It adds motions like 25j and 30k to the jump list, so you can cycle
+-- through them with control-o and control-i.
+-- source: https://www.vi-improved.org/vim-tips/
+--map("n", "j", [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'j' : 'gj']], { expr = true })
+--map("n", "k", [[v:count ? (v:count > 5 ? "m'" . v:count : '') . 'k' : 'gk']], { expr = true })
+
+-- type c* (perform your substitution Esc) then "n" and "."
+--map("n", "<leader><leader>", ":b#<cr>")
+--map("n", "c*", "*<c-o>cgn")
+--map("n", "c#", "#<c-o>cgn")
+-- map("n", "<leader>g", "*<c-o>cgn")
+
+-- two clicks in a word makes a count
+--map("n", "<2-LeftMouse>", [[:lua require('core.utils').CountWordFunction()<cr>]], { silent = true })
+--map("n", "<RightMouse>", "<cmd>match none<cr>")
+
+-- Selecting your pasted text
+-- map gp `[v`]
+-- https://www.reddit.com/r/vim/comments/4aab93 ]]
+-- map("n", "gV", "`[V`]")
+--map("n", "gV", [['`[' . strpart(getregtype(), 0, 1) . '`]']], { expr = true })
+
+-- -- if there is a fold under cursor open it by pressing <CR> otherwise do
+-- -- what <CR> does
+-- map('n', '<CR>', [[@=(foldlevel('.')?'za':"\<Space>")<CR>]], map_opts)
+
+--map( "n", "<C-l>", [[ (&hls && v:hlsearch ? ':nohls' : ':set hls')."\n" <BAR> redraw<CR>]], { silent = true, expr = true })
+
+-- Make Y yank to end of the line
+--map("n", "Y", "yg_")
+
+--map('n', '<leader>a', ':Alpha<CR>')
+
+-- -- Hop
+-- map("n", "h", "<cmd>lua require'hop'.hint_words()<cr>")
+-- map("n", "l", "<cmd>lua require'hop'.hint_lines()<cr>")
+
+
+-- Visual Block ----------------------------------------------------------------
+
+-- keymap("v", "p", '"_dP')
+
+-- Stay in indent mode
+--map("v", "<", "<gv")
+--map("v", ">", ">gv")
+
+-- Move text up and down
+--map("v", "<A-j>", ":m .+1<CR>==")
+--map("v", "<A-k>", ":m .-2<CR>==")
+
+-- Move text up and down
+--map("x", "J", ":move '>+1<CR>gv-gv")
+--map("x", "K", ":move '<-2<CR>gv-gv")
+--map("x", "<A-j>", ":move '>+1<CR>gv-gv")
+--map("x", "<A-k>", ":move '<-2<CR>gv-gv")
+
+-- -- Hop
+-- map("v", "h", "<cmd>lua require'hop'.hint_words()<cr>")
+-- map("v", "l", "<cmd>lua require'hop'.hint_lines()<cr>")
+
+
+-- Insert Block ----------------------------------------------------------------
+
+-- Move text up and down
+--map("i", "<A-k>", "<Esc>:m .-2<CR>==gi")
+--map("i", "<A-j>", "<Esc>:m .+1<CR>==gi")
+
+-- Easier file save
+--map("i", "<F9>", "<c-o>:update<cr>")
+
+-- avoid clipboard hacking security issue
+-- http://thejh.net/misc/website-terminal-copy-paste
+-- inoremap <C-R>+ <C-r><C-o>+
+--map("i", "<C-r>+", "<C-r><C-o>+")
+--map("i", "<S-Insert>", "<C-r><C-o>+")
+
+-- deletes the rest of the line in command mode
+--map("c", "<c-k>", [[<c-\>egetcmdline()[:getcmdpos()-2]<CR>]])
+
+-- <Tab> to navigate the completion menu
+--map("i", "<Tab>", 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', { expr = true })
+--map("i", "<S-Tab>", 'pumvisible() ? "\\<C-p>" : "\\<Tab>"', { expr = true })
+
+-- More molecular undo of text
+-- map("i", ",", ",<c-g>u")
+--map("i", ".", ".<c-g>u")
+--map("i", "!", "!<c-g>u")
+--map("i", "?", "?<c-g>u")
+--map("i", ";", ";<c-g>u")
+--map("i", ":", ":<c-g>u")
+--map("i", "]", "]<c-g>u")
+--map("i", "}", "}<c-g>u")
+
+
+
+-- Terminal Block --------------------------------------------------------------
+
+-- Better terminal navigation
+-- THIS DOES NOT WORK - No idea why.
+--map("t", "<C-h>", "<C-\\><C-N><C-w>h", term_opts)
+--map("t", "<C-j>", "<C-\\><C-N><C-w>j", term_opts)
+--map("t", "<C-k>", "<C-\\><C-N><C-w>k", term_opts)
+--map("t", "<C-l>", "<C-\\><C-N><C-w>l", term_opts)
+
+
+---- line text-objects (inner and whole line text-objects)
+---- I am trying now to create some "inner next object", "around last object" and
+---- these mappings conflict with the mappings bellow, so, I am disabling those for a while
+--map("x", "al", ":<C-u>norm! 0v$<cr>")
+--map("x", "il", ":<C-u>norm! _vg_<cr>")
+--map("o", "al", ":norm! val<cr>")
+--map("o", "il", ":norm! vil<cr>")
+
+-- other interesting text objects
+-- reference: https://www.reddit.com/r/vim/comments/adsqnx/comment/edjw792
+-- TODO: detect if we are over the first char and jump to the right
+--local chars = { "_", "-", ".", ":", ",", ";", "<bar>", "/", "<bslash>", "*", "+", "%", "#", "`" }
+--for k, v in ipairs(chars) do
+--    map("x", "i" .. v, ":<C-u>norm! T" .. v .. "vt" .. v .. "<CR>")
+--    map("x", "a" .. v, ":<C-u>norm! F" .. v .. "vf" .. v .. "<CR>")
+--    map("o", "a" .. v, ":normal! va" .. v .. "<CR>")
+--    map("o", "i" .. v, ":normal! vi" .. v .. "<CR>")
+--end
+
+-- charactere under the cursor
+--local char = vim.fn.strcharpart(vim.fn.strpart(vim.fn.getline("."), vim.fn.col(".") - 1), 0, 1)
+--print(char)
+
+-- for k, v in ipairs(chars) do
+--     map("o", "an" .. v, ":norm! f" .. v .. "vf" .. v .. "<CR>")
+--     map("o", "in" .. v, ":norm! f" .. v .. "lvt" .. v .. "<CR>")
+--     map("o", "al" .. v, ":norm! F" .. v .. "vF" .. v .. "<CR>")
+--     map("o", "il" .. v, ":norm! F" .. v .. "hvT" .. v .. "<CR>")
+--     map("x", "an" .. v, ":<c-u>norm! f" .. v .. "vf" .. v .. "<CR>")
+--     map("x", "in" .. v, ":<c-u>norm! f" .. v .. "lvt" .. v .. "<CR>")
+--     map("x", "al" .. v, ":<c-u>norm! F" .. v .. "vF" .. v .. "<CR>")
+--     map("x", "il" .. v, ":<c-u>norm! F" .. v .. "hvT" .. v .. "<CR>")
+-- end
+
+--map("v", "<Leader>y", '"+y')
+
+-- copy to the primary selection on mouse release
+--map("v", "<LeftRelease>", '"*y')
+
+
+--map("n", "<F4>", ":set invpaste paste?<cr>")
+--map("i", "<F4>", "<c-o>:set invpaste paste?<cr>")
+
+
+-- Make visual yanks place the cursor back where started
+-- map("v", "y", "ygv<Esc>")
+-- https://ddrscott.github.io/blog/2016/yank-without-jank/
+--vim.cmd([[vnoremap <expr>y "my\"" . v:register . "y`y"]])
+
+-- better gx mapping
+-- https://sbulav.github.io/vim/neovim-opening-urls/
+--map("", "gx", '<Cmd>call jobstart(["xdg-open", expand("<cfile>")], {"detach": v:true})<CR>', {})
+
+-- Reselect visual when indenting
+--map("x", ">", ">gv")
+--map("x", "<", "<gv")
+
+-- shortcuts to jump in the command line
+map("c", "<C-s>", "<home>")
+map("c", "<C-e>", "<end>")
+
+--map("i", "<s-cr>", "<c-o>o")
+--map("i", "<c-cr>", "<c-o>O")
+
+--nnoremap <expr> oo 'm`' . v:count1 . 'o<Esc>``'
+--nnoremap <expr> OO 'm`' . v:count1 . 'O<Esc>``'
+
+--map("n", "ç", ":")
+
+-- Line bubbling
+-- Move selected line / block of text in visual mode
+--map("x", "K", ":move '<-2<CR>gv-gv", { noremap = true, silent = true })
+--map("x", "J", ":move '>+1<CR>gv-gv", { noremap = true, silent = true })
+
+-- Make the dot command work as expected in visual mode (via
+-- https://www.reddit.com/r/vim/comments/3y2mgt/
+--map("v", ".", ":norm .<cr>")
+
 --map("i", "<F2>", '<cmd>lua require("renamer").rename()<cr>', { noremap = true, silent = true })
 --map("n", "<leader>cn", '<cmd>lua require("renamer").rename()<cr>', { noremap = true, silent = true })
 --map("v", "<leader>cn", '<cmd>lua require("renamer").rename()<cr>', { noremap = true, silent = true })
@@ -390,48 +426,12 @@ map('n', '<leader>ft', [[<cmd>lua require('telescope.builtin').treesitter()<cr>]
 
 --map("n", "<leader>ci", "<cmd> lua vim.diagnostic.open_float()<cr>")
 
--- Easier split mappings
-map("n", "<A-Down>", "<C-W><C-J>", { silent = true })
-map("n", "<A-Up>", "<C-W><C-K>", { silent = true })
-map("n", "<A-Right>", "<C-W><C-L>", { silent = true })
-map("n", "<A-Left>", "<C-W><C-H>", { silent = true })
---map("n", "<A-j>", "<C-W><C-J>", { silent = true })
---map("n", "<A-k>", "<C-W><C-K>", { silent = true })
---map("n", "<A-l>", "<C-W><C-L>", { silent = true })
---map("n", "<A-h>", "<C-W><C-H>", { silent = true })
-map("n", "<A-[>;", "<C-W>-", { silent = true })
-map("n", "<A-]>;", "<C-W>+", { silent = true })
---map("n", "<Leader>[", "<C-W>_", { silent = true })
---map("n", "<Leader>[", "<C-W>_", { silent = true })
---map("n", "<Leader>]", "<C-W>|", { silent = true })
---map("n", "<Leader>=", "<C-W>=", { silent = true })
-
---map('n', '<leader>a', ':Alpha<CR>')
-
--- -- Hop
--- map("n", "h", "<cmd>lua require'hop'.hint_words()<cr>")
--- map("n", "l", "<cmd>lua require'hop'.hint_lines()<cr>")
--- map("v", "h", "<cmd>lua require'hop'.hint_words()<cr>")
--- map("v", "l", "<cmd>lua require'hop'.hint_lines()<cr>")
-
 -- Symbols outline
--- map("n", "<leader>o", ":SymbolsOutline<cr>")
+--map("n", "<leader>o", ":SymbolsOutline<cr>")
 
--- barbar mappings
-
--- -- -- Move to previous/next
---map("n", "<A-,>", ":BufferPrevious<CR>")
---map("n", "<A-.>", ":BufferNext<CR>")
-
--- Tab to switch buffers in Normal mode
---map("n", "<Tab>", ":bnext<CR>")
---map("n", "<S-Tab>", ":bprevious<CR>")
 -- -- Navigate buffers
 map("n", "<Tab>", ":bnext<CR>", { silent = true})
 map("n", "<S-Tab>", ":bprevious<CR>", { silent = true})
--- useful for presntations
---map('n', '<Right>', ':bnext<CR> :redraw<CR>', { silent = true})
---map('n', '<Left>', ':bnext<CR> :redraw<CR>', { silent = true})
 
 -- alternate file mapping (add silent true)
 --map('n', '<bs>',
