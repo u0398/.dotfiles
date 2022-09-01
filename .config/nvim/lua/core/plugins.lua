@@ -85,16 +85,14 @@ return packer.startup(function(use)
   })
 
 
-    --use ({"JoosepAlviste/nvim-ts-context-commentstring"})
---    use ({"JoosepAlviste/nvim-ts-context-commentstring",
---        event = "BufReadPost",
---    })
+  -- Easily comment stuff
+--  use ({"JoosepAlviste/nvim-ts-context-commentstring" })
 
---    use({ "numToStr/Comment.nvim", config = get_setup("comment"),
---        opt = false,
---        keys = { "gc", "gcc", "gbc" }, -- it makes commet plugin lazy load
---        requires = {"JoosepAlviste/nvim-ts-context-commentstring"}
---    }) -- Easily comment stuff
+  use({ "numToStr/Comment.nvim",
+    config = get_config("comment"),
+--    keys = { "gc", "gcc", "gbc" }, -- it makes commet plugin lazy load
+--    requires = {"JoosepAlviste/nvim-ts-context-commentstring"}
+  })
 
     -- Lua
 --    use({
