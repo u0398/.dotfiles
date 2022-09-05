@@ -50,9 +50,6 @@ return packer.startup(function(use)
   }
 
   use({ "sainnhe/sonokai" })
-
-  use({ "sunjon/Shade.nvim", config = get_config("shade") })
-
   use({ "famiu/bufdelete.nvim" }) -- config = get_config("bufdelete")})
 
   use({ -- view line in context :33
@@ -85,7 +82,6 @@ return packer.startup(function(use)
 
   })
 
-
   -- Easily comment stuff
 --  use ({"JoosepAlviste/nvim-ts-context-commentstring" })
 
@@ -95,15 +91,18 @@ return packer.startup(function(use)
 --    requires = {"JoosepAlviste/nvim-ts-context-commentstring"}
   })
 
+
     -- Lua
---    use({
---        "olimorris/persisted.nvim",
---        -- event = "BufReadPre", -- this will only start session saving when an actual file was opened
---        -- module = "persisted",
---        config = function()
---            require("persisted").setup()
---        end,
---    })
+--  use({ "rmagatti/auto-session", config = get_config("auto-session") })
+  use({
+    "olimorris/persisted.nvim",
+    config = get_config("persisted"),
+    -- event = "BufReadPre", -- this will only start session saving when an actual file was opened
+    -- module = "persisted", -- Lazy loading
+--    config = function()
+--      require("persisted").setup(),
+--    end,
+  })
 
   use ({'monkoose/matchparen.nvim', config = get_config("matchparen") })
 
