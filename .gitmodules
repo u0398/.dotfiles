@@ -1,4 +1,4 @@
-[submodule "config/zsh/zsh-autosuggestions"]
+[submodule ".config/zsh/zsh-autosuggestions"]
 	path = .config/zsh/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions
 [submodule ".config/zsh/zsh-completions"]
