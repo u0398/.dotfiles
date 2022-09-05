@@ -192,7 +192,7 @@ map('n', '<leader>ft', [[<cmd>lua require('telescope.builtin').treesitter()<cr>]
 -- stop Persisted => session won't be saved on exit
 
 -- Easy add date/time
--- map("n", "<Leader>t", "\"=strftime('%c')<CR>Pa", { silent = true })
+--map("n", "<Leader>t", "\"=strftime('%c')<CR>Pa", { silent = true })
 
 -- Telescope
 --map("n", "<Leader>1", ":Telescope sessions [save_current=true]<CR>")

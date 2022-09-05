@@ -91,7 +91,7 @@ return packer.startup(function(use)
   })
 
 
-    -- Lua
+  -- Lua
 --  use({ "rmagatti/auto-session", config = get_config("auto-session") })
   use({
     "olimorris/persisted.nvim",
@@ -214,12 +214,12 @@ return packer.startup(function(use)
     config = get_config("treesitter"),
   }
 
-    -- Git
+  -- Git
   use ({"lewis6991/gitsigns.nvim",
     config = get_config("gitsigns"),
-    setup = function()
-      require("core.utils").packer_lazy_load "gitsigns.nvim"
-    end,
+--    setup = function()
+--      require("core.utils").packer_lazy_load "gitsigns.nvim"
+--    end,
   })
     
     -- Automatically set up your configuration after cloning packer.nvim
