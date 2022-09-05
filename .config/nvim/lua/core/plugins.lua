@@ -49,7 +49,6 @@ return packer.startup(function(use)
     config = function() require'colorizer'.setup() end
   }
 
-  use({ "sainnhe/sonokai" })
   use({ "famiu/bufdelete.nvim" }) -- config = get_config("bufdelete")})
 
   use({ -- view line in context :33
@@ -111,6 +110,7 @@ return packer.startup(function(use)
     "EdenEast/nightfox.nvim",
     config = get_config("nightfox")
   })
+--  use({ "sainnhe/sonokai" })
 --	use ({"tanvirtin/monokai.nvim", config = get_config("monokai") }) -- show cursor on jumps
 --  use ({"mvpopuk/inspired-github.vim"})
 --  use ({'tanvirtin/monokai.nvim'})
