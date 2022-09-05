@@ -185,11 +185,13 @@ return packer.startup(function(use)
 --    use "rafamadriz/friendly-snippets" -- a bunch of snippets to use
 
     -- LSP
-    use "neovim/nvim-lspconfig" -- enable LSP
-    use "williamboman/nvim-lsp-installer" -- simple to use language server installer
-    use "tamago324/nlsp-settings.nvim" -- language server settings defined in json for
-    use "jose-elias-alvarez/null-ls.nvim" -- for formatters and linters
-    use "MunifTanjim/prettier.nvim"
+  use "neovim/nvim-lspconfig" -- enable LSP
+  use "williamboman/nvim-lsp-installer" -- simple to use language server installer
+  use "tamago324/nlsp-settings.nvim" -- language server settings defined in json for
+  use "jose-elias-alvarez/null-ls.nvim" -- for formatters and linters
+--  use ({ "MunifTanjim/prettier.nvim",
+--    config = get_config("prettier")
+--  })
 
   -- Telescope
   use ({"nvim-telescope/telescope.nvim",
@@ -213,12 +215,12 @@ return packer.startup(function(use)
   }
 
     -- Git
---    use ({"lewis6991/gitsigns.nvim",
---        config = get_setup("gitsigns"),
---        setup = function()
---            require("core.utils").packer_lazy_load "gitsigns.nvim"
---        end,
---    })
+  use ({"lewis6991/gitsigns.nvim",
+    config = get_config("gitsigns"),
+    setup = function()
+      require("core.utils").packer_lazy_load "gitsigns.nvim"
+    end,
+  })
     
     -- Automatically set up your configuration after cloning packer.nvim
     -- Put this at the end after all plugins
