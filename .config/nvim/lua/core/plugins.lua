@@ -39,6 +39,7 @@ return packer.startup(function(use)
 
   -- My plugins here
   use "wbthomason/packer.nvim" -- Have packer manage itself
+  use({ "0x100101/Shade.nvim", config = get_config("shade") })
   use {"nvim-lua/popup.nvim", opt = true } -- An implementation of the Popup API from vim in Neovim
   use "nvim-lua/plenary.nvim" -- Useful lua functions used by lots of plugins
   use { -- Show colors in neovim (Red, Green, Blue, etc.)
