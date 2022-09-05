@@ -143,6 +143,6 @@ if [[ $EUID -ne 0 ]]; then
   fi
 fi
 
-source ~/.config/profile
+source ~/.config/profile.sh
 
 # keep tmux block at the bottom so everything else is loaded first
