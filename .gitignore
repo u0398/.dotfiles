@@ -11,3 +11,5 @@
 .dotbare
 .gradle
 .sdkman
+
+.config/nvim/plugin/packer_compiled.lua
