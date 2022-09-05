@@ -1,5 +1,6 @@
 lastupdatecheck: 0
 recentrepos:
+- /home/peterm/.config/zsh/zsh-autosuggestions
 - /home/peterm/.dotfiles
 startuppopupversion: 5
 customcommandshistory:

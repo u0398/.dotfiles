@@ -371,6 +371,10 @@ xsource ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=30
 
+## zsh-completions plugin
+
+fpath=(~/.config/zsh/zsh-completions/src $fpath)
+
 ## dirhistory plugin
 
 xsource ~/.config/zsh/dirhistory.plugin.zsh
