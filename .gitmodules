@@ -4,3 +4,6 @@
 [submodule ".config/zsh/zsh-completions"]
 	path = .config/zsh/zsh-completions
 	url = https://github.com/zsh-users/zsh-completions.git
+[submodule ".config/zsh/gitstatus"]
+	path = .config/zsh/gitstatus
+	url = https://github.com/romkatv/gitstatus.git
