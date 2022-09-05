@@ -436,15 +436,18 @@ NEWLINE=$'\n'
 GIT_PS1_SHOWDIRTYSTATE=yes
 
 PROMPT_COLOR="%F{10}"
+PROMPT_ERROR="%F{9}"
 
 # remote connections show host
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-  PROMPT_PRE='%(!.%F{9}.$PROMPT_COLOR)%n%F{15}@%F{7}%m %F{243}- %D{%a %b %d %H:%M:%S} - %(?.%F{10}0.%F{9}%?)%f'
+  PROMPT_PRE='%(!.%F{9}.$PROMPT_COLOR)%n%F{15}@%F{7}%m %F{243}- %(?.%F{10}0.%F{9}%?)%f'
 else
-  PROMPT_PRE='%(!.%F{9}.$PROMPT_COLOR)%n%F{15} %F{243}- %D{%a %b %d %H:%M:%S} - %(?.%F{10}0.%F{9}%?)%f'
+  PROMPT_PRE='%(!.%F{9}.$PROMPT_COLOR)%n%F{15} %F{243} '
 fi
 
-PROMPT_SUF='${EXECUTETIME}${NEWLINE}%F{7}%0~%f%b %(!.%F{9}.$PROMPT_COLOR)%#%F{7} '
+RPROMPT='%(?..$PROMPT_ERROR%? %F{243}- )${EXECUTETIME} %F{243}- %D{%a %b %d %H:%M:%S}'
+
+PROMPT_SUF='${NEWLINE}%F{7}%0~%f%b %(?.$PROMPT_COLOR.$PROMPT_ERROR)%#%F{7} '
 
 # insert git status if repo
 PROMPT=$PROMPT_PRE'$(git branch &>/dev/null;\
