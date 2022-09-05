@@ -209,6 +209,7 @@ opt.formatoptions = opt.formatoptions
     + "j" -- Auto-remove comments if possible.
     - "2" -- I'm not in gradeschool anymore
 
+
 --opt.guicursor = {
 --    "n-v-c-sm:block",
 --    "i-ci-ve:ver25",
@@ -222,9 +223,9 @@ opt.formatoptions = opt.formatoptions
 window_options = {
   numberwidth = 3,
   number = true,
-  relativenumber = false,
+  relativenumber = true,
   linebreak = true,
-  cursorline = false,
+  cursorline = true,
   foldenable = false,
 }
 
