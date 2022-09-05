@@ -1,6 +1,3 @@
--- File: /home/sergio/build/nvim/lua/user/gitsigns.lua
--- Last Change: Mon, 28 Feb 2022 09:07
-
 local status_ok, gitsigns = pcall(require, "gitsigns")
 if not status_ok then
   return
