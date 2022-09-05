@@ -161,6 +161,7 @@ local options = {
     list = false, -- Show some invisible characters
     relativenumber = true,
     scrolloff = 2, -- Lines of context
+    sessionoptions = "buffers,curdir,folds,help,tabpages,winsize",
     shiftround = true, -- Round indent
     shiftwidth = 2, -- Size of an indent
     expandtab = true,
