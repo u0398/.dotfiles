@@ -483,7 +483,9 @@ bindkey "^T" forward-search-history
 bindkey "^S" beginning-of-line
 
 # autosuggest
+zle -N autosuggest-accept
 bindkey '^ ' autosuggest-accept
+zle -N autosuggest-execute
 bindkey '^\' autosuggest-execute
 
 # fix some other binds
