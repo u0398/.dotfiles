@@ -493,6 +493,7 @@ bindkey "^[OB" history-beginning-search-forward
 stty -ixon
 
 # bind forward search history to ctrl-t
+zle -N forward-search-history
 bindkey "^T" forward-search-history
 
 # bind beginning of line to ctrl-s
@@ -874,6 +875,7 @@ if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
   fi
 fi
 
-source ~/.config/profile.sh
+xsource ~/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+xsource ~/.config/profile.sh
 
 ## EOF
