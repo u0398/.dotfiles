@@ -411,58 +411,6 @@ HIST_STAMPS="yyyy-mm-dd"
 HISTSIZE=3000
 SAVEHIST=10000
 
-## gitprompt setup
-
-GITSTATUS_DIR=~/.config/zsh/gitstatus
-source $GITSTATUS_DIR/gitstatus.plugin.zsh # xsource not working
-
-# Start gitstatusd instance with name "MY". The same name is passed to
-# gitstatus_query in gitstatus_prompt_update. The flags with -1 as values
-# enable staged, unstaged, conflicted and untracked counters.
-gitstatus_stop 'MY' && gitstatus_start -s -1 -u -1 -c -1 -d -1 'MY'
-
-# On every prompt, fetch git status and set GITSTATUS_PROMPT.
-autoload -Uz add-zsh-hook
-add-zsh-hook precmd gitstatus_prompt_update
-
-## git completion setup
-
-zstyle ':completion:*:*:git:*' script ~/.config/git-completion.bash
-zstyle ':completion:*' completer _expand _complete _ignored _approximate
-zstyle ':completion:*' max-errors 2 numeric
-zstyle ':completion:*' prompt '1'
-
-# provides '.' completion
-zstyle ':completion:*' special-dirs true
-
-zstyle :compinstall filename '/home/peterm/.zshrc'
-
-# add custom functions to fpath
-fpath=(~/.config/zsh/functions $fpath)
-
-# enable completion system
-autoload -Uz compinit && compinit
-
-## dotbare plugin
-
-export DOTBARE_DIR="$HOME/.dotfiles"
-export DOTBARE_TREE="$HOME"
-xsource ~/.dotbare/dotbare.plugin.zsh
-
-## zsh-autosuggestions plugin
-
-xsource ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=30
-
-## zsh-completions plugin
-
-fpath=(~/.config/zsh/zsh-completions/src $fpath)
-
-## dirhistory plugin
-
-xsource ~/.config/zsh/dirhistory.plugin.zsh
-
 ## Key bindings
 
 # use vi mode binds
@@ -616,6 +564,10 @@ alias dotlazy='/usr/local/bin/lazygit -w $HOME -g $HOME/.dotfiles'
 alias v='nvim'
 alias vi='nvim'
 alias vim='nvim'
+
+alias fzf='fzf --preview-window "top:50%:nohidden" --preview "batcat --style numbers,changes --color=always {} | head -500"'
+
+alias vf='v $(fzf)'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -860,7 +812,59 @@ if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
   fi
 fi
 
+## gitprompt setup
+
+GITSTATUS_DIR=~/.config/zsh/gitstatus
+source $GITSTATUS_DIR/gitstatus.plugin.zsh # xsource not working
+
+# Start gitstatusd instance with name "MY". The same name is passed to
+# gitstatus_query in gitstatus_prompt_update. The flags with -1 as values
+# enable staged, unstaged, conflicted and untracked counters.
+gitstatus_stop 'MY' && gitstatus_start -s -1 -u -1 -c -1 -d -1 'MY'
+
+# On every prompt, fetch git status and set GITSTATUS_PROMPT.
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd gitstatus_prompt_update
+
+## git completion setup
+
+zstyle ':completion:*:*:git:*' script ~/.config/git-completion.bash
+zstyle ':completion:*' completer _expand _complete _ignored _approximate
+zstyle ':completion:*' max-errors 2 numeric
+zstyle ':completion:*' prompt '1'
+
+# provides '.' completion
+zstyle ':completion:*' special-dirs true
+
+zstyle :compinstall filename '/home/peterm/.zshrc'
+
+# add custom functions to fpath
+fpath=(~/.config/zsh/functions $fpath)
+
+# enable completion system
+autoload -Uz compinit && compinit
+
+## dotbare plugin
+
+export DOTBARE_DIR="$HOME/.dotfiles"
+export DOTBARE_TREE="$HOME"
+xsource ~/.dotbare/dotbare.plugin.zsh
+
+## zsh-completions plugin
+
+fpath=(~/.config/zsh/zsh-completions/src $fpath)
+
+## dirhistory plugin
+
+xsource ~/.config/zsh/dirhistory.plugin.zsh
+
 xsource ~/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+## zsh-autosuggestions plugin
+xsource ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=30
+
 xsource ~/.config/profile.sh
 
 ## EOF
