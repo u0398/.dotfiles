@@ -169,8 +169,9 @@ return packer.startup(function(use)
 --    }) -- This is needed to fix lsp doc highlight
 
 --    use 'tjdevries/nlua.nvim'
-  use({ "nathom/filetype.nvim", config = get_config("filetype") })
-  use "folke/which-key.nvim"
+use ({ "nathom/filetype.nvim", config = get_config("filetype") })
+use ({ "folke/which-key.nvim", config = get_config("whichkey") })
+--use ({ "folke/which-key.nvim" })
 
     -- cmp plugins
   use ({"hrsh7th/nvim-cmp", config = get_config("cmp") }) -- The completion plugin

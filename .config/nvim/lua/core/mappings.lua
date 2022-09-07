@@ -17,40 +17,40 @@ vim.g.mapleader = ","
 -- Normal Block ----------------------------------------------------------------
 
 -- Better split navigation
-map("n", "<C-h>", "<C-w>h", { silent = true })
-map("n", "<C-j>", "<C-w>j", { silent = true })
-map("n", "<C-k>", "<C-w>k", { silent = true })
-map("n", "<C-l>", "<C-w>l", { silent = true })
+--map("n", "<C-h>", "<C-w>h", { silent = true })
+--map("n", "<C-j>", "<C-w>j", { silent = true })
+--map("n", "<C-k>", "<C-w>k", { silent = true })
+--map("n", "<C-l>", "<C-w>l", { silent = true })
 
 -- Better split movement
-map("n", "<A-h>", "<C-W><C-H>", { silent = true })
-map("n", "<A-j>", "<C-W><C-J>", { silent = true })
-map("n", "<A-k>", "<C-W><C-K>", { silent = true })
-map("n", "<A-l>", "<C-W><C-L>", { silent = true })
+--map("n", "<A-h>", "<C-W><C-H>", { silent = true })
+--map("n", "<A-j>", "<C-W><C-J>", { silent = true })
+--map("n", "<A-k>", "<C-W><C-K>", { silent = true })
+--map("n", "<A-l>", "<C-W><C-L>", { silent = true })
 
 -- Better split resizing
-map("n", "<C-A-h>", ":vertical resize -2<CR>")
-map("n", "<C-A-j>", ":resize +2<CR>", {silent = true})
-map("n", "<C-A-k>", ":resize -2<CR>", {silent = true})
-map("n", "<C-A-l>", ":vertical resize +2<CR>")
+--map("n", "<C-A-h>", ":vertical resize -2<CR>")
+--map("n", "<C-A-j>", ":resize +2<CR>", {silent = true})
+--map("n", "<C-A-k>", ":resize -2<CR>", {silent = true})
+--map("n", "<C-A-l>", ":vertical resize +2<CR>")
 
 -- Expand current split horizontally
-map("n", "<Leader>[", "<C-W>_", { silent = true })
+--map("n", "<Leader>[", "<C-W>_", { silent = true })
 
 -- Expand current split vertically
-map("n", "<Leader>]", "<C-W>|", { silent = true })
+--map("n", "<Leader>]", "<C-W>|", { silent = true })
 
 -- Balance splits
-map("n", "<Leader>=", "<C-W>=", { silent = true })
+--map("n", "<Leader>=", "<C-W>=", { silent = true })
 
 -- Move text up and down
-map("n", "<A-->", ":m .+1<CR>==")
-map("n", "<A-=>", ":m .-2<CR>==")
+--map("n", "<A-->", ":m .+1<CR>==")
+--map("n", "<A-=>", ":m .-2<CR>==")
 
 -- Jump to the last changed spot
-map("n", "gl", "`.")
+--map("n", "gl", "`.")
 
-map("n", "<space>", ":")
+--map("n", "<space>", ":")
 
 -- Nvim Tree
 --map("n", "<leader>e", ":PackerLoad nvim-tree.lua | NvimTreeToggle<CR>", { silent = true })
@@ -133,11 +133,15 @@ map("n", "<C-x>", ":BufferClose<CR>", { silent = true })
 --map("n", "<space>fb", "<cmd>lua require 'telescope'.extensions.file_browser.file_browser()<CR>", { noremap = true })
 
 -- telescope mappings
-map('n', '<leader>ff', [[<cmd>lua require('telescope.builtin').find_files()<cr>]])
-map('n', '<leader>fg', [[<cmd>lua require('telescope.builtin').live_grep()<cr>]])
-map('n', '<leader>fb', [[<cmd>lua require('telescope.builtin').buffers()<cr>]])
-map('n', '<leader>fh', [[<cmd>lua require('telescope.builtin').help_tags()<cr>]])
-map('n', '<leader>ft', [[<cmd>lua require('telescope.builtin').treesitter()<cr>]])
+
+
+-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+--map('n', '<leader>ff', [[<cmd>lua require('telescope.builtin').find_files()<cr>]])
+--map('n', '<leader>fg', [[<cmd>lua require('telescope.builtin').live_grep()<cr>]])
+--map('n', '<leader>fb', [[<cmd>lua require('telescope.builtin').buffers()<cr>]])
+--map('n', '<leader>fh', [[<cmd>lua require('telescope.builtin').help_tags()<cr>]])
+--map('n', '<leader>ft', [[<cmd>lua require('telescope.builtin').treesitter()<cr>]])
 
 -- map("n", "<leader>o", ':lua require("telescope.builtin").oldfiles()<cr>') -- already mapped on which-key
 --map("n", "<C-M-o>", ':lua require("core.files").search_oldfiles()<CR>') -- already mapped on which-key
