@@ -1,0 +1,25 @@
+local map = vim.keymap.set
+
+-- :Gedit will always send us back to the working copy
+-- and thus serves as a quasi back button
+map('n', '<leader>gg', '<Esc>:Gedit<CR>', { silent = true })
+map('n', '<leader>gs', '<Esc>:Git<CR>', { silent = true })
+map('n', '<leader>gr', '<Esc>:Gread<CR>', { silent = true })
+map('n', '<leader>gw', '<Esc>:Gwrite<CR>', { silent = true })
+map('n', '<leader>ga', '<Esc>:Git add %<CR>', { silent = true })
+map('n', '<leader>gA', '<Esc>:Git add .<CR>', { silent = true })
+map('n', '<leader>gb', '<Esc>:Git blame<CR>', { silent = true })
+map('n', '<leader>gc', '<Esc>:Git commit<CR>', { silent = true })
+map('n', '<leader>gd', '<Esc>:Gvdiffsplit!<CR>', { silent = true })
+map('n', '<leader>gD', '<Esc>:Git diff | setlocal nonumber norelativenumber | wincmd o<CR>', { silent = true })
+map('n', '<leader>gp', '<Esc>:Git push<CR>', { silent = true })
+map('n', '<leader>gP', '<Esc>:Git pull<CR>', { silent = true })
+map('n', '<leader>gS', '<Esc>:Git stash -- %<CR>', { silent = true })
+map('n', '<leader>g-', '<Esc>:Git stash<CR>', { silent = true })
+map('n', '<leader>g+', '<Esc>:Git stash pop<CR>', { silent = true })
+map('n', '<leader>gf', '<Esc>:Git fetch --all<CR>', { silent = true })
+map('n', '<leader>gF', '<Esc>:Git fetch origin<CR>', { silent = true })
+map('n', '<leader>gl', '<Esc>:Git log --stat %<CR>', { silent = true })
+map('n', '<leader>gL', '<Esc>:Git log --stat -n 100<CR>', { silent = true })
+map('n', '<leader>ge', '<Esc>:vsp<CR>:Gedit HEAD~:%<left><left>', { silent = true })
+map('n', '<leader>gE', '<Esc>:sp<CR>:Gedit HEAD~:%<left><left>', { silent = true })
