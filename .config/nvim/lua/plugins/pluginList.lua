@@ -28,6 +28,12 @@ local packer_startup = function(use)
     event = "VimEnter"
   }
 
+  use { -- view line in context :33
+    'nacro90/numb.nvim',
+    config = "require('plugins.numb')",
+    event = "BufRead",
+  }
+
   -- "gc" to comment visual regions/lines
   use { 'numToStr/Comment.nvim',
     config = "require('plugins.comment')",
@@ -214,6 +220,19 @@ use({
     ]],
     ft = { 'markdown' },
     opt = true,
+  }
+
+  use {
+    "karb94/neoscroll.nvim",
+    opt = true,
+    event = "WinScrolled",
+    keys = { "<C-u>", "<C-d>", "<C-b>", "<C-f>", "<C-y>", "<C-e>", "zt", "zz", "zb" },
+    config = "require('plugins.neoscroll')",
+  }
+
+  use {
+    "olimorris/persisted.nvim",
+    config = "require('plugins.persisted')",
   }
 
   -- key bindings cheatsheet
