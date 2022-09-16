@@ -91,17 +91,46 @@ map('n', '<Leader>tO', ':tabfirst<CR>:tabonly<CR>', {})
 -- tmux <c-meta>z like
 map('n', '<Leader>tz',  "<cmd>lua require'utils'.tabZ()<CR>", {})
 
+-- Open Nvim Tree
+map("n", "<C-n>", ":NvimTreeToggle<CR>")
+
+-- Split navigation
+map("n", "<C-h>", "<C-w>h")
+map("n", "<C-j>", "<C-w>j")
+map("n", "<C-k>", "<C-w>k")
+map("n", "<C-l>", "<C-w>l")
+
+-- Split resize
+map("n", "<A-k>", ":resize -2<CR>", {silent = true})
+map("n", "<A-j>", ":resize +2<CR>", {silent = true})
+map("n", "<A-h>", ":vertical resize -2<CR>")
+map("n", "<A-l>", ":vertical resize +2<CR>")
+
 -- Navigate buffers
 map('n', '[b', ':bprevious<CR>',      {})
 map('n', ']b', ':bnext<CR>',          {})
 map('n', '[B', ':bfirst<CR>',         {})
 map('n', ']B', ':blast<CR>',          {})
+
+map("n", "<Tab>", ":bnext<CR>",       {})
+map("n", "<S-Tab>", ":bprevious<CR>", {})
+
+map("n", "<A-.>", ":bnext<CR>",       {})
+map("n", "<A-,>", ":bprevious<CR>",   {})
+
+map("n", "<C-.>", ":BufferMoveNext<CR>", {})
+map("n", "<C-,>", ":BufferMovePrevious<CR>", {})
+
+-- close buffer without loosing the opened window
+map("n", "<C-c>", ":BufferClose<CR>", { silent = true })
+
 -- Quickfix list mappings
 map('n', '<leader>q', "<cmd>lua require'utils'.toggle_qf('q')<CR>", {})
 map('n', '[q', ':cprevious<CR>',      {})
 map('n', ']q', ':cnext<CR>',          {})
 map('n', '[Q', ':cfirst<CR>',         {})
 map('n', ']Q', ':clast<CR>',          {})
+
 -- Location list mappings
 map('n', '<leader>Q', "<cmd>lua require'utils'.toggle_qf('l')<CR>", {})
 map('n', '[l', ':lprevious<CR>',      {})
