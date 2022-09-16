@@ -27,7 +27,7 @@ vim.cmd[[set path=.,,,$PWD/**]]
 
 o.showmode          = false     -- show current mode (insert, etc) under the cmdline
 o.showcmd           = true      -- show current command under the cmd line
-o.cmdheight         = 2         -- cmdline height
+o.cmdheight         = 1         -- cmdline height
 o.cmdwinheight      = math.floor(vim.o.lines/2) -- 'q:' window height
 -- o.laststatus        = vim.fn.has('nvim-0.7')==1 and 3 or 2  -- global statusline
 o.laststatus        = 2         -- 2 = always show status line (filename, etc)
@@ -40,8 +40,8 @@ o.number            = true      -- show absolute line no. at the cursor pos
 o.relativenumber    = true      -- otherwise, show relative numbers in the ruler
 o.cursorline        = true      -- Show a line where the current cursor is
 o.signcolumn        = 'yes'     -- Show sign column as first column
-vim.g.colorcolumn   = 81        -- global var, mark column 81
-o.colorcolumn       = tostring(vim.g.colorcolumn)
+--vim.g.colorcolumn   = 81        -- global var, mark column 81
+--o.colorcolumn       = tostring(vim.g.colorcolumn)
 o.wrap              = true      -- wrap long lines
 o.breakindent       = true      -- start wrapped lines indented
 o.linebreak         = true      -- do not break words on line wrap
@@ -125,6 +125,8 @@ o.inccommand        = 'nosplit' -- show search and replace in real time
 o.autoread          = true      -- reread a file if it's changed outside of vim
 o.wrapscan          = true      -- begin search from top of the file when nothing is found
 vim.o.cpoptions     = vim.o.cpoptions .. 'x' -- stay on search item when <esc>
+
+o.whichwrap = "<,>,h,l,[,]"     -- wrap to next line when moving cursor to beginning/end of line
 
 o.backup            = false     -- no backup file
 o.writebackup       = false     -- do not backup file before write
