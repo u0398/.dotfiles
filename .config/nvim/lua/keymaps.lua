@@ -118,8 +118,8 @@ map("n", "<S-Tab>", ":bprevious<CR>", {})
 map("n", "<A-.>", ":bnext<CR>",       {})
 map("n", "<A-,>", ":bprevious<CR>",   {})
 
-map("n", "<C-.>", ":BufferMoveNext<CR>", {})
-map("n", "<C-,>", ":BufferMovePrevious<CR>", {})
+map("n", "<A->>", ":BufferMoveNext<CR>", {})
+map("n", "<A-<>", ":BufferMovePrevious<CR>", {})
 
 -- close buffer without loosing the opened window
 map("n", "<C-c>", ":BufferClose<CR>", { silent = true })
