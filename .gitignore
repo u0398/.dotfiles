@@ -1,13 +1,14 @@
 .cache
 .config/bashtop/error.log
 .config/nvim/plugin/packer_compiled.lua
+.config/zsh/gitstatus
 .dotbare
 .dotfiles
+.gradle
 .histfile
+.landscape
 .lesshst
 .local/share
-.ssh
-.landscape
-.gradle
 .sdkman
+.ssh
 .zcompdump
