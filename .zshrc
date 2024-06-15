@@ -3,6 +3,9 @@ export TERM='xterm-256color'
 
 export EDITOR='/bin/nvim'
 
+# Set environment theme. Use #-gitignore filter to avoid committing color
+# export THEME=green
+
 # Exit if non-interactive
 case $- in
   *i*) ;;
