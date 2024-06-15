@@ -63,13 +63,13 @@ augroup('ResizeWindows', function(g)
   })
 end)
 
-augroup('ToggleColorcolumn', function(g)
-  aucmd("VimResized,WinEnter,BufWinEnter", {
-    group = g,
-    pattern = '*',
-    command = 'lua require"utils".toggle_colorcolumn()',
-  })
-end)
+--augroup('ToggleColorcolumn', function(g)
+--  aucmd("VimResized,WinEnter,BufWinEnter", {
+--    group = g,
+--    pattern = '*',
+--    command = 'lua require"utils".toggle_colorcolumn()',
+--  })
+--end)
 
 augroup('ToggleSearchHL', function(g)
   aucmd("InsertEnter",
@@ -80,19 +80,19 @@ augroup('ToggleSearchHL', function(g)
   })
 end)
 
-augroup('ActiveWinCursorLine', function(g)
-  -- Highlight current line only on focused window
-  aucmd("WinEnter,BufEnter,InsertLeave", {
-    group = g,
-    pattern = '*',
-    command = 'if ! &cursorline && ! &pvw | setlocal cursorline | endif'
-  })
-  aucmd("WinLeave,BufLeave,InsertEnter", {
-    group = g,
-    pattern = '*',
-    command = 'if &cursorline && ! &pvw | setlocal nocursorline | endif'
-  })
-end)
+--augroup('ActiveWinCursorLine', function(g)
+--  -- Highlight current line only on focused window
+--  aucmd("WinEnter,BufEnter,InsertLeave", {
+--    group = g,
+--    pattern = '*',
+--    command = 'if ! &cursorline && ! &pvw | setlocal cursorline | endif'
+--  })
+--  aucmd("WinLeave,BufLeave,InsertEnter", {
+--    group = g,
+--    pattern = '*',
+--    command = 'if &cursorline && ! &pvw | setlocal nocursorline | endif'
+--  })
+--end)
 
 augroup('PackerCompile', function(g)
   aucmd("BufWritePost", {
@@ -104,20 +104,20 @@ end)
 
 -- auto-delete fugitive buffers
 augroup('Fugitive', function(g)
-  aucmd("BufReadPost,", {
+  aucmd("BufReadPost", {
     group = g,
     pattern = 'fugitive://*',
     command = 'set bufhidden=delete'
   })
 end)
 
-augroup('Solidity', function(g)
-  aucmd("BufRead,BufNewFile", {
-    group = g,
-    pattern = '*.sol',
-    command = 'set filetype=solidity'
-  })
-end)
+--augroup('Solidity', function(g)
+--  aucmd("BufRead,BufNewFile", {
+--    group = g,
+--    pattern = '*.sol',
+--    command = 'set filetype=solidity'
+--  })
+--end)
 
 -- Display help|man in vertical splits and map 'q' to quit
 augroup('Help', function(g)
