@@ -5,3 +5,6 @@
 	helper = cache --timeout=28800
 [push]
 	default = simple
+[filter "gitignore"]
+	clean = "sed '/#gitignore$/d'"
+	smudge = cat
