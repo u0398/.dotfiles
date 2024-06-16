@@ -3,9 +3,6 @@ export TERM='xterm-256color'
 
 export EDITOR='/bin/nvim'
 
-# Set environment theme. Use #-gitignore filter to avoid committing color
-# export THEME=green
-
 # Exit if non-interactive
 case $- in
   *i*) ;;
@@ -18,6 +15,11 @@ if (( EUID == 0 )); then
 else
     umask 022
 fi
+
+# Set terminal theme color to any number in the 1-256 color palette
+# Use #-gitignore filter (remove - ) at the end of the line to avoid
+# committing the line.
+# export THEME_COLOR=10 #-gitignore
 
 ## Functions
 
@@ -467,13 +469,19 @@ bindkey "^O" accept-line-and-down-history
 
 #bindkey '\eq' push-line-or-edit
 
-# Prompt
+## Prompt
 
 NEWLINE=$'\n'
 
 GIT_PS1_SHOWDIRTYSTATE=yes
 
-PROMPT_COLOR="%F{10}"
+# if a theme color is set, use it
+if [ -z $THEME_COLOR ]; then
+  PROMPT_COLOR="%F{10}"
+else
+  PROMPT_COLOR="%F{$THEME_COLOR}"
+fi
+
 PROMPT_ERROR="%F{9}"
 
 # remote connections show host
@@ -488,7 +496,7 @@ PROMPT+='$GITSTATUS_PROMPT'
 
 PROMPT+='${NEWLINE}%F{7}%0~%f%b %(?.$PROMPT_COLOR.$PROMPT_ERROR)%#%F{7} '
 
-# Only show date/time on wide terminals
+# only show date/time on wide terminals
 if [ $(tput cols) -lt 96 ]; then
   RPROMPT='%(?..$PROMPT_ERROR%? %F{243}- )${EXECUTETIME}'
 else
@@ -803,14 +811,18 @@ export MANWIDTH=${MANWIDTH:-80}
 # Set a search path for the cd builtin
 cdpath=(.. ~)
 
-## tmux autoload ##
+## tmux autoload
 
 # if remote connection
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
   # if tmux is installed, attach to the main session, or create it
   if [ `command -v tmux` > /dev/null ]; then
     if [ ! "$TMUX" ]; then
-      tmux -2 attach -t main || tmux -2 new -s main
+      # set a tmux envar to zsh envar value
+      # the 0 session must be closed to change tmux colors from an envar
+      tmux set-environment THEME_COLOR $THEME_COLOR
+      # create or attach to existing main session
+      tmux -2 new-session -A -s main -f ~/.config/tmux/tmux.conf
     fi
   fi
 fi
