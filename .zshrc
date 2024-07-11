@@ -19,7 +19,7 @@ fi
 # Set terminal theme color to any number in the 1-256 color palette
 # Use #-gitignore filter (remove - ) at the end of the line to avoid
 # committing the line.
-# export THEME_COLOR=10 #-gitignore
+export THEME_COLOR=4 #-gitignore
 
 ## Functions
 
@@ -879,6 +879,13 @@ xsource ~/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 xsource ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=30
+
+## fzf integration
+
+if [[ ! "$PATH" == */home/peterm/.config/zsh/fzf/bin* ]]; then
+  PATH="${PATH:+${PATH}:}/home/peterm/.config/zsh/fzf/bin"
+fi
+xsource <(fzf --zsh)
 
 xsource ~/.config/profile.sh
 

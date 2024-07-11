@@ -130,7 +130,13 @@ fi
 source ~/.config/git-completion.bash
 source ~/.config/git-prompt.sh
 
-# SDKMAN variable and init script 
+# enable fzf integration
+if [[ ! "$PATH" == */home/peterm/.config/zsh/fzf/bin* ]]; then
+  PATH="${PATH:+${PATH}:}/home/peterm/.config/zsh/fzf/bin"
+fi
+eval "$(fzf --bash)"
+
+# SDKMAN variable and init script
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
