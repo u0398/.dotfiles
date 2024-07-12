@@ -16,14 +16,19 @@ else
     umask 022
 fi
 
+
+## Theme settings
+
 # Copy lines and use #-gitignore filter (remove - ) at the end of the
 #line to avoid committing the line.
 
 # Set terminal theme color to any number in the 1-256 color palette
+export THEME_COLOR=10 #(leave this default)
 #export THEME_COLOR=10 #-gitignore
 
 # Use nerd font icons
 #export THEME_ICONS=1 #-gitignore
+
 
 ## Functions
 
