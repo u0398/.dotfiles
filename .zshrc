@@ -16,12 +16,14 @@ else
     umask 022
 fi
 
-# Set terminal theme color to any number in the 1-256 color palette
-# Use #-gitignore filter (remove - ) at the end of the line to avoid
-# committing the line.
-#export THEME_COLOR=10 #-gitignore
-#export THEME_ICONS=1 #-gitignore
+# Copy lines and use #-gitignore filter (remove - ) at the end of the
+#line to avoid committing the line.
 
+# Set terminal theme color to any number in the 1-256 color palette
+#export THEME_COLOR=10 #-gitignore
+
+# Use nerd font icons
+#export THEME_ICONS=1 #-gitignore
 
 ## Functions
 
@@ -192,8 +194,6 @@ precmd() {
 # Set the title
 printf "\033];%s\07\n" "$USER@$(hostname)"
 
-
-
 # Sets GITSTATUS_PROMPT to reflect the state of the current git repository. Empty if not
 # in a git repository. In addition, sets GITSTATUS_PROMPT_LEN to the number of columns
 # $GITSTATUS_PROMPT will occupy when printed.
@@ -255,7 +255,7 @@ function gitstatus_prompt_update() {
 
   # The length of GITSTATUS_PROMPT after removing %f and %F.
   GITSTATUS_PROMPT_LEN="${(m)#${${GITSTATUS_PROMPT//\%\%/x}//\%(f|<->F)}}"
-  
+
   GITSTATUS_PROMPT="%F{243}($GITSTATUS_PROMPT%F{243})"
   GITSTATUS_PROMPT_LEN+=2
 }
