@@ -172,7 +172,7 @@ xcat() {
 # start timer
 preexec() {
   # Set the title
-  printf "\033];%s\07\n" "$(hostname)"
+  printf "\033];%s\07\n" "$USER@$(hostname)"
 
   timer=${timer:-$SECONDS}
 }
@@ -180,7 +180,7 @@ preexec() {
 # calculate execution time
 precmd() {
   # Set the title
-  printf "\033];%s\07\n" "$(hostname)"
+  printf "\033];%s\07\n" "$USER@$(hostname)"
 
   if [ $timer ]; then
     timer_show=$(($SECONDS - $timer))
@@ -190,7 +190,7 @@ precmd() {
 }
 
 # Set the title
-printf "\033];%s\07\n" "$(hostname)"
+printf "\033];%s\07\n" "$USER@$(hostname)"
 
 
 
