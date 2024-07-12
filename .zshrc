@@ -16,9 +16,6 @@ else
     umask 022
 fi
 
-# Set the title
-printf "\033];%s\07\n" "$(hostname)"
-
 # Set terminal theme color to any number in the 1-256 color palette
 # Use #-gitignore filter (remove - ) at the end of the line to avoid
 # committing the line.
@@ -174,6 +171,9 @@ xcat() {
 
 # start timer
 preexec() {
+  # Set the title
+  printf "\033];%s\07\n" "$(hostname)"
+
   timer=${timer:-$SECONDS}
 }
 
