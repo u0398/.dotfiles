@@ -19,9 +19,9 @@ fi
 # Set terminal theme color to any number in the 1-256 color palette
 # Use #-gitignore filter (remove - ) at the end of the line to avoid
 # committing the line.
-export THEME_COLOR=4 #-gitignore
+#export THEME_COLOR=10 #-gitignore
+#export THEME_ICONS=1 #-gitignore
 
-export THEME_ICONS=1
 
 ## Functions
 
