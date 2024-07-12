@@ -13,7 +13,7 @@ function print-decimal-unicode-range() {
   local counter=0
   # Use alternating colors to see which symbols extend out of the bounding
   # box.
-  local bgColorBorder='\033[1;37m'
+  local bgColorBorder='\033[0;30m'
   local bgColorCode='\033[1;37m'
   local alternateBgColorCode='\033[1;37m'
   local bgColorChar='\033[1;37m'
