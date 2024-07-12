@@ -179,12 +179,18 @@ preexec() {
 
 # calculate execution time
 precmd() {
+  # Set the title
+  printf "\033];%s\07\n" "$(hostname)"
+
   if [ $timer ]; then
     timer_show=$(($SECONDS - $timer))
     export EXECUTETIME="%F{238}${timer_show}s"
     unset timer
   fi
 }
+
+# Set the title
+printf "\033];%s\07\n" "$(hostname)"
 
 
 
