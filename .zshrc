@@ -832,18 +832,18 @@ cdpath=(.. ~)
 ## tmux autoload
 
 # if remote connection
-if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-  # if tmux is installed, attach to the main session, or create it
-  if [ `command -v tmux` > /dev/null ]; then
-    if [ ! "$TMUX" ]; then
-      # set a tmux envar to zsh envar value
-      # the 0 session must be closed to change tmux colors from an envar
-      tmux set-environment THEME_COLOR $THEME_COLOR
-      # create or attach to existing main session
-      tmux -2 new-session -A -s main -f ~/.config/tmux/tmux.conf
-    fi
-  fi
-fi
+#if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+#  # if tmux is installed, attach to the main session, or create it
+#  if [ `command -v tmux` > /dev/null ]; then
+#    if [ ! "$TMUX" ]; then
+#      # set a tmux envar to zsh envar value
+#      # the 0 session must be closed to change tmux colors from an envar
+#      tmux set-environment THEME_COLOR $THEME_COLOR
+#      # create or attach to existing main session
+#      tmux -2 new-session -A -s main -f ~/.config/tmux/tmux.conf
+#    fi
+#  fi
+#fi
 
 ## gitprompt setup
 
@@ -900,9 +900,6 @@ ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=30
 
 ## fzf integration
 
-if [[ ! "$PATH" == */home/peterm/.config/zsh/fzf/bin* ]]; then
-  PATH="${PATH:+${PATH}:}/home/peterm/.config/zsh/fzf/bin"
-fi
 xsource <(fzf --zsh)
 
 xsource ~/.config/profile.sh

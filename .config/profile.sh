@@ -49,4 +49,9 @@ if [ -d "$HOME/.nvm" ] ; then
   fi
 fi
 
+# set PATH so it includes fzf if it exists
+ if [ -d "$HOME/.config/fzf/bin" ] ; then
+   PATH="$HOME/.config/fzf/bin:$PATH"
+fi
+
 ## EOF
