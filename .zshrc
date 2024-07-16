@@ -900,7 +900,7 @@ ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=30
 
 ## fzf integration
 
-xsource <(fzf --zsh)
+xsource <(~/.config/fzf/bin/fzf --zsh)
 
 xsource ~/.config/profile.sh
 
