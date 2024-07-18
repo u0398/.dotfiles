@@ -16,7 +16,6 @@ else
     umask 022
 fi
 
-
 ## Theme settings
 
 # Copy lines and use #-gitignore filter (remove - ) at the end of the
@@ -177,24 +176,24 @@ xcat() {
 }
 
 # start timer
-preexec() {
-  # Set the title
-  printf "\033];%s\07\n" "$USER@$(hostname)"
-
-  timer=${timer:-$SECONDS}
-}
+#preexec() {
+#  # Set the title
+#  printf "\033];%s\07\n" "$USER@$(hostname)"
+#
+#  timer=${timer:-$SECONDS}
+#}
 
 # calculate execution time
-precmd() {
-  # Set the title
-  printf "\033];%s\07\n" "$USER@$(hostname)"
-
-  if [ $timer ]; then
-    timer_show=$(($SECONDS - $timer))
-    export EXECUTETIME="%F{238}${timer_show}s"
-    unset timer
-  fi
-}
+#precmd() {
+#  # Set the title
+#  printf "\033];%s\07\n" "$USER@$(hostname)"
+#
+#  if [ $timer ]; then
+#    timer_show=$(($SECONDS - $timer))
+#    export EXECUTETIME="%F{238}${timer_show}s"
+#    unset timer
+#  fi
+#}
 
 # Set the title
 printf "\033];%s\07\n" "$USER@$(hostname)"
@@ -488,40 +487,39 @@ bindkey "^O" accept-line-and-down-history
 #bindkey '\eq' push-line-or-edit
 
 ## Prompt
+#NEWLINE=$'\n'
 
-NEWLINE=$'\n'
-
-GIT_PS1_SHOWDIRTYSTATE=yes
+#GIT_PS1_SHOWDIRTYSTATE=yes
 
 # if a theme color is set, use it
-if [ -z $THEME_COLOR ]; then
-  PROMPT_COLOR="%F{10}"
-else
-  PROMPT_COLOR="%F{$THEME_COLOR}"
-fi
+#if [ -z $THEME_COLOR ]; then
+#  PROMPT_COLOR="%F{10}"
+#else
+#  PROMPT_COLOR="%F{$THEME_COLOR}"
+#fi
 
-PROMPT_ERROR="%F{9}"
+#PROMPT_ERROR="%F{9}"
 
 # remote connections show host
-if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-  PROMPT='%(!.%F{9}.$PROMPT_COLOR)%n%F{15}@%F{7}%m %F{243}'
-else
-  PROMPT='%(!.%F{9}.$PROMPT_COLOR)%n%F{15} %F{243}'
-fi
+#if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+#  PROMPT='%(!.%F{9}.$PROMPT_COLOR)%n%F{15}@%F{7}%m %F{243}'
+#else
+#  PROMPT='%(!.%F{9}.$PROMPT_COLOR)%n%F{15} %F{243}'
+#fi
 
 #PROMPT+='${GITSTATUS_PROMPT:+ $GITSTATUS_PROMPT}'
-PROMPT+='$GITSTATUS_PROMPT'
+#PROMPT+='$GITSTATUS_PROMPT'
 
-PROMPT+='${NEWLINE}%F{7}%0~%f%b %(?.$PROMPT_COLOR.$PROMPT_ERROR)%#%F{7} '
+#PROMPT+='${NEWLINE}%F{7}%0~%f%b %(?.$PROMPT_COLOR.$PROMPT_ERROR)%#%F{7} '
 
 # only show date/time on wide terminals
-if [ $(tput cols) -lt 96 ]; then
-  RPROMPT='%(?..$PROMPT_ERROR%? %F{243}- )${EXECUTETIME}'
-else
-  RPROMPT='%(?..$PROMPT_ERROR%? %F{243}- )${EXECUTETIME} %F{243}- %D{%a %b %d %H:%M:%S}'
-fi
+#if [ $(tput cols) -lt 96 ]; then
+#  RPROMPT='%(?..$PROMPT_ERROR%? %F{243}- )${EXECUTETIME}'
+#else
+#  RPROMPT='%(?..$PROMPT_ERROR%? %F{243}- )${EXECUTETIME} %F{243}- %D{%a %b %d %H:%M:%S}'
+#fi
 
-PROMPT_SUF='${NEWLINE}%F{7}%0~%f%b %(?.$PROMPT_COLOR.$PROMPT_ERROR)%#%F{7} '
+#PROMPT_SUF='${NEWLINE}%F{7}%0~%f%b %(?.$PROMPT_COLOR.$PROMPT_ERROR)%#%F{7} '
 
 # insert git status if repo
 #PROMPT=$PROMPT_PRE'$(git branch &>/dev/null;\
@@ -903,5 +901,7 @@ ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=30
 xsource <(~/.config/fzf/bin/fzf --zsh)
 
 xsource ~/.config/profile.sh
+
+eval "$(~/.local/bin/oh-my-posh init zsh --config ~/.config/zsh/catppuccin.omp.json)"
 
 ## EOF
