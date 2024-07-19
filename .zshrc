@@ -1,7 +1,7 @@
-# Use a color terminal
-export TERM='xterm-256color'
+# Early setup {{{1
 
-export EDITOR='/bin/nvim'
+export TERM='xterm-256color' # Use a color terminal
+export EDITOR='/bin/nvim'    # Default editor
 
 # Exit if non-interactive
 case $- in
@@ -16,232 +16,20 @@ else
     umask 022
 fi
 
-## Functions
+# History file settings
+HISTFILE=~/.histfile
+HIST_STAMPS="yyyy-mm-dd"
+HISTSIZE=3000
+SAVEHIST=10000
 
-# List all occurrences of programm in current PATH
-function plap() {
-    emulate -L zsh
-    if [[ $# = 0 ]] ; then
-        echo "Usage:    $0 program"
-        echo "Example:  $0 zsh"
-        echo "Lists all occurrences of program in the current PATH."
-    else
-        ls -l ${^path}/*$1*(*N)
-    fi
-}
-
-# Find out which libs define a symbol
-function lcheck() {
-    if [[ -n "$1" ]] ; then
-        nm -go /usr/lib/lib*.a 2>/dev/null | grep ":[[:xdigit:]]\{8\} . .*$1"
-    else
-        echo "Usage: lcheck <function>" >&2
-    fi
-}
-
-# Download a file and display it locally
-function uopen() {
-    emulate -L zsh
-    if ! [[ -n "$1" ]] ; then
-        print "Usage: uopen \$URL/\$file">&2
-        return 1
-    else
-        FILE=$1
-        MIME=$(curl --head $FILE | \
-               grep Content-Type | \
-               cut -d ' ' -f 2 | \
-               cut -d\; -f 1)
-        MIME=${MIME%$'\r'}
-        curl $FILE | see ${MIME}:-
-    fi
-}
-
-# Memory overview
-function memusage() {
-    ps aux | awk '{if (NR > 1) print $5;
-                   if (NR > 2) print "+"}
-                   END { print "p" }' | dc
-}
-
-# print hex value of a number
-function hex() {
-    emulate -L zsh
-    if [[ -n "$1" ]]; then
-        printf "%x\n" $1
-    else
-        print 'Usage: hex <number-to-convert>'
-        return 1
-    fi
-}
-
-function docker-clean-images() {
-    # If there are dangling docker images, remove them
-  if [[ $(docker images -a --filter=dangling=true -q) ]];
-    then
-    tput setaf 3; docker rmi $(docker images -a --filter=dangling=true -q) ; tput setaf 9
-    else
-        printf "\033[0;31mThere are no dangling images.\n"
-    fi
-}
-
-function docker-clean-ps() {
-    # If there are stopped containers, remove them
-  if [[ $(docker ps --filter=status=exited --filter=status=created -q) ]];
-    then
-    tput setaf 3; docker rm $(docker ps --filter=status=exited --filter=status=created -q) ; tput setaf 9
-    else
-        printf "\033[0;31mThere are no stopped containers.\n"
-    fi
-}
-
-function dfs() {
-    df $* | sed -n '1p;/^\//p;'
-}
-
-# creates an alias and precedes the command with sudo if $EUID is not zero.
-function salias() {
-  emulate -L zsh
-  local only=0 ; local multi=0
-  local key val
-  while getopts ":hao" opt; do
-    case $opt in
-      o) only=1 ;;
-      a) multi=1 ;;
-      h)
-        printf 'usage: salias [-hoa] <alias-expression>\n'
-        printf '  -h      shows this help text.\n'
-        printf '  -a      replace '\'' ; '\'' sequences with '\'' ; sudo '\''.\n'
-        printf '          be careful using this option.\n'
-        printf '  -o      only sets an alias if a preceding sudo would be needed.\n'
-        return 0
-        ;;
-      *) salias -h >&2; return 1 ;;
-    esac
-  done
-  shift "$((OPTIND-1))"
-
-  if (( ${#argv} > 1 )) ; then
-    printf 'Too many arguments %s\n' "${#argv}"
-    return 1
-  fi
-
-  key="${1%%\=*}" ;  val="${1#*\=}"
-  if (( EUID == 0 )) && (( only == 0 )); then
-    alias -- "${key}=${val}"
-  elif (( EUID > 0 )) ; then
-    (( multi > 0 )) && val="${val// ; / ; sudo }"
-    alias -- "${key}=sudo ${val}"
-  fi
-
-  return 0
-}
-
-# Check if we can read given files and source those we can.
-function xsource () {
-  if (( ${#argv} < 1 )) ; then
-    printf 'usage: xsource FILE(s)...\n' >&2
-    return 1
-  fi
-
-  while (( ${#argv} > 0 )) ; do
-    [[ -r "$1" ]] && source "$1"
-    shift
-  done
-  return 0
-}
-
-# Check if we can read a given file and 'cat(1)' it.
-function xcat() {
-  emulate -L zsh
-  if (( ${#argv} != 1 )) ; then
-    printf 'usage: xcat FILE\n' >&2
-    return 1
-  fi
-
-  [[ -r $1 ]] && cat $1
-  return 0
-}
-
-# Set the title
+# Set terminal title
 printf "\033];%s\07\n" "$USER@$(hostname)"
 
-# ohmyzsh functions
-# ------------------------------------------------------------------------------
-# * Oh My Zsh functions - https://github.com/ohmyzsh/
+# Options {{{1
 
-function top20() {
-  fc -l 1 \
-    | awk '{ CMD[$2]++; count++; } END { for (a in CMD) print CMD[a] " " CMD[a]*100/count "% " a }' \
-    | grep -v "./" | sort -nr | head -n 20 | column -c3 -s " " -t | nl
-}
+source /etc/default/locale    #load important settings &options early
 
-function takedir() {
-  mkdir -p $@ && cd ${@:$#}
-}
-
-function takeurl() {
-  local data thedir
-  data="$(mktemp)"
-  curl -L "$1" > "$data"
-  tar xf "$data"
-  thedir="$(tar tf "$data" | head -n 1)"
-  rm "$data"
-  cd "$thedir"
-}
-
-function takegit() {
-  git clone "$1"
-  cd "$(basename ${1%%.git})"
-}
-
-function take() {
-  if [[ $1 =~ ^(https?|ftp).*\.tar\.(gz|bz2|xz)$ ]]; then
-    takeurl "$1"
-  elif [[ $1 =~ ^([A-Za-z0-9]\+@|https?|git|ssh|ftps?|rsync).*\.git/?$ ]]; then
-    takegit "$1"
-  else
-    takedir "$@"
-  fi
-}
-# ------------------------------------------------------------------------------
-
-function gco() {
-  str="$*"
-  git commit -m "$str"
-}
-
-function dco() {
-  str="$*"
-  /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME commit -m "$str"
-}
-
-function lsl() {
-  str="$*"
-  ls --color=always $str | less -R
-}
-
-function lal() {
-  str="$*"
-  ls -CFa --color=always $str | less -R
-}
-
-function lll() {
-  str="$*"
-  ls -lF --color=always $str | less -R
-}
-
-function llal() {
-  str=""$*
-  ls -lFa --color=always $str | less -R
-}
-
-
-
-## Set important settings &options early
-
-xsource /etc/default/locale
-
-# enable parameter expansion, command substitution and arithmetic expansion in prompts
+# enable parameter expansion, command substitution and arithmetic expansion
 setopt prompt_subst
 
 # expand certain escape sequences starting with `%'
@@ -332,13 +120,332 @@ setopt histignorealldups
 # do not auto remove /'s
 unsetopt AUTO_REMOVE_SLASH
 
-# History file settings
-HISTFILE=~/.histfile
-HIST_STAMPS="yyyy-mm-dd"
-HISTSIZE=3000
-SAVEHIST=10000
+# Functions {{{1
 
-## Key bindings
+# Assorted utility funcitons {{{2
+
+# List all occurrences of programm in current PATH
+function plap() {
+    emulate -L zsh
+    if [[ $# = 0 ]] ; then
+        echo "Usage:    $0 program"
+        echo "Example:  $0 zsh"
+        echo "Lists all occurrences of program in the current PATH."
+    else
+        ls -l ${^path}/*$1*(*N)
+    fi
+}
+
+# Find out which libs define a symbol
+function lcheck() {
+    if [[ -n "$1" ]] ; then
+        nm -go /usr/lib/lib*.a 2>/dev/null | grep ":[[:xdigit:]]\{8\} . .*$1"
+    else
+        echo "Usage: lcheck <function>" >&2
+    fi
+}
+
+# Download a file and display it locally
+function uopen() {
+    emulate -L zsh
+    if ! [[ -n "$1" ]] ; then
+        print "Usage: uopen \$URL/\$file">&2
+        return 1
+    else
+        FILE=$1
+        MIME=$(curl --head $FILE | \
+               grep Content-Type | \
+               cut -d ' ' -f 2 | \
+               cut -d\; -f 1)
+        MIME=${MIME%$'\r'}
+        curl $FILE | see ${MIME}:-
+    fi
+}
+
+# Memory overview
+function memusage() {
+    ps aux | awk '{if (NR > 1) print $5;
+                   if (NR > 2) print "+"}
+                   END { print "p" }' | dc
+}
+
+# print hex value of a number
+function hex() {
+    emulate -L zsh
+    if [[ -n "$1" ]]; then
+        printf "%x\n" $1
+    else
+        print 'Usage: hex <number-to-convert>'
+        return 1
+    fi
+}
+
+# list physical devices
+function dfs() {
+    df $* | sed -n '1p;/^\//p;'
+}
+
+# Docker Functions {{{2
+
+function docker-clean-images() {
+    # If there are dangling docker images, remove them
+  if [[ $(docker images -a --filter=dangling=true -q) ]];
+    then
+    tput setaf 3; docker rmi $(docker images -a --filter=dangling=true -q) ; tput setaf 9
+    else
+        printf "\033[0;31mThere are no dangling images.\n"
+    fi
+}
+
+function docker-clean-ps() {
+    # If there are stopped containers, remove them
+  if [[ $(docker ps --filter=status=exited --filter=status=created -q) ]];
+    then
+    tput setaf 3; docker rm $(docker ps --filter=status=exited --filter=status=created -q) ; tput setaf 9
+    else
+        printf "\033[0;31mThere are no stopped containers.\n"
+    fi
+}
+
+# X Functions (fail gracefully) {{{2
+
+# Check if we can read given files and source those we can.
+function xsource () {
+  if (( ${#argv} < 1 )) ; then
+    printf 'usage: xsource FILE(s)...\n' >&2
+    return 1
+  fi
+
+  while (( ${#argv} > 0 )) ; do
+    [[ -r "$1" ]] && source "$1"
+    shift
+  done
+  return 0
+}
+
+# Check if we can read a given file and 'cat(1)' it.
+function xcat() {
+  emulate -L zsh
+  if (( ${#argv} != 1 )) ; then
+    printf 'usage: xcat FILE\n' >&2
+    return 1
+  fi
+
+  [[ -r $1 ]] && cat $1
+  return 0
+}
+
+# Oh My Zsh Functions {{{2
+# https://github.com/ohmyzsh/
+
+function top20() {
+  fc -l 1 \
+    | awk '{ CMD[$2]++; count++; } END { for (a in CMD) print CMD[a] " " CMD[a]*100/count "% " a }' \
+    | grep -v "./" | sort -nr | head -n 20 | column -c3 -s " " -t | nl
+}
+
+function takedir() {
+  mkdir -p $@ && cd ${@:$#}
+}
+
+function takeurl() {
+  local data thedir
+  data="$(mktemp)"
+  curl -L "$1" > "$data"
+  tar xf "$data"
+  thedir="$(tar tf "$data" | head -n 1)"
+  rm "$data"
+  cd "$thedir"
+}
+
+function takegit() {
+  git clone "$1"
+  cd "$(basename ${1%%.git})"
+}
+
+function take() {
+  if [[ $1 =~ ^(https?|ftp).*\.tar\.(gz|bz2|xz)$ ]]; then
+    takeurl "$1"
+  elif [[ $1 =~ ^([A-Za-z0-9]\+@|https?|git|ssh|ftps?|rsync).*\.git/?$ ]]; then
+    takegit "$1"
+  else
+    takedir "$@"
+  fi
+}
+
+# Git Functions {{{2
+
+function gco() {
+  str="$*"
+  git commit -m "$str"
+}
+
+function dco() {
+  str="$*"
+  /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME commit -m "$str"
+}
+
+# List Functions {{{2
+
+function lsl() {
+  str="$*"
+  ls --color=always $str | less -R
+}
+
+function lal() {
+  str="$*"
+  ls -CFa --color=always $str | less -R
+}
+
+function lll() {
+  str="$*"
+  ls -lF --color=always $str | less -R
+}
+
+function llal() {
+  str=""$*
+  ls -lFa --color=always $str | less -R
+}
+
+## SUDO Functions {{2
+
+# creates an alias and precedes the command with sudo if $EUID is not zero.
+function salias() {
+  emulate -L zsh
+  local only=0 ; local multi=0
+  local key val
+  while getopts ":hao" opt; do
+    case $opt in
+      o) only=1 ;;
+      a) multi=1 ;;
+      h)
+        printf 'usage: salias [-hoa] <alias-expression>\n'
+        printf '  -h      shows this help text.\n'
+        printf '  -a      replace '\'' ; '\'' sequences with '\'' ; sudo '\''.\n'
+        printf '          be careful using this option.\n'
+        printf '  -o      only sets an alias if a preceding sudo would be needed.\n'
+        return 0
+        ;;
+      *) salias -h >&2; return 1 ;;
+    esac
+  done
+  shift "$((OPTIND-1))"
+
+  if (( ${#argv} > 1 )) ; then
+    printf 'Too many arguments %s\n' "${#argv}"
+    return 1
+  fi
+
+  key="${1%%\=*}" ;  val="${1#*\=}"
+  if (( EUID == 0 )) && (( only == 0 )); then
+    alias -- "${key}=${val}"
+  elif (( EUID > 0 )) ; then
+    (( multi > 0 )) && val="${val// ; / ; sudo }"
+    alias -- "${key}=sudo ${val}"
+  fi
+
+  return 0
+}
+
+# sudo or sudo -e (replacement for sudoedit) will be inserted before the command
+# authors: Dongweiming <ciici123@gmail.com>, Subhaditya Nath <github.com/subnut>,
+#          Marc Cornellà <github.com/mcornella>, Carlo Sala <carlosalag@protonmail.com>
+
+# sudo-command-line helper function 
+function __sudo-replace-buffer() {
+  local old=$1 new=$2 space=${2:+ }
+
+  # if the cursor is positioned in the $old part of the text, make
+  # the substitution and leave the cursor after the $new text
+  if [[ $CURSOR -le ${#old} ]]; then
+    BUFFER="${new}${space}${BUFFER#$old }"
+    CURSOR=${#new}
+  # otherwise just replace $old with $new in the text before the cursor
+  else
+    LBUFFER="${new}${space}${LBUFFER#$old }"
+  fi
+}
+
+# prepend sudo to command or last command 
+function sudo-command-line() {
+  # If line is empty, get the last run command from history
+  [[ -z $BUFFER ]] && LBUFFER="$(fc -ln -1)"
+
+  # Save beginning space
+  local WHITESPACE=""
+  if [[ ${LBUFFER:0:1} = " " ]]; then
+    WHITESPACE=" "
+    LBUFFER="${LBUFFER:1}"
+  fi
+
+  {
+    # If $SUDO_EDITOR or $VISUAL are defined, then use that as $EDITOR
+    # Else use the default $EDITOR
+    local EDITOR=${SUDO_EDITOR:-${VISUAL:-$EDITOR}}
+
+    # If $EDITOR is not set, just toggle the sudo prefix on and off
+    if [[ -z "$EDITOR" ]]; then
+      case "$BUFFER" in
+        sudo\ -e\ *) __sudo-replace-buffer "sudo -e" "" ;;
+        sudo\ *) __sudo-replace-buffer "sudo" "" ;;
+        *) LBUFFER="sudo $LBUFFER" ;;
+      esac
+      return
+    fi
+
+    # Check if the typed command is really an alias to $EDITOR
+
+    # Get the first part of the typed command
+    local cmd="${${(Az)BUFFER}[1]}"
+    # Get the first part of the alias of the same name as $cmd, or $cmd if no alias matches
+    local realcmd="${${(Az)aliases[$cmd]}[1]:-$cmd}"
+    # Get the first part of the $EDITOR command ($EDITOR may have arguments after it)
+    local editorcmd="${${(Az)EDITOR}[1]}"
+
+    # Note: ${var:c} makes a $PATH search and expands $var to the full path
+    # The if condition is met when:
+    # - $realcmd is '$EDITOR'
+    # - $realcmd is "cmd" and $EDITOR is "cmd"
+    # - $realcmd is "cmd" and $EDITOR is "cmd --with --arguments"
+    # - $realcmd is "/path/to/cmd" and $EDITOR is "cmd"
+    # - $realcmd is "/path/to/cmd" and $EDITOR is "/path/to/cmd"
+    # or
+    # - $realcmd is "cmd" and $EDITOR is "cmd"
+    # - $realcmd is "cmd" and $EDITOR is "/path/to/cmd"
+    # or
+    # - $realcmd is "cmd" and $EDITOR is /alternative/path/to/cmd that appears in $PATH
+    if [[ "$realcmd" = (\$EDITOR|$editorcmd|${editorcmd:c}) \
+      || "${realcmd:c}" = ($editorcmd|${editorcmd:c}) ]] \
+      || builtin which -a "$realcmd" | command grep -Fx -q "$editorcmd"; then
+      __sudo-replace-buffer "$cmd" "sudo -e"
+      return
+    fi
+
+    # Check for editor commands in the typed command and replace accordingly
+    case "$BUFFER" in
+      $editorcmd\ *) __sudo-replace-buffer "$editorcmd" "sudo -e" ;;
+      \$EDITOR\ *) __sudo-replace-buffer '$EDITOR' "sudo -e" ;;
+      sudo\ -e\ *) __sudo-replace-buffer "sudo -e" "$EDITOR" ;;
+      sudo\ *) __sudo-replace-buffer "sudo" "" ;;
+      *) LBUFFER="sudo $LBUFFER" ;;
+    esac
+  } always {
+    # Preserve beginning space
+    LBUFFER="${WHITESPACE}${LBUFFER}"
+
+    # Redisplay edit buffer (compatibility with zsh-syntax-highlighting)
+    zle redisplay
+  }
+}
+
+## Key Bindings {{{1
+
+# sudo prepend bindings
+zle -N sudo-command-line
+# Defined shortcut keys: [Esc] [Esc]
+bindkey -M emacs '\e\e' sudo-command-line
+bindkey -M vicmd '\e\e' sudo-command-line
+bindkey -M viins '\e\e' sudo-command-line
 
 # use vi mode binds
 bindkey -v
@@ -371,10 +478,12 @@ bindkey "^E" end-of-line
 bindkey "^O" accept-line-and-down-history
 
 ## use the vi navigation keys (hjkl) besides cursor keys in menu completion
-#bindkey -M menuselect 'h' vi-backward-char        # left
-#bindkey -M menuselect 'k' vi-up-line-or-history   # up
-#bindkey -M menuselect 'l' vi-forward-char         # right
-#bindkey -M menuselect 'j' vi-down-line-or-history # bottom
+zstyle ':completion:*' menu select
+zmodload zsh/complist
+bindkey -M menuselect 'h' vi-backward-char        # left
+bindkey -M menuselect 'k' vi-up-line-or-history   # up
+bindkey -M menuselect 'l' vi-forward-char         # right
+bindkey -M menuselect 'j' vi-down-line-or-history # bottom
 
 ## set command prediction from history, see 'man 1 zshcontrib'
 #is4 && zrcautoload predict-on && \
@@ -391,7 +500,7 @@ bindkey "^O" accept-line-and-down-history
 
 #bindkey '\eq' push-line-or-edit
 
-## aliases ##
+## Aliases {{{1
 
 alias less='less -R'
 
@@ -433,6 +542,15 @@ alias sudo='sudo '
 
 alias cmx='cmatrix -ab -u 3'
 
+alias fzf='fzf --preview-window "top:50%:nohidden" --preview "batcat --style numbers,changes --color=always {} | head -500"'
+alias vf='v $(fzf)'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && (echo terminal; exit 0) || (echo error; exit 1))" "$([ $? = 0 ] && echo Task finished || echo Something went wrong!)" "$(history | sed -n "\$s/^\s*[0-9]\+\s*\(.*\)[;&|]\s*alert\$/\1/p")"'
+
+## Git Aliases {{{2
+
 alias dotgit='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias dotlazy='/usr/local/bin/lazygit -w $HOME -g $HOME/.dotfiles'
 
@@ -462,15 +580,7 @@ alias v='nvim'
 alias vi='nvim'
 alias vim='nvim'
 
-alias fzf='fzf --preview-window "top:50%:nohidden" --preview "batcat --style numbers,changes --color=always {} | head -500"'
-
-alias vf='v $(fzf)'
-
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && (echo terminal; exit 0) || (echo error; exit 1))" "$([ $? = 0 ] && echo Task finished || echo Something went wrong!)" "$(history | sed -n "\$s/^\s*[0-9]\+\s*\(.*\)[;&|]\s*alert\$/\1/p")"'
-
-## global aliases (for those who like them) ##
+## global aliases (for those who like them) {{{2
 
 #alias -g '...'='../..'
 #alias -g '....'='../../..'
@@ -491,9 +601,8 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && (echo terminal; exit 
 #alias -g V='| vim -'
 
 
-# Systemd aliases
-# ------------------------------------------------------------------------------
-# * Oh My Zsh systemd plugin - https://github.com/ohmyzsh/
+## Systemd Aliases {{{2
+# source: Oh My Zsh systemd plugin - https://github.com/ohmyzsh/
 
 user_commands=(
   cat
@@ -587,109 +696,8 @@ alias sc-mask-now="sc-mask --now"
 alias scu-enable-now="scu-enable --now"
 alias scu-disable-now="scu-disable --now"
 alias scu-mask-now="scu-mask --now"
-# ------------------------------------------------------------------------------
 
-# sudo or sudo -e (replacement for sudoedit) will be inserted before the command
-# ------------------------------------------------------------------------------
-# * Dongweiming <ciici123@gmail.com>
-# * Subhaditya Nath <github.com/subnut>
-# * Marc Cornellà <github.com/mcornella>
-# * Carlo Sala <carlosalag@protonmail.com>
-
-function __sudo-replace-buffer() {
-  local old=$1 new=$2 space=${2:+ }
-
-  # if the cursor is positioned in the $old part of the text, make
-  # the substitution and leave the cursor after the $new text
-  if [[ $CURSOR -le ${#old} ]]; then
-    BUFFER="${new}${space}${BUFFER#$old }"
-    CURSOR=${#new}
-  # otherwise just replace $old with $new in the text before the cursor
-  else
-    LBUFFER="${new}${space}${LBUFFER#$old }"
-  fi
-}
-
-function sudo-command-line() {
-  # If line is empty, get the last run command from history
-  [[ -z $BUFFER ]] && LBUFFER="$(fc -ln -1)"
-
-  # Save beginning space
-  local WHITESPACE=""
-  if [[ ${LBUFFER:0:1} = " " ]]; then
-    WHITESPACE=" "
-    LBUFFER="${LBUFFER:1}"
-  fi
-
-  {
-    # If $SUDO_EDITOR or $VISUAL are defined, then use that as $EDITOR
-    # Else use the default $EDITOR
-    local EDITOR=${SUDO_EDITOR:-${VISUAL:-$EDITOR}}
-
-    # If $EDITOR is not set, just toggle the sudo prefix on and off
-    if [[ -z "$EDITOR" ]]; then
-      case "$BUFFER" in
-        sudo\ -e\ *) __sudo-replace-buffer "sudo -e" "" ;;
-        sudo\ *) __sudo-replace-buffer "sudo" "" ;;
-        *) LBUFFER="sudo $LBUFFER" ;;
-      esac
-      return
-    fi
-
-    # Check if the typed command is really an alias to $EDITOR
-
-    # Get the first part of the typed command
-    local cmd="${${(Az)BUFFER}[1]}"
-    # Get the first part of the alias of the same name as $cmd, or $cmd if no alias matches
-    local realcmd="${${(Az)aliases[$cmd]}[1]:-$cmd}"
-    # Get the first part of the $EDITOR command ($EDITOR may have arguments after it)
-    local editorcmd="${${(Az)EDITOR}[1]}"
-
-    # Note: ${var:c} makes a $PATH search and expands $var to the full path
-    # The if condition is met when:
-    # - $realcmd is '$EDITOR'
-    # - $realcmd is "cmd" and $EDITOR is "cmd"
-    # - $realcmd is "cmd" and $EDITOR is "cmd --with --arguments"
-    # - $realcmd is "/path/to/cmd" and $EDITOR is "cmd"
-    # - $realcmd is "/path/to/cmd" and $EDITOR is "/path/to/cmd"
-    # or
-    # - $realcmd is "cmd" and $EDITOR is "cmd"
-    # - $realcmd is "cmd" and $EDITOR is "/path/to/cmd"
-    # or
-    # - $realcmd is "cmd" and $EDITOR is /alternative/path/to/cmd that appears in $PATH
-    if [[ "$realcmd" = (\$EDITOR|$editorcmd|${editorcmd:c}) \
-      || "${realcmd:c}" = ($editorcmd|${editorcmd:c}) ]] \
-      || builtin which -a "$realcmd" | command grep -Fx -q "$editorcmd"; then
-      __sudo-replace-buffer "$cmd" "sudo -e"
-      return
-    fi
-
-    # Check for editor commands in the typed command and replace accordingly
-    case "$BUFFER" in
-      $editorcmd\ *) __sudo-replace-buffer "$editorcmd" "sudo -e" ;;
-      \$EDITOR\ *) __sudo-replace-buffer '$EDITOR' "sudo -e" ;;
-      sudo\ -e\ *) __sudo-replace-buffer "sudo -e" "$EDITOR" ;;
-      sudo\ *) __sudo-replace-buffer "sudo" "" ;;
-      *) LBUFFER="sudo $LBUFFER" ;;
-    esac
-  } always {
-    # Preserve beginning space
-    LBUFFER="${WHITESPACE}${LBUFFER}"
-
-    # Redisplay edit buffer (compatibility with zsh-syntax-highlighting)
-    zle redisplay
-  }
-}
-
-zle -N sudo-command-line
-
-# Defined shortcut keys: [Esc] [Esc]
-bindkey -M emacs '\e\e' sudo-command-line
-bindkey -M vicmd '\e\e' sudo-command-line
-bindkey -M viins '\e\e' sudo-command-line
-# ------------------------------------------------------------------------------
-
-## miscellaneous code ##
+## miscellaneous code
 
 # Use a default width of 80 for manpages for more convenient reading
 export MANWIDTH=${MANWIDTH:-80}
@@ -697,8 +705,9 @@ export MANWIDTH=${MANWIDTH:-80}
 # Set a search path for the cd builtin
 cdpath=(.. ~)
 
-## git completion setup
+## Plugins & Sourcing {{{1
 
+# git completion
 zstyle ':completion:*:*:git:*' script ~/.config/git-completion.bash
 zstyle ':completion:*' completer _expand _complete _ignored _approximate
 zstyle ':completion:*' max-errors 2 numeric
@@ -707,7 +716,7 @@ zstyle ':completion:*' prompt '1'
 # provides '.' completion
 zstyle ':completion:*' special-dirs true
 
-zstyle :compinstall filename '/home/peterm/.zshrc'
+zstyle :compinstall filename '/$HOME/.zshrc'
 
 # add custom functions to fpath
 fpath=(~/.config/zsh/functions $fpath)
@@ -715,33 +724,27 @@ fpath=(~/.config/zsh/functions $fpath)
 # enable completion system
 autoload -Uz compinit && compinit
 
-## dotbare plugin
-
-export DOTBARE_DIR="$HOME/.dotfiles"
-export DOTBARE_TREE="$HOME"
-xsource ~/.dotbare/dotbare.plugin.zsh
-
-## zsh-completions plugin
-
+# zsh-completions plugin
 fpath=(~/.config/zsh/zsh-completions/src $fpath)
 
-## dirhistory plugin
-
+# dirhistory plugin
 xsource ~/.config/zsh/dirhistory.plugin.zsh
 
+# syntax highlighting plugin 
 xsource ~/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-## zsh-autosuggestions plugin
+# zsh-autosuggestions plugin
 xsource ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=30
 
-## fzf integration
-
+# fzf plugin
 xsource <(~/.config/fzf/bin/fzf --zsh)
 
+# profile
 xsource ~/.config/profile.sh
 
+# oh-my-posh prompt
 eval "$(~/.local/bin/oh-my-posh init zsh --config ~/.config/zsh/catppuccin.omp.toml)"
 
 ## EOF
