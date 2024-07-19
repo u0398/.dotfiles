@@ -695,20 +695,6 @@ cdpath=(.. ~)
 #  fi
 #fi
 
-## gitprompt setup
-
-GITSTATUS_DIR=~/.config/zsh/gitstatus
-source $GITSTATUS_DIR/gitstatus.plugin.zsh # xsource not working
-
-# Start gitstatusd instance with name "MY". The same name is passed to
-# gitstatus_query in gitstatus_prompt_update. The flags with -1 as values
-# enable staged, unstaged, conflicted and untracked counters.
-gitstatus_stop 'MY' && gitstatus_start -s -1 -u -1 -c -1 -d -1 'MY'
-
-# On every prompt, fetch git status and set GITSTATUS_PROMPT.
-autoload -Uz add-zsh-hook
-add-zsh-hook precmd gitstatus_prompt_update
-
 ## git completion setup
 
 zstyle ':completion:*:*:git:*' script ~/.config/git-completion.bash
