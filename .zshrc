@@ -386,54 +386,6 @@ bindkey "^O" accept-line-and-down-history
 
 #bindkey '\eq' push-line-or-edit
 
-## Prompt
-#NEWLINE=$'\n'
-
-#GIT_PS1_SHOWDIRTYSTATE=yes
-
-# if a theme color is set, use it
-#if [ -z $THEME_COLOR ]; then
-#  PROMPT_COLOR="%F{10}"
-#else
-#  PROMPT_COLOR="%F{$THEME_COLOR}"
-#fi
-
-#PROMPT_ERROR="%F{9}"
-
-# remote connections show host
-#if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-#  PROMPT='%(!.%F{9}.$PROMPT_COLOR)%n%F{15}@%F{7}%m %F{243}'
-#else
-#  PROMPT='%(!.%F{9}.$PROMPT_COLOR)%n%F{15} %F{243}'
-#fi
-
-#PROMPT+='${GITSTATUS_PROMPT:+ $GITSTATUS_PROMPT}'
-#PROMPT+='$GITSTATUS_PROMPT'
-
-#PROMPT+='${NEWLINE}%F{7}%0~%f%b %(?.$PROMPT_COLOR.$PROMPT_ERROR)%#%F{7} '
-
-# only show date/time on wide terminals
-#if [ $(tput cols) -lt 96 ]; then
-#  RPROMPT='%(?..$PROMPT_ERROR%? %F{243}- )${EXECUTETIME}'
-#else
-#  RPROMPT='%(?..$PROMPT_ERROR%? %F{243}- )${EXECUTETIME} %F{243}- %D{%a %b %d %H:%M:%S}'
-#fi
-
-#PROMPT_SUF='${NEWLINE}%F{7}%0~%f%b %(?.$PROMPT_COLOR.$PROMPT_ERROR)%#%F{7} '
-
-# insert git status if repo
-#PROMPT=$PROMPT_PRE'$(git branch &>/dev/null;\
-#if [ $? -eq 0 ]; then \
-#  echo "$(echo `git status` | grep "nothing to commit" > /dev/null 2>&1; \
-#  if [ "$?" -eq "0" ]; then \
-#    echo "%F{28}"$(__git_ps1 " (%s)"); \
-#  else \
-#    echo "%F{1}"$(__git_ps1 " (%s)"); \
-#  fi) '$PROMPT_SUF'"; \
-#else \
-#  echo " '$PROMPT_SUF'"; \
-#fi)'
-
 ## aliases ##
 
 alias less='less -R'
