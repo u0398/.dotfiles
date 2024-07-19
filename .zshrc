@@ -902,6 +902,6 @@ xsource <(~/.config/fzf/bin/fzf --zsh)
 
 xsource ~/.config/profile.sh
 
-eval "$(~/.local/bin/oh-my-posh init zsh --config ~/.config/zsh/catppuccin.omp.json)"
+eval "$(~/.local/bin/oh-my-posh init zsh --config ~/.config/zsh/catppuccin.omp.toml)"
 
 ## EOF
