@@ -210,6 +210,11 @@ gco() {
   git commit -m "$str"
 }
 
+dco() {
+  str="$*"
+  dotgit commit -m "$str"
+}
+
 lsl() {
   str="$*"
   ls --color=always $str | less -R
@@ -391,9 +396,9 @@ bindkey "^O" accept-line-and-down-history
 alias less='less -R'
 
 alias ls='ls -CF --color=always'
+alias lsa='ls -CFa'
 alias ll='ls -lF'
 alias lla='ll -a'
-alias la='ls -CFa'
 #alias lsl (see lsl function)
 #alias lal (see lal function)
 #alias lll (see lll function)
@@ -411,6 +416,7 @@ alias ....='cd ../../..'
 alias .....='cd ../../../..'
 
 alias fhere='find . -name '
+alias fd='fdfind'
 alias df='df -Tha --total'
 alias du='du -ch'
 alias dus='du | sort -h'
@@ -427,18 +433,30 @@ alias sudo='sudo '
 
 alias cmx='cmatrix -ab -u 3'
 
+alias dotgit='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias dotlazy='/usr/local/bin/lazygit -w $HOME -g $HOME/.dotfiles'
+
+#dotgit shortcuts
+alias dst='git status'
+alias dad='git add'
+alias dbr='git branch'
+#alias dco (add un-commented string to commit. see dco function)
+alias ddf='git diff'
+alias dck='git checkout'
+alias dlo='git log --pretty=format:"%h %ad | %s%d [%an]" --graph --date=short --max-count=40'
+alias dps='git push'
+alias dpl='git pull'
+
+#git shortcuts
 alias gst='git status'
 alias gad='git add'
 alias gbr='git branch'
-#alias gco (see gco function)
+#alias gco (add un-commented string to commit. see gco function)
 alias gdf='git diff'
 alias gck='git checkout'
 alias glo='git log --pretty=format:"%h %ad | %s%d [%an]" --graph --date=short --max-count=40'
 alias gps='git push'
 alias gpl='git pull'
-
-alias dotgit='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-alias dotlazy='/usr/local/bin/lazygit -w $HOME -g $HOME/.dotfiles'
 
 alias v='nvim'
 alias vi='nvim'
