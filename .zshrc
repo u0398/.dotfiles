@@ -212,7 +212,7 @@ gco() {
 
 dco() {
   str="$*"
-  dotgit commit -m "$str"
+  /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME commit -m "$str"
 }
 
 lsl() {
@@ -437,15 +437,15 @@ alias dotgit='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias dotlazy='/usr/local/bin/lazygit -w $HOME -g $HOME/.dotfiles'
 
 #dotgit shortcuts
-alias dst='git status'
-alias dad='git add'
-alias dbr='git branch'
+alias dst='dotgit status'
+alias dad='dotgit add'
+alias dbr='dotgit branch'
 #alias dco (add un-commented string to commit. see dco function)
-alias ddf='git diff'
-alias dck='git checkout'
-alias dlo='git log --pretty=format:"%h %ad | %s%d [%an]" --graph --date=short --max-count=40'
-alias dps='git push'
-alias dpl='git pull'
+alias ddf='dotgit diff'
+alias dck='dotgit checkout'
+alias dlo='dotgit log --pretty=format:"%h %ad | %s%d [%an]" --graph --date=short --max-count=40'
+alias dps='dotgit push'
+alias dpl='dotgit pull'
 
 #git shortcuts
 alias gst='git status'
