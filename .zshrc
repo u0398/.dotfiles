@@ -438,7 +438,7 @@ function sudo-command-line() {
   }
 }
 
-## Key Bindings {{{1
+# Key Bindings {{{1
 
 # sudo prepend bindings
 zle -N sudo-command-line
@@ -500,7 +500,7 @@ bindkey -M menuselect 'j' vi-down-line-or-history # bottom
 
 #bindkey '\eq' push-line-or-edit
 
-## Aliases {{{1
+# Aliases {{{1
 
 alias less='less -R'
 
@@ -705,7 +705,7 @@ export MANWIDTH=${MANWIDTH:-80}
 # Set a search path for the cd builtin
 cdpath=(.. ~)
 
-## Plugins & Sourcing {{{1
+# Plugins & Sourcing {{{1
 
 # git completion
 zstyle ':completion:*:*:git:*' script ~/.config/git-completion.bash
@@ -739,8 +739,17 @@ ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=30
 
 # fzf plugin
-xsource <(~/.config/fzf/bin/fzf --zsh)
 
+xsource <(~/.config/fzf/bin/fzf --zsh)
+export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
+  --color=fg:#b8c0e0,fg+:#cad3f5,bg:#24273a,bg+:#363a4f
+  --color=hl:#ed8796,hl+:#7dc4e4,info:#c6a0f6,marker:#91d7e3
+  --color=prompt:#d7005f,spinner:#7dc4e4,pointer:#7dc4e4,header:#ed8796
+  --color=gutter:#1e2030,border:#6e738d,separator:#494d64,scrollbar:#494d64
+  --color=preview-label:#c6a0f6,label:#c6a0f6,query:#b8c0e0
+  --border="rounded" --border-label-pos="0" --preview-window="border-rounded"
+  --prompt=" " --marker="" --pointer=" " --separator="─"
+  --scrollbar="│"'
 # profile
 xsource ~/.config/profile.sh
 
