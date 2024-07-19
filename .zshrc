@@ -19,7 +19,7 @@ fi
 ## Functions
 
 # List all occurrences of programm in current PATH
-plap() {
+function plap() {
     emulate -L zsh
     if [[ $# = 0 ]] ; then
         echo "Usage:    $0 program"
@@ -31,7 +31,7 @@ plap() {
 }
 
 # Find out which libs define a symbol
-lcheck() {
+function lcheck() {
     if [[ -n "$1" ]] ; then
         nm -go /usr/lib/lib*.a 2>/dev/null | grep ":[[:xdigit:]]\{8\} . .*$1"
     else
@@ -40,7 +40,7 @@ lcheck() {
 }
 
 # Download a file and display it locally
-uopen() {
+function uopen() {
     emulate -L zsh
     if ! [[ -n "$1" ]] ; then
         print "Usage: uopen \$URL/\$file">&2
@@ -57,14 +57,14 @@ uopen() {
 }
 
 # Memory overview
-memusage() {
+function memusage() {
     ps aux | awk '{if (NR > 1) print $5;
                    if (NR > 2) print "+"}
                    END { print "p" }' | dc
 }
 
 # print hex value of a number
-hex() {
+function hex() {
     emulate -L zsh
     if [[ -n "$1" ]]; then
         printf "%x\n" $1
@@ -74,7 +74,7 @@ hex() {
     fi
 }
 
-docker-clean-images() {
+function docker-clean-images() {
     # If there are dangling docker images, remove them
   if [[ $(docker images -a --filter=dangling=true -q) ]];
     then
@@ -84,7 +84,7 @@ docker-clean-images() {
     fi
 }
 
-docker-clean-ps() {
+function docker-clean-ps() {
     # If there are stopped containers, remove them
   if [[ $(docker ps --filter=status=exited --filter=status=created -q) ]];
     then
@@ -94,12 +94,12 @@ docker-clean-ps() {
     fi
 }
 
-dfs() {
+function dfs() {
     df $* | sed -n '1p;/^\//p;'
 }
 
 # creates an alias and precedes the command with sudo if $EUID is not zero.
-salias() {
+function salias() {
   emulate -L zsh
   local only=0 ; local multi=0
   local key val
@@ -151,7 +151,7 @@ function xsource () {
 }
 
 # Check if we can read a given file and 'cat(1)' it.
-xcat() {
+function xcat() {
   emulate -L zsh
   if (( ${#argv} != 1 )) ; then
     printf 'usage: xcat FILE\n' >&2
@@ -169,17 +169,17 @@ printf "\033];%s\07\n" "$USER@$(hostname)"
 # ------------------------------------------------------------------------------
 # * Oh My Zsh functions - https://github.com/ohmyzsh/
 
-top20() {
+function top20() {
   fc -l 1 \
     | awk '{ CMD[$2]++; count++; } END { for (a in CMD) print CMD[a] " " CMD[a]*100/count "% " a }' \
     | grep -v "./" | sort -nr | head -n 20 | column -c3 -s " " -t | nl
 }
 
-takedir() {
+function takedir() {
   mkdir -p $@ && cd ${@:$#}
 }
 
-takeurl() {
+function takeurl() {
   local data thedir
   data="$(mktemp)"
   curl -L "$1" > "$data"
@@ -189,12 +189,12 @@ takeurl() {
   cd "$thedir"
 }
 
-takegit() {
+function takegit() {
   git clone "$1"
   cd "$(basename ${1%%.git})"
 }
 
-take() {
+function take() {
   if [[ $1 =~ ^(https?|ftp).*\.tar\.(gz|bz2|xz)$ ]]; then
     takeurl "$1"
   elif [[ $1 =~ ^([A-Za-z0-9]\+@|https?|git|ssh|ftps?|rsync).*\.git/?$ ]]; then
@@ -205,32 +205,32 @@ take() {
 }
 # ------------------------------------------------------------------------------
 
-gco() {
+function gco() {
   str="$*"
   git commit -m "$str"
 }
 
-dco() {
+function dco() {
   str="$*"
   /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME commit -m "$str"
 }
 
-lsl() {
+function lsl() {
   str="$*"
   ls --color=always $str | less -R
 }
 
-lal() {
+function lal() {
   str="$*"
   ls -CFa --color=always $str | less -R
 }
 
-lll() {
+function lll() {
   str="$*"
   ls -lF --color=always $str | less -R
 }
 
-llal() {
+function llal() {
   str=""$*
   ls -lFa --color=always $str | less -R
 }
@@ -596,7 +596,7 @@ alias scu-mask-now="scu-mask --now"
 # * Marc Cornellà <github.com/mcornella>
 # * Carlo Sala <carlosalag@protonmail.com>
 
-__sudo-replace-buffer() {
+function __sudo-replace-buffer() {
   local old=$1 new=$2 space=${2:+ }
 
   # if the cursor is positioned in the $old part of the text, make
@@ -610,7 +610,7 @@ __sudo-replace-buffer() {
   fi
 }
 
-sudo-command-line() {
+function sudo-command-line() {
   # If line is empty, get the last run command from history
   [[ -z $BUFFER ]] && LBUFFER="$(fc -ln -1)"
 
