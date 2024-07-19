@@ -101,10 +101,10 @@ alignment = "right"
   [[blocks.segments]]
   type = "time"
   style = "plain"
-  template = " <p:blue,transparent></><p:surface0,p:blue> </><p:text,p:surface0> {{ .Format }}</><p:surface0,transparent></>"
+  template = " <p:blue,transparent></><p:surface0,p:blue> </><p:text,p:surface0> {{ .CurrentDate | date .Format }}</><p:surface0,transparent></>"
 
     [blocks.segments.properties]
-    time_format = "15:04:05"
+    time_format = "15:04"
 
 [[blocks]]
 type = "prompt"
