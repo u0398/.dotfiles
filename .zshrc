@@ -185,6 +185,44 @@ function dfs() {
     df $* | sed -n '1p;/^\//p;'
 }
 
+# fuzzy explorer
+# extending Phantas0's work (https://thevaluable.dev/practical-guide-fzf-example/)
+function fex() {
+  local selection=$(find -type d | fzf --multi --print0 \
+  --preview='tree -C {}' \
+  --prompt='   ' \
+  --bind='del:execute(rm -ri {+})' \
+  --bind='ctrl-p:toggle-preview' \
+  --bind='ctrl-d:change-prompt(   )' \
+  --bind='ctrl-d:+reload(find -type d)' \
+  --bind='ctrl-d:+change-preview(tree -C {})' \
+  --bind='ctrl-d:+refresh-preview' \
+  --bind='ctrl-f:change-prompt(   )' \
+  --bind='ctrl-f:+reload(find -type f)' \
+  --bind='ctrl-f:+change-preview(batcat --style numbers,changes --color=always {} | head -500)' \
+  --bind='ctrl-f:+refresh-preview' \
+  --bind='ctrl-a:select-all' \
+  --bind='ctrl-x:deselect-all' \
+  --border-label ' fzf Explorer ' \
+  --header ' CTRL-D (directories) CTRL-F (files)
+ CTRL-A (select all) CTRL-X (deselect) 
+ CTRL-P (toggle preview) DEL (delete)' 
+  )
+
+  # if no selection made do nothing
+  if [ -z "$selection" ]; then
+    return 0
+  fi
+
+  # if selection is a folder (with multiples go to the first)
+  if [ -d "$(echo $selection | sed 's/\x0.*$//')" ]; then
+    cd "$selection" || exit
+  else
+    # supports multiple selections
+    eval $EDITOR $(echo $selection |sed -e 's/\x00/ /g')
+  fi
+}
+
 # Docker Functions {{{2
 
 function docker-clean-images() {
@@ -201,7 +239,7 @@ function docker-clean-ps() {
     # If there are stopped containers, remove them
   if [[ $(docker ps --filter=status=exited --filter=status=created -q) ]];
     then
-    tput setaf 3; docker rm $(docker ps --filter=status=exited --filter=status=created -q) ; tput setaf 9
+    tput setaf 3; docker rm $(docker ps --filter=statu=sexited --filter=status=created -q) ; tput setaf 9
     else
         printf "\033[0;31mThere are no stopped containers.\n"
     fi
@@ -542,8 +580,8 @@ alias sudo='sudo '
 
 alias cmx='cmatrix -ab -u 3'
 
-alias fzf='fzf --preview-window "top:50%:nohidden" --preview "batcat --style numbers,changes --color=always {} | head -500"'
-alias vf='v $(fzf)'
+alias fzf='fzf --height=80% --reverse --preview-window "right:70%:nohidden" --bind="ctrl-p:toggle-preview" --preview "batcat --style numbers,changes --color=always {} | head -500"'
+alias vf='v $(find . -type f | fzf)'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
