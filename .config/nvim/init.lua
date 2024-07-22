@@ -254,6 +254,7 @@ require("lazy").setup {
       },
     },
     { "nvim-tree/nvim-web-devicons" },
+    { "lewis6991/gitsigns.nvim" },
     { "nvim-tree/nvim-tree.lua", version = "*", lazy = false },
     { "nvim-treesitter/nvim-treesitter" },
     { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
@@ -283,6 +284,13 @@ require("lazy").setup {
 }
 
 -- plugin setup {{{1
+
+-- lewis6991/gitsigns.nvim {{{2
+-- git decorations implemented purely in Lua
+local gitsigns_loaded, gitsigns = pcall(require, 'gitsigns')
+if gitsigns_loaded then
+  gitsigns.setup()
+end
 
 -- nvim-tree/nvim-tree.lua {{{2
 -- A File Explorer For Neovim Written In Lua
@@ -585,9 +593,9 @@ if lualine_loaded then
   lualine.setup {
     options = {
       icons_enabled = true,
-      theme = custom_powerline,
+      theme = auto,
       component_separators = { left = "", right = "" },
-      section_separators = { left = "", right = "" },
+      section_separators = { left = "", right = "" },
       disabled_filetypes = { "alpha", "dashboard", "NvimTree", "Outline" },
       always_divide_middle = true,
     },
