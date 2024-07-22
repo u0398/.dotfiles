@@ -226,82 +226,21 @@ function fex() {
 # Docker Functions {{{2
 
 function docker-clean-images() {
-    # If there are dangling docker images, remove them
-  if [[ $(docker images -a --filter=dangling=true -q) ]];
-    then
+  # If there are dangling docker images, remove them
+  if [[ $(docker images -a --filter=dangling=true -q) ]]; then
     tput setaf 3; docker rmi $(docker images -a --filter=dangling=true -q) ; tput setaf 9
-    else
-        printf "\033[0;31mThere are no dangling images.\n"
-    fi
+  else
+    printf "\033[0;31mThere are no dangling images.\n"
+  fi
 }
 
 function docker-clean-ps() {
-    # If there are stopped containers, remove them
-  if [[ $(docker ps --filter=status=exited --filter=status=created -q) ]];
-    then
+  # If there are stopped containers, remove them
+  if [[ $(docker ps --filter=status=exited --filter=status=created -q) ]]; then
     tput setaf 3; docker rm $(docker ps --filter=status=exited --filter=status=created -q) ; tput setaf 9
-    rer
-    # extending Phantas0's work
-    # (https://thevaluable.dev/practical-guide-fzf-example/)
-    # function fex() {
-    #   local selection=$(find -type d | fzf --multi --print0 \
-    #     --preview='tree -C {}' \
-    #       --prompt='   ' \
-    #         --bind='del:execute(rm -ri {+})' \
-    #           --bind='ctrl-p:toggle-preview' \
-    #             --bind='ctrl-d:change-prompt(   )' \
-    #               --bind='ctrl-d:+reload(find -type d)' \
-    #                 --bind='ctrl-d:+change-preview(tree -C {})' \
-    #                   --bind='ctrl-d:+refresh-preview' \
-    #                     --bind='ctrl-f:change-prompt(   )' \
-    #                       --bind='ctrl-f:+reload(find -type f)' \
-    #                         --bind='ctrl-f:+change-preview(batcat --style
-    #                         numbers,changes --color=always {} | head -500)'
-    #                         \
-    #                           --bind='ctrl-f:+refresh-preview' \
-    #                             --bind='ctrl-a:select-all' \
-    #                               --bind='ctrl-x:deselect-all' \
-    #                                 --border-label ' fzf Explorer ' \
-    #                                   --header ' CTRL-D (directories) CTRL-F
-    #                                   (files)
-    #                                    CTRL-A (select all) CTRL-X (deselect) 
-    #                                     CTRL-P (toggle preview) DEL
-    #                                     (delete)' 
-    #                                       )
-    #
-    #                                         # if no selection made do
-    #                                         nothing
-    #                                           if [ -z "$selection" ]; then
-    #                                               return 0
-    #                                                 fi
-    #
-    #                                                   # if selection is a
-    #                                                   folder (with multiples
-    #                                                   go to the first)
-    #                                                     if [ -d "$(echo
-    #                                                     $selection | sed
-    #                                                     's/\x0.*$//')" ];
-    #                                                     then
-    #                                                         cd "$selection"
-    #                                                         || exit
-    #                                                           else
-    #                                                               # supports
-    #                                                               multiple
-    #                                                               selections
-    #                                                                   eval
-    #                                                                   $EDITOR
-    #                                                                   $(echo
-    #                                                                   $selection
-    #                                                                   |sed
-    #                                                                   -e
-    #                                                                   's/\x00/
-    #                                                                   /g')
-    #                                                                     fi
-    #                                                                     }
-    #
-    else
-        printf "\033[0;31mThere are no stopped containers.\n"
-    fi
+  else
+    printf "\033[0;31mThere are no stopped containers.\n"
+  fi
 }
 
 # X Functions (fail gracefully) {{{2
@@ -563,7 +502,7 @@ bindkey "^S" beginning-of-line
 
 # autosuggest
 zle -N autosuggest-accept
-bindkey '^ ' autosuggest-accept
+bindkey '^l' autosuggest-accept
 zle -N autosuggest-execute
 bindkey '^\' autosuggest-execute
 
