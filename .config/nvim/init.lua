@@ -15,6 +15,43 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+vim.diagnostic.config {
+  virtual_text = {
+    prefix = "●",
+  },
+  severity_sort = true,
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = "",
+      [vim.diagnostic.severity.WARN] = "",
+      [vim.diagnostic.severity.INFO] = "",
+      [vim.diagnostic.severity.HINT] = "",
+    },
+  },
+  float = {
+    border = "rounded",
+    format = function(d)
+      return ("%s (%s) [%s]"):format(d.message, d.source, d.code or d.user_data.lsp.code)
+    end,
+  },
+  underline = true,
+  jump = {
+    float = true,
+  },
+}
+
+      -- [vim.diagnostic.severity.ERROR] = "",
+      -- [vim.diagnostic.severity.WARN] = "",
+      -- [vim.diagnostic.severity.INFO] = "",
+      -- [vim.diagnostic.severity.HINT] = "",
+
+-- local symbols = { Error = "󰅙", Info = "󰋼", Hint = "󰌵", Warn = "" }
+--
+-- for name, icon in pairs(symbols) do
+--     local hl = "DiagnosticSign" .. name
+--     vim.fn.sign_define(hl, { text = icon, numhl = hl, texthl = hl })
+-- end
+
 -- options {{{1
 
 local o = vim.opt
@@ -68,6 +105,8 @@ o.wrap              = true      -- wrap long lines
 o.breakindent       = true      -- start wrapped lines indented
 o.linebreak         = true      -- do not break words on line wrap
 
+o.fillchars         = 'foldsep: '
+
 -- Characters to display on ':set list',explore glyphs using:
 -- `xfd -fa "InputMonoNerdFont:style:Regular"` or
 -- `xfd -fn "-misc-fixed-medium-r-semicondensed-*-13-*-*-*-*-*-iso10646-1"`
@@ -86,7 +125,8 @@ o.listchars = {
 o.showbreak = '↪ '
 
 -- show menu even for one item do not auto select/insert
-o.completeopt       = { 'noinsert' , 'menuone' , 'noselect' }
+o.completeopt       = {'menu', 'menuone', 'noselect'}
+--o.completeopt       = { 'noinsert' , 'menuone' , 'noselect' }
 o.wildmenu          = true
 o.wildmode          = 'longest:full,full'
 o.wildoptions       = 'pum'     -- Show completion items using the pop-up-menu (pum)
@@ -128,10 +168,12 @@ o.formatoptions = o.formatoptions
 o.splitbelow        = true      -- ':new' ':split' below current
 o.splitright        = true      -- ':vnew' ':vsplit' right of current
 
+o.foldcolumn        = '1'
 o.foldenable        = true      -- enable folding
-o.foldlevelstart    = 10        -- open most folds by default
-o.foldnestmax       = 10        -- 10 nested fold max
-o.foldmethod        = 'marker'  -- fold based on indent level
+o.foldlevel         = 99
+o.foldlevelstart    = 99        -- open most folds by default
+o.foldnestmax       = 50        -- 10 nested fold max
+o.foldmethod        = 'indent'  -- fold based on indent level
 
 o.undofile          = false     -- no undo file
 o.hidden            = true      -- do not unload buffer when abandoned
@@ -232,7 +274,12 @@ vim.g.markdown_fenced_languages = {
   'json',
 }
 
-vim.api.nvim_command('set rtp-=/usr/share/vim/vimfiles') -- do not load system fzf.vim (Arch, etc.)
+-- using catppuccin custom highlights instead
+--local hi = vim.api.nvim_set_hl
+--hi(0,'TermCursorNC', { fg='#24273a', bg='#a5adcb' })
+--hi(0,'Folded', { bg='NONE' })
+
+  vim.api.nvim_command('set rtp-=/usr/share/vim/vimfiles') -- do not load system fzf.vim (Arch, etc.)
 
 vim.keymap.set("n", "<Space>", "<Nop>", { silent = true, remap = false })
 
@@ -240,50 +287,109 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
 -- load plugins with lazy.nvim {{{1
-require("lazy").setup {
+require('lazy').setup {
   spec = {
-    { "nvim-lua/plenary.nvim" },
-    { "gennaro-tedesco/nvim-possession",
+    { 'nvim-lua/plenary.nvim', lazy = false, },
+    { 'nvim-telescope/telescope.nvim', branch = '0.1.x', },
+    { 'nvim-tree/nvim-tree.lua',
+      version = '*',
       lazy = false,
       dependencies = {
-        { "tiagovla/scope.nvim",
+        { 'nvim-tree/nvim-web-devicons',  lazy = false },
+      },
+      config = function()
+        require('nvim-tree').setup {}
+      end,
+    },
+    { 'kevinhwang91/nvim-ufo',
+      dependencies = {
+        'kevinhwang91/promise-async',
+      },
+    },
+    { 'kylechui/nvim-surround',
+      version = '*', -- Use for stability; omit to use `main` branch for the latest features
+      event = 'VeryLazy',
+      config =
+        function()
+          require('nvim-surround').setup()
+        end
+    },
+    { 'smoka7/hop.nvim', version = 'v2.*' },
+    { 'luukvbaal/statuscol.nvim' },
+    { 'echasnovski/mini.nvim', version = '*' },
+    { 'lewis6991/gitsigns.nvim' },
+    { 'nvim-treesitter/nvim-treesitter' },
+    { 'catppuccin/nvim', name = 'catppuccin', priority = 1000 },
+    { 'karb94/neoscroll.nvim' },
+    { 'ibhagwan/fzf-lua' },
+--    { 'numToStr/Comment.nvim' },
+    { "folke/which-key.nvim", event = "VeryLazy",
+      keys = {
+        {
+          "<leader><space>",
+          function()
+            require("which-key").show({ global = false })
+          end,
+          desc = "Buffer Local Keymaps (which-key)",
+        },
+      },
+    },
+    { 'windwp/nvim-autopairs', event = 'InsertEnter', config = true },
+    { 'L3MON4D3/LuaSnip',
+      version = 'v2.*',
+      build = 'make install_jsregexp',
+      dependencies = {
+        'rafamadriz/friendly-snippets'
+      },
+    },
+    { 'williamboman/mason.nvim',
+      dependencies = {
+        'williamboman/mason-lspconfig.nvim',
+        'neovim/nvim-lspconfig',
+        'hrsh7th/nvim-cmp',
+        'hrsh7th/cmp-buffer',
+        'hrsh7th/cmp-path',
+        'saadparwaiz1/cmp_luasnip',
+        'hrsh7th/cmp-nvim-lua',
+        'hrsh7th/cmp-nvim-lsp',
+        'hrsh7th/cmp-cmdline',
+      },
+      -- event = "filetype",
+    },
+    -- { 'romgrk/barbar.nvim' },
+    -- { 'nvim-lualine/lualine.nvim' },
+    { 'rebelot/heirline.nvim' },
+    { 'j-hui/fidget.nvim' },
+    { 'gennaro-tedesco/nvim-possession',
+      lazy = false,
+      dependencies = {
+        { 'tiagovla/scope.nvim',
           lazy = false,
           config = true,
         },
-        { "ibhagwan/fzf-lua" },
+        { 'ibhagwan/fzf-lua' },
       },
     },
-    { "nvim-tree/nvim-web-devicons" },
-    { "lewis6991/gitsigns.nvim" },
-    { "nvim-tree/nvim-tree.lua", version = "*", lazy = false },
-    { "nvim-treesitter/nvim-treesitter" },
-    { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
---    { "romgrk/barbar.nvim" },
---    { 'akinsho/bufferline.nvim', version = "*", dependencies = 'nvim-tree/nvim-web-devicons' },
-    { "nvim-lualine/lualine.nvim" },
-    { "karb94/neoscroll.nvim" },
-    { "ibhagwan/fzf-lua" },
---    { "numToStr/Comment.nvim" },
-
---    {'williamboman/mason.nvim'},
---    {'williamboman/mason-lspconfig.nvim'},
---    {'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
-
---        { "L3MON4D3/LuaSnip", version = "v2.*", build = "make install_jsregexp" },
---        { "saadparwaiz1/cmp_luasnip" },
---      dependencies = {
---        { "neovim/nvim-lspconfig" },
---        { "hrsh7th/cmp-nvim-lsp" },
---        { "hrsh7th/cmp-buffer" },
---        { "hrsh7th/cmp-path" },
---        { "hrsh7th/cmp-cmdline" },
---    { "hrsh7th/nvim-cmp" },
---     },
   },
   checker = { enabled = true },
 }
 
 -- plugin setup {{{1
+
+-- nvim-telescope/telescope.nvim {{{2
+-- gaze deeply into unknown regions using the power of the moon.
+local telescope_loaded, telescope = pcall(require, 'telescope')
+if telescope_loaded then
+  telescope.setup {
+    defaults = {
+      layout_strategy = 'vertical',
+      layout_config = {
+        height = 0.9,
+        width = 0.9,
+      },
+    },
+  }
+end
 
 -- lewis6991/gitsigns.nvim {{{2
 -- git decorations implemented purely in Lua
@@ -296,7 +402,224 @@ end
 -- A File Explorer For Neovim Written In Lua
 local nvim_tree_loaded, nvim_tree = pcall(require, 'nvim-tree')
 if nvim_tree_loaded then
-  nvim_tree.setup()
+  nvim_tree.setup {
+    disable_netrw = true,
+    hijack_cursor = true,
+    hijack_netrw = false,
+    update_cwd = true,
+    view = {
+      width = 40,
+      side = 'left',
+      --mappings = {
+      --  custom_only = false,
+      --  list = {
+      --    { key = "<C-x>", action = nil },
+      --    { key = "<C-s>", action = "split" },
+      --  }
+      --}
+    },
+    renderer = {
+      indent_markers = {
+        enable = true,
+        icons = {
+          corner = "└ ",
+          edge = "│ ",
+          none = "  ",
+        },
+      },
+      icons = {
+        symlink_arrow = " → ",  -- ➜ → ➛
+        show = {
+          file = true,
+          folder = true,
+          folder_arrow = true,
+          git = true,
+        },
+        glyphs = {
+          git = {
+            -- staged      = "✓",
+            -- renamed     = "➜",
+            -- renamed     = "→",
+            unstaged    = "U",
+            staged      = "S",
+            unmerged    = "M",
+            renamed     = "R",
+            untracked   = "?",
+            deleted     = "✗",
+            ignored     = "◌",
+          },
+        },
+      },
+      special_files = {
+        "README.md",
+        "LICENSE",
+        "Cargo.toml",
+        "Makefile",
+        "package.json",
+        "package-lock.json",
+      }
+    },
+    diagnostics = {
+      enable = true,
+      show_on_dirs = false,
+      icons = {
+        hint = "", -- "",
+        info = "",
+        warning = "",
+        error = "",
+      },
+    },
+    filters = {
+      dotfiles = false,
+      custom = {
+        "\\.git",
+        ".cache",
+        "node_modules",
+        "__pycache__",
+      }
+    },
+    git = {
+      enable = true,
+      ignore = false,
+      timeout = 400,
+    },
+    actions = {
+      use_system_clipboard = false,
+      change_dir = {
+        enable = false,
+        global = false,
+        restrict_above_cwd = false,
+      },
+      open_file = {
+        quit_on_open = true,
+        resize_window = true,
+      },
+    },
+  }
+end
+
+-- kevinhwang91/nvim-ufo {{{2
+-- make Neovim's fold look modern and keep high performance
+local ufo_loaded, ufo = pcall(require, 'ufo')
+if ufo_loaded then
+
+  local fold_handler = function(virtText, lnum, endLnum, width, truncate)
+    local newVirtText = {}
+    local suffix = (' 󰁂 %d'):format(endLnum - lnum)
+    local sufWidth = vim.fn.strdisplaywidth(suffix)
+    local targetWidth = width - sufWidth
+    local curWidth = 0
+    for _, chunk in ipairs(virtText) do
+      local chunkText = chunk[1]
+      local chunkWidth = vim.fn.strdisplaywidth(chunkText)
+      if targetWidth > curWidth + chunkWidth then
+        table.insert(newVirtText, chunk)
+      else
+        chunkText = truncate(chunkText, targetWidth - curWidth)
+        local hlGroup = chunk[2]
+        table.insert(newVirtText, {chunkText, hlGroup})
+        chunkWidth = vim.fn.strdisplaywidth(chunkText)
+        -- str width returned from truncate() may less than 2nd argument, need padding
+        if curWidth + chunkWidth < targetWidth then
+          suffix = suffix .. (' '):rep(targetWidth - curWidth - chunkWidth)
+        end
+        break
+      end
+      curWidth = curWidth + chunkWidth
+    end
+    table.insert(newVirtText, {suffix, 'MoreMsg'})
+    return newVirtText
+  end
+
+  ufo.setup {
+    open_fold_hl_timeout = 0,
+    provider_selector =
+      function(bufnr, filetype, buftype)
+        return { 'treesitter', 'indent' }
+      end,
+    fold_virt_text_handler = fold_handler,
+
+  }
+end
+
+-- smoka7/hop.nvim
+-- an EasyMotion-like plugin allowing you to jump anywhere in a document
+local hop_loaded, hop =pcall(require, 'hop')
+if hop_loaded then
+  hop.setup {
+    quit_key = '<Esc>',
+  }
+end
+
+-- luukvbaal/statuscol.nvim {{{2
+-- status column plugin that provides a configurable 'statuscolumn' and click handlers
+local statuscol_loaded, statuscol = pcall(require, 'statuscol')
+if statuscol_loaded then
+  local builtin = require('statuscol.builtin')
+
+  statuscol.setup {
+    setopt = true,
+    thousands = false,
+    relculright = true,
+    segments = {
+      { text = { builtin.foldfunc }, colwidth = 2, click = "v:lua.ScFa" },
+      {
+        sign = { namespace = { "diagnostic/signs" }, maxwidth = 2, auto = true },
+        click = "v:lua.ScSa",
+      },
+      { text = { builtin.lnumfunc }, click = "v:lua.ScLa", },
+      {
+        sign = { name = { ".*" }, maxwidth = 1, colwidth = 1, auto = false, wrap = true },
+          click = "v:lua.ScSa"
+      },
+    },
+  }
+end
+
+-- echasnovski/mini.nvim (mini-animate) {{{2
+-- animate common Neovim actions
+-- local mini_animate_loaded, mini_animate = pcall(require, 'mini.animate')
+-- if mini_animate_loaded then
+--   mini_animate.setup()
+-- end
+
+-- echasnovski/mini.indentscope {{{2
+-- visualize and work with indent scope
+local mini_indentscope_loaded, mini_indentscope = pcall(require, 'mini.indentscope')
+if mini_indentscope_loaded then
+  mini_indentscope.setup {
+    draw = {
+      delay = 100,
+      -- Animation rule for scope's first drawing. A function which, given
+      -- next and total step numbers, returns wait time (in ms). See
+      -- |MiniIndentscope.gen_animation| for builtin options. To disable
+      -- animation, use `require('mini.indentscope').gen_animation.none()`.
+      animation = mini_indentscope.gen_animation.quadratic({ easing = 'out', duration = 50, unit = 'total' }),
+      priority = 2,
+    },
+      mappings = { -- Use `''` (empty string) to disable one.
+      -- Textobjects
+      object_scope = 'ii',
+      object_scope_with_border = 'ai',
+      -- Motions (jump to respective border line; if not present - body line)
+      goto_top = '[i',
+      goto_bottom = ']i',
+    },
+    -- Options which control scope computation
+    options = {
+      border = 'both',  -- both|top|bottom|none'
+      indent_at_cursor = true,
+      try_as_border = false,
+    },
+    symbol = '│',
+  }
+end
+
+-- echasnovski/mini.icons {{{2
+-- icon provider
+local mini_icons_loaded, mini_icons = pcall(require, 'mini.icons')
+if mini_icons_loaded then
+  mini_icons.setup()
 end
 
 -- nvim-treesitter/nvim-treesitter {{{2
@@ -341,7 +664,7 @@ if nvim_treesitter_loaded then
         init_selection = '<cr>',
         node_incremental = '<cr>',
         node_decremental = '<bs>',
-        scope_incremental = null,
+        scope_incremental = false,
       },
     },
   }
@@ -351,55 +674,85 @@ end
 -- catppuccin for (Neo)vim
 local catppuccin_loaded, catppuccin = pcall(require, 'catppuccin')
 if catppuccin_loaded then
-catppuccin.setup({
+  catppuccin.setup {
     flavour = "macchiato", -- auto, latte, frappe, macchiato, mocha
     background = { -- :h background
-        light = "macchiato",
-        dark = "mocha",
+      light = "macchiato",
+      dark = "mocha",
     },
     transparent_background = false, -- disables setting the background color.
     show_end_of_buffer = false, -- shows the '~' characters after the end of buffers
-    term_colors = false, -- sets terminal colors (e.g. `g:terminal_color_0`)
-    dim_inactive = {
-        enabled = true, -- dims the background color of inactive window
-        shade = "dark",
-        percentage = 0.15, -- percentage of the shade to apply to the inactive window
-    },
+    term_colors = true, -- sets terminal colors (e.g. `g:terminal_color_0`)
+    -- dim_inactive = {
+    --   enabled = true, -- dims the background color of inactive window
+    --   shade = "dark",
+    --   percentage = 0.01, -- percentage of the shade to apply to the inactive window
+    -- },
     no_italic = false, -- Force no italic
     no_bold = false, -- Force no bold
     no_underline = false, -- Force no underline
     styles = { -- Handles the styles of general hi groups (see `:h highlight-args`):
-        comments = { "italic" }, -- Change the style of comments
-        conditionals = { "italic" },
-        loops = {},
-        functions = {},
-        keywords = {},
-        strings = {},
-        variables = {},
-        numbers = {},
-        booleans = {},
-        properties = {},
-        types = {},
-        operators = {},
-        -- miscs = {}, -- Uncomment to turn off hard-coded styles
+      comments = { "italic" }, -- Change the style of comments
+      conditionals = { "italic" },
+      loops = {},
+      functions = {},
+      keywords = {},
+      strings = {},
+      variables = {},
+      numbers = {},
+      booleans = {},
+      properties = {},
+      types = {},
+      operators = {},
+    -- miscs = {}, -- Uncomment to turn off hard-coded styles
     },
     color_overrides = {},
-    custom_highlights = {},
+    custom_highlights = function(colors)
+      return {
+        NormalNC = { bg = colors.mantle },
+        Folded = { bg = colors.surface0 },
+        TermCursorNC = { fg = colors.base, bg = colors.subtext0 },
+        StatusLine = { bg = colors.base },
+        StatusLineNC = { bg = colors.mantle },
+        NotifyERRORBorder = { fg = colors.red },
+        NotifyWARNBorder = { fg = colors.peach },
+        NotifyINFOBorder = { fg = colors.yellow },
+        NotifyDEBUGBorder = { fg = colors.lavender },
+        NotifyTRACEBorder = { fg = colors.mauve },
+        NotifyERRORIcon = { fg = colors.red },
+        NotifyWARNIcon = { fg = colors.peach },
+        NotifyINFOIcon = { fg = colors.yellow },
+        NotifyDEBUGIcon = { fg = colors.lavender },
+        NotifyTRACEIcon = { fg = colors.mauve },
+        NotifyERRORTitle = { fg = colors.red },
+        NotifyWARNTitle = { fg = colors.peach },
+        NotifyINFOTitle = { fg = colors.yellow },
+        NotifyDEBUGTitle = { fg = colors.lavender },
+        NotifyTRACETitle = { fg = colors.mauve },
+        -- NotifyERRORBody = { bg = colors.surface0 },
+        -- NotifyWARNBody = { bg = colors.surface0 },
+        -- NotifyINFOBody = { bg = colors.surface0 },
+        -- NotifyDEBUGBody = { bg = colors.surface0 },
+        -- NotifyTRACEBody = { bg = colors.surface0 },
+        HeirDiagnosticPrefix = { fg = colors.flamingo, bg = colors.base },
+        HeirDiagnosticPrefixInactive = { fg = colors.flamingo, bg = colors.mantle },
+      }
+    end,
     default_integrations = true,
     integrations = {
-        cmp = true,
-        gitsigns = true,
-        nvimtree = true,
-        treesitter = true,
-        notify = false,
-        mini = {
-            enabled = true,
-            indentscope_color = "",
-        },
-        -- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
+      cmp = true,
+      gitsigns = true,
+      nvimtree = true,
+      treesitter = true,
+      notify = false,
+      mini = {
+        enabled = true,
+        indentscope_color = "surface0",
+      },
+      -- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
     },
-})
-vim.cmd.colorscheme "catppuccin"
+  }
+  vim.cmd.colorscheme "catppuccin"
 end
 
 -- romgrk/barbar.nvim {{{2  
@@ -498,141 +851,730 @@ if neoscroll_loaded then
   }
 end
 
+-- rebelot/heirline.nvim {{{2
+-- the ultimate Neovim Statuslie for tinkerers
+local heirline_loaded, heirline = pcall(require, 'heirline')
+if heirline_loaded then
+
+  local heir_conditions = require("heirline.conditions")
+  local heir_utils = require("heirline.utils")
+
+  local colorscheme_colors = require("catppuccin.palettes").get_palette "macchiato"
+  local heir_colors = {
+    mode_normal    = colorscheme_colors.blue,
+    mode_insert    = colorscheme_colors.green,
+    mode_visual    = colorscheme_colors.mauve,
+    mode_command   = colorscheme_colors.peach,
+    mode_select    = colorscheme_colors.pink,
+    mode_replace   = colorscheme_colors.peach,
+    mode_executing = colorscheme_colors.red,
+    mode_terminal  = colorscheme_colors.yellow,
+
+    statusline           = colorscheme_colors.base,
+    statusline_inactive  = colorscheme_colors.mantle,
+    bg                   = colorscheme_colors.surface0,
+    bg_inactive          = colorscheme_colors.surface0,
+    text                 = colorscheme_colors.text,
+    text_inactive        = colorscheme_colors.surface2,
+    prefix               = colorscheme_colors.surface2,
+    prefix_inactive      = colorscheme_colors.surface2,
+    prefix_text          = colorscheme_colors.base,
+    prefix_text_inactive = colorscheme_colors.base,
+
+    file_name         = colorscheme_colors.green,
+    file_name_locked  = colorscheme_colors.peach,
+    help              = colorscheme_colors.green,
+    diagnostics       = colorscheme_colors.flamingo,
+    git               = colorscheme_colors.teal,
+    git_added         = colorscheme_colors.green,
+    git_removed       = colorscheme_colors.red,
+    git_changed       = colorscheme_colors.yellow,
+    git_parenthese    = colorscheme_colors.overlay0,
+    file_properties   = colorscheme_colors.mauve,
+
+    ERROR = colorscheme_colors.red,
+    WARN  = colorscheme_colors.peach,
+    INFO  = colorscheme_colors.yellow,
+    HINT  = colorscheme_colors.teal,
+  }
+
+  local heir_block_prefix = { provider = '' }
+  local heir_block_suffix = { provider = '' }
+  local heir_block_spacer = { provider = ' ' }
+
+  local heir_block_suffix_modifier = {
+    hl = function()
+      if heir_conditions.is_active() then
+        return { fg = 'bg', bg = 'statusline' }
+      else
+        return { fg = 'bg_inactive', bg = 'statusline_inactive' }
+      end
+    end
+  }
+
+  heir_block_suffix = heir_utils.insert( heir_block_suffix_modifier, heir_block_suffix )
+
+  local heir_mode = {
+    init = function(self)
+      self.mode = vim.fn.mode(1)
+    end,
+    static = {
+      mode_names = {
+        n = "N",
+        no = "N?",
+        nov = "N?",
+        noV = "N?",
+        ["no\22"] = "N?",
+        niI = "Ni",
+        niR = "Nr",
+        niV = "Nv",
+        nt = "Nt",
+        v = "V",
+        vs = "Vs",
+        V = "V_",
+        Vs = "Vs",
+        ["\22"] = "^V",
+        ["\22s"] = "^V",
+        s = "S",
+        S = "S_",
+        ["\19"] = "^S",
+        i = "I",
+        ic = "Ic",
+        ix = "Ix",
+        R = "R",
+        Rc = "Rc",
+        Rx = "Rx",
+        Rv = "Rv",
+        Rvc = "Rv",
+        Rvx = "Rv",
+        c = "C",
+        cv = "Ex",
+        r = "...",
+        rm = "M",
+        ["r?"] = "?",
+        ["!"] = "!",
+        t = "T",
+      },
+    },
+    provider = function(self)
+      return "%2("..self.mode_names[self.mode].." %)"
+    end,
+    update = {
+      'WinEnter',
+      'WinLeave',
+      'ModeChanged',
+      -- !!! intended for entering operator-pending mode, but breaks inactive settings
+      -- pattern = "*:*",
+      -- callback = vim.schedule_wrap(function()
+      --   vim.cmd("redrawstatus")
+      -- end),
+    },
+  }
+
+  local heir_mode_modifier = {
+    hl = function(self)
+      if heir_conditions.is_active() then
+        local color = self:mode_color()
+        return { fg = 'prefix_text', bg = color, bold = true }
+      else
+        return { fg = 'prefix_text', bg = 'prefix_inactive', bold = true }
+      end
+    end,
+  }
+
+  heir_mode = heir_utils.insert( heir_mode_modifier, heir_mode )
+
+  local heir_mode_prefix_modifier = {
+    -- condition = heir_conditions.is_active(),
+    hl = function(self)
+      if heir_conditions.is_active() then
+        local color = self:mode_color()
+        return { fg = color }
+      else
+        return { fg = 'prefix_inactive', bg = 'statusline_inactive' }
+      end
+    end,
+  }
+
+  local heir_mode_prefix = heir_utils.insert(heir_mode_prefix_modifier, heir_block_prefix)
+
+  heir_mode = heir_utils.insert( heir_mode_prefix, heir_mode )
+
+  local heir_file_path = {
+    init = function(self)
+      self.filename = vim.api.nvim_buf_get_name(0)
+      --self.filename = vim.fn.expand("%:t")
+    end,
+    hl = function()
+      if heir_conditions.is_active() then
+        return { fg = 'text', bg = 'bg' }
+      else
+        return { fg = 'text_inactive', bg = 'bg_inactive' }
+      end
+    end,
+  }
+
+  local heir_file_name = {
+    provider = function(self)
+      local filename = vim.fn.fnamemodify(self.filename, ":.")
+      if filename == "" then return '[No Name]' end
+      if not heir_conditions.width_percent_below(#filename, 0.25) then
+        filename = vim.fn.pathshorten(filename)
+      end
+      return ' ' .. filename
+    end,
+  }
+
+  local heir_file_name_flags = {
+    {
+      condition = function()
+        return vim.bo.modified
+      end,
+      provider = '+',
+      hl = function()
+        if heir_conditions.is_active() then
+          return { fg = 'file_name' }
+        end
+      end,
+    },
+    {
+      condition = function()
+        return not vim.bo.modifiable or vim.bo.readonly
+      end,
+      provider = '  ',
+      hl = { fg = 'file_name_locked' },
+    },
+  }
+
+  local heir_file_name_modifier = {
+    hl = function()
+      if vim.bo.modified and heir_conditions.is_active() then
+        return { fg = 'file_name', bold = true, force=true }
+      end
+    end,
+  }
+
+  heir_file_path = heir_utils.insert(
+    heir_file_path,
+    heir_utils.insert(heir_file_name_modifier, heir_file_name),
+    { provider = '%<'} -- this means that the statusline is cut here when there's not enough space
+  )
+
+  heir_file_path = heir_utils.insert(
+    heir_file_path,
+    heir_file_name_flags,
+    heir_block_suffix
+  )
+
+  local heir_help_file_prefix_modifier = {
+    hl = function()
+      if heir_conditions.is_active() then
+        return { fg = 'help', bg = 'statusline' }
+      else
+        return { fg = 'prefix_inactive', bg = 'statusline_inactive' }
+      end
+    end
+  }
+
+  local heir_help_file_prefix = {
+    heir_utils.insert(heir_help_file_prefix_modifier, heir_block_prefix)
+  }
+
+  local heir_help_file = {
+    { provider = '󰘥 ',
+      hl = function()
+        if heir_conditions.is_active() then
+          return { fg = 'prefix_text', bg = 'help' }
+        else
+          return { fg = 'prefix_text_inactive', bg = 'prefix_inactive' }
+        end
+      end
+    },
+    { provider = function()
+        local filename = vim.api.nvim_buf_get_name(0)
+        return ' ' .. vim.fn.fnamemodify(filename, ":t")
+      end,
+      hl = function()
+        if heir_conditions.is_active() then
+          return { fg = 'text', bg = 'bg' }
+        else
+          return { fg = 'text_inactive', bg = 'bg_inactive' }
+        end
+      end
+    },
+  }
+
+  heir_help_file = heir_utils.insert(
+    heir_help_file_prefix,
+    heir_help_file,
+    heir_block_suffix
+  )
+
+  local heir_terminal_name = {
+    { provider = function()
+        local tname, _ = vim.api.nvim_buf_get_name(0):gsub(".*:", "")
+        return " " .. tname
+      end,
+      hl = function()
+        if heir_conditions.is_active() then
+          return { fg = 'text', bg = 'bg' }
+        else
+          return { fg = 'prefix_text_inactive', bg = 'bg_inactive' }
+        end
+      end
+    },
+    heir_block_suffix
+  }
+
+  local heir_diagnostics_modifier = {
+    condition = heir_conditions.has_diagnostics,
+  }
+  local heir_diagnostics_prefix_modifier = {
+    hl = function()
+      if heir_conditions.is_active() then
+        return { fg = 'diagnostics', bg = 'statusline' }
+      else
+        return { fg = 'prefix_inactive', bg = 'statusline_inactive' }
+      end
+    end
+  }
+
+  local heir_diagnostics_spacer = heir_utils.insert(heir_diagnostics_modifier, heir_block_spacer)
+
+  local heir_diagnostics_prefix = {
+    heir_utils.insert(heir_diagnostics_prefix_modifier, heir_block_prefix)
+  }
+
+  local heir_diagnostics = {
+    init = function(self)
+      self.error_num = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR })
+      self.warn_num = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.WARN })
+      self.hint_num = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.HINT })
+      self.info_num = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.INFO })
+    end,
+    update = { "DiagnosticChanged", "BufEnter", "WinEnter", 'WinLeave' },
+    hl = { fg = 'text_inactive', bg = 'bg_inactive' },
+
+    { provider = ' ',
+      hl = function()
+        if heir_conditions.is_active() then
+          return { fg = 'prefix_text', bg = 'diagnostics' }
+        else
+          return { fg = 'prefix_text_inactive', bg = 'prefix_inactive' }
+        end
+      end
+    },
+    { provider = function(self) return self.error_num > 0 and
+        (' ' .. self.error_num)
+      end,
+      hl = function()
+        if heir_conditions.is_active() then
+          return { fg = 'ERROR', bg = 'bg' }
+        end
+      end
+    },
+    { provider = function(self) return self.warn_num > 0 and
+        (' ' .. self.warn_num)
+      end,
+      hl = function()
+        if heir_conditions.is_active() then
+          return { fg = 'WARN', bg = 'bg' }
+        end
+      end
+    },
+    { provider = function(self) return self.info_num > 0 and
+        (' ' .. self.info_num)
+      end,
+      hl = function()
+        if heir_conditions.is_active() then
+          return { fg = 'INFO', bg = 'bg' }
+        end
+      end
+    },
+    { provider = function(self) return self.hint_num > 0 and
+        (' ' .. self.hint_num)
+      end,
+      hl = function()
+        if heir_conditions.is_active() then
+          return { fg = 'HINT', bg = 'bg' }
+        end
+      end
+    },
+  }
+
+  heir_diagnostics = heir_utils.insert(
+    heir_diagnostics_modifier,
+    heir_diagnostics_prefix,
+    heir_diagnostics,
+    heir_block_suffix
+  )
+  local heir_ruler_prefix_modifier = {
+    hl = function(self)
+      if heir_conditions.is_active() then
+        local color = self:mode_color()
+        return { fg = color, bg = 'statusline' }
+      else
+        return { fg = 'prefix_inactive', bg = 'statusline_inactive' }
+      end
+    end,
+  }
+
+  local heir_ruler_prefix = heir_utils.insert(
+    heir_ruler_prefix_modifier,
+    heir_block_prefix
+  )
+
+  local heir_ruler = {
+    { provider = '󰮱 ',
+      hl = function(self)
+        if heir_conditions.is_active() then
+          local color = self:mode_color()
+          return { fg = 'prefix_text', bg = color }
+        else
+          return { fg = 'prefix_text_inactive', bg = 'prefix_inactive' }
+        end
+      end,
+    },
+    { provider = ' %(%l/%L%):%c',
+    -- { provider = ' %7(%l/%3L%):%2c',
+      hl = function(self)
+        if heir_conditions.is_active() then
+          local color = self:mode_color()
+          return { fg = color, bg = 'bg' }
+        else
+          return { fg = 'text_inactive', bg = 'bg_inactive' }
+        end
+      end,
+    },
+  }
+
+  heir_ruler = heir_utils.insert(
+    heir_ruler_prefix,
+    heir_ruler,
+    heir_block_suffix
+  )
+
+  local heir_git_modifier = {
+    condition = heir_conditions.is_git_repo,
+  }
+  local heir_git_spacer = heir_utils.insert(
+    heir_git_modifier,
+    heir_block_spacer
+  )
+  local heir_git_prefix_modifier = {
+    hl = function()
+      if heir_conditions.is_active() then
+        return { fg = 'git', bg = 'statusline' }
+      else
+        return { fg = 'prefix_inactive', bg = 'statusline_inactive' }
+      end
+    end
+  }
+  local heir_git_prefix = heir_utils.insert(
+    heir_git_prefix_modifier,
+    heir_block_prefix
+  )
+
+  local heir_git = {
+    init = function(self)
+      self.status_dict = vim.b.gitsigns_status_dict
+      self.has_changes =
+        self.status_dict.added ~= 0
+        or self.status_dict.removed ~= 0
+        or self.status_dict.changed ~= 0
+    end,
+    hl = { fg= 'text_inactive', bg  = 'bg_inactive' },
+
+    { provider = ' ',
+      hl = function()
+        if heir_conditions.is_active() then
+          return { fg = 'prefix_text', bg = 'git' }
+        else
+          return { fg = 'prefix_text_inactive', bg = 'prefix_inactive' }
+        end
+      end,
+    },
+    { provider = function(self)
+        return ' ' .. self.status_dict.head
+      end,
+      hl = function()
+        if heir_conditions.is_active() then
+          return { fg = 'text', bg = 'bg' }
+        end
+      end,
+    },
+    { condition = function(self)
+        return self.has_changes
+      end,
+      provider = "(",
+      hl = { fg = 'git_parenthese', bg = 'bg' }
+    },
+    { provider = function(self)
+        local count = self.status_dict.added or 0
+        return count > 0 and ("+" .. count)
+      end,
+      hl = function()
+        if heir_conditions.is_active() then
+          return { fg = 'git_added', bg = 'bg' }
+        end
+      end,
+    },
+    { provider = function(self)
+        local count = self.status_dict.removed or 0
+        return count > 0 and ("-" .. count)
+      end,
+      hl = function()
+        if heir_conditions.is_active() then
+          return { fg = 'git_removed', bg = 'bg' }
+        end
+      end,
+    },
+    { provider = function(self)
+        local count = self.status_dict.changed or 0
+        return count > 0 and ("~" .. count)
+      end,
+      hl = function()
+        if heir_conditions.is_active() then
+          return { fg = 'git_changed', bg = 'bg' }
+        end
+      end,
+    },
+    { condition = function(self)
+        return self.has_changes
+      end,
+      provider = ")",
+      hl = { fg = 'git_parenthese', bg = 'bg' }
+    },
+  }
+
+  heir_git = heir_utils.insert(
+    heir_git_modifier,
+    heir_git_prefix,
+    heir_git,
+    heir_block_suffix
+  )
+
+  local heir_file_properties_prefix_modifier = {
+    hl = function()
+      if heir_conditions.is_active() then
+        return { fg = 'file_properties', bg = 'statusline' }
+      else
+        return { fg = 'prefix_inactive', bg = 'statusline_inactive' }
+      end
+    end
+  }
+  local heir_file_properties_prefix = heir_utils.insert(
+    heir_file_properties_prefix_modifier,
+    heir_block_prefix
+  )
+
+  local heir_file_properties = {
+    hl = { fg = 'text_inactive', bg  = 'bg_inactive' },
+
+    { provider = '󰱽 ',
+      hl = function()
+        if heir_conditions.is_active() then
+          return { fg = 'prefix_text', bg = 'file_properties' }
+        else
+          return { fg = 'prefix_text_inactive', bg = 'prefix_inactive' }
+        end
+      end,
+    },
+    { provider = function()
+        return ' ' .. string.upper(vim.bo.filetype)
+      end,
+      hl = function()
+        if heir_conditions.is_active() then
+          return { fg = 'text', bg = 'bg' }
+        end
+      end,
+    },
+    {
+      provider = function()
+        local enc = (vim.bo.fenc ~= '' and vim.bo.fenc) or vim.o.enc
+        if enc ~= 'utf-8' then
+          return ' ' .. enc:upper()
+        end
+      end,
+      hl = function()
+        if heir_conditions.is_active() then
+          return { fg = 'text', bg = 'bg' }
+        end
+      end,
+    },
+    {
+      provider = function()
+        local fmt = vim.bo.fileformat
+        if fmt ~= 'unix' then
+          return ' ' .. fmt:upper()
+        end
+      end,
+      hl = function()
+        if heir_conditions.is_active() then
+          return { fg = 'text', bg = 'bg' }
+        end
+      end,
+    },
+  }
+
+  local heir_file_properties_modifier = {
+    condition = function()
+      local ft = vim.bo.filetype
+      local enc = (vim.bo.fenc ~= '' and vim.bo.fenc) or vim.o.enc
+      local fmt = vim.bo.fileformat
+      if ft == '' and enc == 'utf-8' and fmt == 'unix' then
+        return false
+      else
+        return true
+      end
+    end,
+  }
+
+  local heir_file_properties_spacer = heir_utils.insert(
+    heir_file_properties_modifier,
+    heir_block_spacer
+  )
+
+  heir_file_properties = heir_utils.insert(
+    heir_file_properties_modifier,
+    heir_file_properties_prefix,
+    heir_file_properties,
+    heir_block_suffix
+  )
+
+  local heir_alignment = {
+    provider = '%='
+  }
+
+  local heir_default_statusline = {
+    heir_mode,
+    heir_file_path,
+    heir_diagnostics_spacer,
+    heir_diagnostics,
+    heir_alignment,
+    heir_file_properties,
+    heir_file_properties_spacer,
+    heir_git,
+    heir_git_spacer,
+    heir_ruler
+  }
+  local heir_blank_statusline = {
+    condition = function()
+      return heir_conditions.buffer_matches {
+        buftype = { 'NVimTree_1', 'nofile', 'prompt', 'quickfix' },
+        filetype = { "^git.*", "fugitive" },
+      }
+    end,
+  }
+
+  local heir_help_statusline = {
+    condition = function()
+      return heir_conditions.buffer_matches {
+        buftype = { 'help' },
+      }
+    end,
+    heir_help_file,
+    heir_alignment,
+    heir_ruler
+  }
+
+  local heir_terminal_statusline = {
+    condition = function()
+      return heir_conditions.buffer_matches {
+        buftype = { 'terminal' },
+      }
+    end,
+    heir_mode,
+    heir_terminal_name,
+    heir_alignment,
+    heir_ruler
+  }
+
+  local heir_statusline = {
+    fallthrough = false,
+
+    heir_help_statusline,
+    heir_terminal_statusline,
+    heir_blank_statusline,
+    heir_default_statusline,
+
+    static = {
+      mode_colors_map = {
+        n       = 'mode_normal',
+        i       = 'mode_insert',
+        v       = 'mode_visual',
+        V       = 'mode_visual',
+        ["\22"] = 'mode_visual',
+        c       = 'mode_command',
+        s       = 'mode_select',
+        S       = 'mode_select',
+        ["\19"] = 'mode_select',
+        R       = 'mode_replace',
+        r       = 'mode_replace',
+        ["!"]   = 'mode_executing',
+        t       = 'mode_terminal',
+      },
+      mode_color = function(self)
+        local m = heir_conditions.is_active() and vim.fn.mode() or "n"
+        return self.mode_colors_map[m]
+      end,
+
+    }
+  }
+
+  heirline.setup {
+    opts = {
+      colors = heir_colors,
+    },
+    statusline = heir_statusline
+  }
+
+
+end
+
 -- nvim-lualine/lualine.nvim {{{2
 -- A blazing fast and easy to configure Neovim statusline written in Lua
 local lualine_loaded, lualine = pcall(require, 'lualine')
 if lualine_loaded then
-  local hide_in_width = function()
-	  return vim.fn.winwidth(0) > 80
-  end
-
-  local diagnostics = {
-    "diagnostics",
-    sources = { "nvim_diagnostic" },
-    sections = { "error", "warn" },
-    symbols = { error = " ", warn = " " },
-    colored = false,
-    update_in_insert = false,
-    always_visible = true,
-  }
-
-  local diff = {
-  	"diff",
-  	colored = false,
-  	symbols = { added = " ", modified = " ", removed = " " }, -- changes diff symbols
-    cond = hide_in_width
-  }
-
-  local mode = {
-    "mode",
-    fmt = function(str)
-    return "-- " .. str .. " --"
-    end,
-  }
-
-  local filetype = {
-    "filetype",
-    icons_enabled = false,
-    icon = nil,
-  }
-
-  local branch = {
-    "branch",
-    icons_enabled = true,
-    icon = "",
-  }
-
-  local location = {
-    "location",
-    padding = 0,
-  }
-
-  -- cool function for progress
-  local progress = function()
-    local current_line = vim.fn.line(".")
-    local total_lines = vim.fn.line("$")
-    local chars = { "__", "▁▁", "▂▂", "▃▃", "▄▄", "▅▅", "▆▆", "▇▇", "██" }
-    local line_ratio = current_line / total_lines
-    local index = math.ceil(line_ratio * #chars)
-	  return chars[index]
-  end
-
-  local spaces = function()
-    return "spaces: " .. vim.api.nvim_buf_get_option(0, "shiftwidth")
-  end
-
-  local custom_powerline = require'lualine.themes.powerline'
-
-  custom_powerline.normal.a.bg = '#ffffff'
-  custom_powerline.normal.a.fg = '#000000'
-  custom_powerline.normal.b.bg = '#444444'
-  custom_powerline.normal.b.fg = '#ffffff'
-  custom_powerline.normal.c.bg = '#1c1c1c'
-  custom_powerline.normal.c.fg = '#ffffff'
-
-  custom_powerline.insert.a.bg = '#25be6a'
-  custom_powerline.insert.a.fg = '#000000'
-  custom_powerline.insert.b.bg = '#0c3e22'
-  custom_powerline.insert.b.fg = '#2ce47f'
-  custom_powerline.insert.c.bg = '#0b2013'
-  custom_powerline.insert.c.fg = '#2ce47f'
-
-  custom_powerline.visual.a.bg = '#e23434'
-  custom_powerline.visual.a.fg = '#000000'
-
-  custom_powerline.replace.a.bg = '#e2df34'
-  custom_powerline.replace.a.fg = '#000000'
-
-  custom_powerline.inactive.a.bg = '#666666'
-  custom_powerline.inactive.a.fg = '#000000'
-  custom_powerline.inactive.b.bg = '#444444'
-  custom_powerline.inactive.b.fg = '#ffffff'
-  custom_powerline.inactive.c.bg = '#1c1c1c'
-  custom_powerline.inactive.c.fg = '#444444'
 
   lualine.setup {
     options = {
-      icons_enabled = true,
-      theme = auto,
+      icons_enabled = false,
+      -- theme = auto,
       component_separators = { left = "", right = "" },
       section_separators = { left = "", right = "" },
       disabled_filetypes = { "alpha", "dashboard", "NvimTree", "Outline" },
       always_divide_middle = true,
     },
     sections = {
-      lualine_a = { mode },
-      lualine_b = { branch },
-      lualine_c = {
-        {"diagnostics", sources = {"nvim_lsp"}},
-        function()
-          return "%="
-        end,
-        "filename"
-      },
+      lualine_a = { { 'mode', separator = { left = '', right = '' } } },
+      lualine_b = { 'branch', { 'diagnostics', sources = { 'nvim_lsp' } } },
+      lualine_c = { 'filename' },
       --lualine_x = { "encoding", "fileformat", "filetype" },
-      lualine_x = { diff, spaces, "encoding"},
-      lualine_y = { filetype },
-      lualine_z = { location },
+      lualine_x = { 'diff', 'spaces', 'encoding'},
+      lualine_y = { 'filetype' },
+      lualine_z = { { 'location', separator = { left = '', right = '' } } },
       --lualine_z = { progress },
       },
     inactive_sections = {
       lualine_a = {},
       lualine_b = {},
       lualine_c = {
-        {"diagnostics", sources = {"nvim_lsp"}},
+        { 'diagnostics', sources = { 'nvim_lsp' } },
         function()
           return "%="
         end,
         "filename"
       },
       --lualine_c = { filename },
-      lualine_x = { "location" },
+      lualine_x = { { 'location', separator = { left = '', right = '' } } },
       lualine_y = {},
       --lualine_z = {},
     },
     tabline = {},
     extensions = {},
   }
+
 end
 
 -- ibhagwan/fzf-lua {{{2
@@ -722,6 +1664,343 @@ if fzf_lua_loaded then
   fzf_map("<leader>lt", "lsp_typedefs", "LSP Type Definitions")
 end
 
+-- folke/which-key.nvim {{{2 
+-- helps you remember your Neovim keymaps, showing keybindings in a popup
+local wk_enabled, wk = pcall(require, 'which-key')
+if wk_enabled then
+  wk.setup {
+    delay = 1500,
+    keys = {
+      scroll_down = "<a-d>", -- binding to scroll down inside the popup
+      scroll_up = "<a-u>", -- binding to scroll up inside the popup
+    },
+  }
+  wk.add {
+    { 'gj', desc = 'Scroll Down (250)' },
+    { 'gJ', desc = 'Scroll Down (450)' },
+    { 'gk', desc = 'Scroll Up (250)' },
+    { 'gK', desc = 'Scroll Up (450)' },
+  }
+end
+
+-- williamboman/mason.nvim {{{2
+-- Easily install and manage LSP servers, DAP servers, linters, and formatters.
+local mason_loaded, mason = pcall(require, 'mason')
+if mason_loaded then
+
+  local lspconfig = require('lspconfig')
+  local mason_lspconfig = require('mason-lspconfig')
+  local cmp = require('cmp')
+  local luasnip = require('luasnip')
+
+  local select_opts = {behavior = cmp.SelectBehavior.Select}
+  local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+  mason.setup {
+    ui = {
+      icons = {
+        package_installed = "✓",
+        package_pending = "➜",
+        package_uninstalled = "✗"
+      }
+    }
+  }
+
+  mason_lspconfig.setup {
+    ensure_installed = { 'lua_ls', 'efm' },
+    automatic_installation = true,
+  }
+
+  mason_lspconfig.setup_handlers {
+    function(server)
+      lspconfig[server].setup {
+        capabilities = lsp_capabilities,
+      }
+    end,
+    ['lua_ls'] = function()
+      lspconfig.lua_ls.setup {
+        capabilities = lsp_capabilities,
+        settings = {
+          Lua = {
+            runtime = {
+              version = 'LuaJIT'
+            },
+            diagnostics = {
+              globals = {'vim'},
+            },
+            workspace = {
+              library = {
+                vim.env.VIMRUNTIME,
+              }
+            }
+          }
+        }
+      }
+    end,
+    [ 'efm' ] = function()
+      lspconfig.efm.setup {
+        init_options = {documentFormatting = true},
+        settings = {
+          rootMarkers = {".git/"},
+          languages = {
+            sh = {
+              { formatCommand = 'shfmt -ci -s -bn' },
+              { formatStdin = true },
+              { lintCommand = 'shellcheck -f gcc -x' },
+              { lintSource = 'shellcheck'},
+              { lintFormats = { '%f:%l:%c: %trror: %m',
+                               '%f:%l:%c: %tarning: %m',
+                               '%f:%l:%c: %tote: %m' } },
+              { LintIgnoreExitCode = true },
+            }
+          }
+        }
+      }
+    end,
+  }
+
+  vim.api.nvim_create_autocmd('LspAttach', {
+    desc = 'LSP actions',
+    callback = function()
+      local bufmap = function(mode, lhs, rhs)
+        local opts = {buffer = true}
+        vim.keymap.set(mode, lhs, rhs, opts)
+      end
+      -- Displays hover information about the symbol under the cursor
+      bufmap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>')
+      -- Jump to the definition
+      bufmap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>')
+      -- Jump to declaration
+      bufmap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>')
+      -- Lists all the implementations for the symbol under the cursor
+      bufmap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>')
+      -- Jumps to the definition of the type symbol
+      bufmap('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>')
+      -- Lists all the references 
+      bufmap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>')
+      -- Displays a function's signature information
+      bufmap('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
+      -- Renames all references to the symbol under the cursor
+      bufmap('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>')
+      -- Selects a code action available at the current cursor position
+      bufmap('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>')
+      -- Show diagnostics in a floating window
+      bufmap('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>')
+      -- Move to the previous diagnostic
+      bufmap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
+      -- Move to the next diagnostic
+      bufmap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>')
+    end
+  })
+
+  local has_words_before = function()
+    unpack = unpack or table.unpack
+    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+    return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+  end
+
+  require("luasnip.loaders.from_vscode").lazy_load()
+
+  cmp.setup {
+    snippet = {
+      expand = function(args)
+        luasnip.lsp_expand(args.body)
+      end
+    },
+    sources = {
+      {name = 'path', keyword_length = 2},
+      {name = 'nvim_lsp', keyword_length = 2},
+      {name = 'nvim_lua', keyword_length = 2},
+      {name = 'cmdline', keyword_length = 2},
+      {name = 'buffer', keyword_length = 3},
+      {name = 'luasnip', keyword_length = 2},
+    },
+    window = {
+      documentation = cmp.config.window.bordered()
+    },
+    formatting = {
+      fields = {'menu', 'abbr', 'kind'},
+      format = function(entry, item)
+        local menu_icon = {
+          nvim_lsp = 'λ',
+          luasnip = '⋗',
+          buffer = 'Ω',
+          path = '🖫',
+        }
+
+        item.menu = menu_icon[entry.source.name]
+        return item
+      end,
+    },
+    mapping = {
+      ['<Up>'] = cmp.mapping.select_prev_item(select_opts),
+      ['<Down>'] = cmp.mapping.select_next_item(select_opts),
+
+      ['<C-p>'] = cmp.mapping.select_prev_item(select_opts),
+      ['<C-n>'] = cmp.mapping.select_next_item(select_opts),
+
+      ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-d>'] = cmp.mapping.scroll_docs(4),
+
+      ['<C-e>'] = cmp.mapping.abort(),
+      ['<C-y>'] = cmp.mapping.confirm({select = true}),
+      ['<CR>'] = cmp.mapping.confirm({select = false}),
+
+      ['<C-f>'] = cmp.mapping(function(fallback)
+        if luasnip.jumpable(1) then
+          luasnip.jump(1)
+        else
+          fallback()
+        end
+      end, {'i', 's'}),
+
+      ['<C-b>'] = cmp.mapping(function(fallback)
+        if luasnip.jumpable(-1) then
+          luasnip.jump(-1)
+        else
+          fallback()
+        end
+      end, {'i', 's'}),
+      ['<Tab>'] = cmp.mapping(function(fallback)
+        local col = vim.fn.col('.') - 1
+
+        if cmp.visible() and has_words_before() then
+          cmp.select_next_item(select_opts)
+        elseif col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
+          fallback()
+        else
+          cmp.complete()
+        end
+      end, {'i', 's'}),
+
+      ['<S-Tab>'] = cmp.mapping(function(fallback)
+        if cmp.visible() then
+          cmp.select_prev_item(select_opts)
+        else
+          fallback()
+        end
+      end, {'i', 's'}),
+    },
+  }
+end
+
+-- j-hui/fidget.nvim {{{2
+-- extensible UI for Neovim notifications and LSP progress messages
+local fidget_loaded, fidget = pcall(require, 'fidget')
+if fidget_loaded then
+  fidget.setup {
+    -- Options related to LSP progress subsystem
+    progress = {
+      poll_rate = 0,                -- How and when to poll for progress messages
+      suppress_on_insert = false,   -- Suppress new messages while in insert mode
+      ignore_done_already = false,  -- Ignore new tasks that are already complete
+      ignore_empty_message = false, -- Ignore new tasks that don't contain a message
+      clear_on_detach =             -- Clear notification group when LSP server detaches
+        function(client_id)
+          local client = vim.lsp.get_client_by_id(client_id)
+          return client and client.name or nil
+        end,
+      notification_group =          -- How to get a progress message's notification group key
+        function(msg) return msg.lsp_client.name end,
+      ignore = {},                  -- List of LSP servers to ignore
+
+      -- Options related to how LSP progress messages are displayed as notifications
+      display = {
+        render_limit = 16,          -- How many LSP messages to show at once
+        done_ttl = 4,               -- How long a message should persist after completion
+        done_icon = " ",            -- Icon shown when all LSP progress tasks are complete
+        done_style = "Constant",    -- Highlight group for completed LSP tasks
+        progress_ttl = math.huge,   -- How long a message should persist when in progress
+        progress_icon =             -- Icon shown when LSP progress tasks are in progress
+          { pattern = "dots", period = 1 },
+        progress_style =            -- Highlight group for in-progress LSP tasks
+          "WarningMsg",
+        group_style = "Title",      -- Highlight group for group name (LSP server name)
+        icon_style = "Question",    -- Highlight group for group icons
+        priority = 30,              -- Ordering priority for LSP notification group
+        skip_history = true,        -- Whether progress notifications should be omitted from history
+        format_message =            -- How to format a progress message
+          require("fidget.progress.display").default_format_message,
+        format_annote =             -- How to format a progress annotation
+          function(msg) return msg.title end,
+        format_group_name =         -- How to format a progress notification group's name
+          function(group) return tostring(group) end,
+        overrides = {               -- Override options from the default notification config
+          rust_analyzer = { name = "rust-analyzer" },
+        },
+      },
+
+      -- Options related to Neovim's built-in LSP client
+      lsp = {
+        progress_ringbuf_size = 0,  -- Configure the nvim's LSP progress ring buffer size
+        log_handler = false,        -- Log `$/progress` handler invocations (for debugging)
+      },
+    },
+
+    -- Options related to notification subsystem
+    notification = {
+      poll_rate = 10,               -- How frequently to update and render notifications
+      filter = vim.log.levels.INFO, -- Minimum notifications level
+      history_size = 128,           -- Number of removed messages to retain in history
+      override_vim_notify = true,   -- Automatically override vim.notify() with Fidget
+      configs =                     -- How to configure notification groups when instantiated
+        { default = require("fidget.notification").default_config },
+      redirect =                    -- Conditionally redirect notifications to another backend
+        function(msg, level, opts)
+          if opts and opts.on_open then
+            return require("fidget.integration.nvim-notify").delegate(msg, level, opts)
+          end
+        end,
+
+      -- Options related to how notifications are rendered as text
+      view = {
+        stack_upwards = true,       -- Display notification items from bottom to top
+        icon_separator = " ",       -- Separator between group name and icon
+        group_separator = "---",    -- Separator between notification groups
+        group_separator_hl =        -- Highlight group used for group separator
+          "Comment",
+        render_message =            -- How to render notification messages
+          function(msg, cnt)
+            return cnt == 1 and msg or string.format("(%dx) %s", cnt, msg)
+          end,
+      },
+
+      -- Options related to the notification window and buffer
+      window = {
+        normal_hl = "Comment",      -- Base highlight group in the notification window
+        winblend = 100,             -- Background color opacity in the notification window
+        border = "none",            -- Border around the notification window
+        zindex = 45,                -- Stacking priority of the notification window
+        max_width = 0,              -- Maximum width of the notification window
+        max_height = 0,             -- Maximum height of the notification window
+        x_padding = 1,              -- Padding from right edge of window boundary
+        y_padding = 1,              -- Padding from bottom edge of window boundary
+        align = "bottom",           -- How to align the notification window
+        relative = "editor",        -- What the notification window position is relative to
+      },
+    },
+
+    -- Options related to integrating with other plugins
+    integration = {
+      ["nvim-tree"] = {
+        enable = true,              -- Integrate with nvim-tree/nvim-tree.lua (if installed)
+      },
+      ["xcodebuild-nvim"] = {
+        enable = true,              -- Integrate with wojciech-kulik/xcodebuild.nvim (if installed)
+      },
+    },
+
+    -- Options related to logging
+    logger = {
+      level = vim.log.levels.WARN,  -- Minimum logging level
+      max_size = 10000,             -- Maximum log file size, in KB
+      float_precision = 0.01,       -- Limit the number of decimals displayed for floats
+      path =                        -- Where Fidget writes its logs to
+        string.format("%s/fidget.nvim.log", vim.fn.stdpath("cache")),
+    },
+  }
+end
+
 -- gennaro-tedesco/nvim-possession {{{2
 -- no-nonsense session manager
 local possession_loaded, possession = pcall(require, 'nvim-possession')
@@ -763,246 +2042,6 @@ if possession_loaded then
 
 end
 
--- nvim-tree/nvim-tree.lua {{{2
--- A File Explorer For Neovim Written In Lua
-local nvim_tree_loaded, nvim_tree = pcall(require, 'nvim-tree')
-if nvim_tree_loaded then
-  nvim_tree.setup {
-    disable_netrw = true,
-    hijack_cursor = true,
-    hijack_netrw = false,
-    update_cwd = true,
-    view = {
-      width = 30,
-      side = 'left',
-      --mappings = {
-      --  custom_only = false,
-      --  list = {
-      --    { key = "<C-x>", action = nil },
-      --    { key = "<C-s>", action = "split" },
-      --  }
-      --}
-    },
-    renderer = {
-      indent_markers = {
-        enable = true,
-        icons = {
-          corner = "└ ",
-          edge = "│ ",
-          none = "  ",
-        },
-      },
-      icons = {
-        symlink_arrow = " → ",  -- ➜ → ➛
-        show = {
-          file = true,
-          folder = true,
-          folder_arrow = true,
-          git = true,
-        },
-        glyphs = {
-          git = {
-            -- staged      = "✓",
-            -- renamed     = "➜",
-            -- renamed     = "→",
-            unstaged    = "U",
-            staged      = "S",
-            unmerged    = "M",
-            renamed     = "R",
-            untracked   = "?",
-            deleted     = "✗",
-            ignored     = "◌",
-          },
-        },
-      },
-      special_files = {
-        "README.md",
-        "LICENSE",
-        "Cargo.toml",
-        "Makefile",
-        "package.json",
-        "package-lock.json",
-      }
-    },
-    diagnostics = {
-      enable = true,
-      show_on_dirs = false,
-      icons = {
-        hint = "", -- "",
-        info = "",
-        warning = "",
-        error = "",
-      },
-    },
-    filters = {
-      dotfiles = false,
-      custom = {
-        "\\.git",
-        ".cache",
-        "node_modules",
-        "__pycache__",
-      }
-    },
-    git = {
-      enable = true,
-      ignore = false,
-      timeout = 400,
-    },
-    actions = {
-      use_system_clipboard = false,
-      change_dir = {
-        enable = false,
-        global = false,
-        restrict_above_cwd = false,
-      },
-      open_file = {
-        quit_on_open = true,
-        resize_window = true,
-      },
-    },
-  }
-end
-
--- VonHeikemen/lsp-zero.nvim {{{2
--- Collection of functions to setup LSP with minimal effort
-local lsp_zero_loaded, lsp_zero = pcall(require, 'lsp-zero')
-if lsp_zero_loaded then
-  lsp_zero.on_attach(function(client, bufnr)
-    -- see :help lsp-zero-keybindings
-    -- to learn the available actions
-    lsp_zero.default_keymaps({buffer = bufnr})
-  end)
-end
-
--- hrsh7th/nvim-cmp {{2
--- completion engine plugin for neovim written in Lua
-local cmp_loaded, cmp = pcall(require, 'cmp')
-if cmp_loaded then
-
-  vim.api.nvim_create_autocmd('LspAttach', {
-    desc = 'LSP actions',
-    callback = function(event)
-      local opts = {buffer = event.buf}
-
-      -- these will be buffer-local keybindings
-      -- because they only work if you have an active language server
-
-      --vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
-      --vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
-      --vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
-      --vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-      --vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-      --vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-      --vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
-      --vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-      --vim.keymap.set({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
-      --vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
-    end
-  })
-
-  local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
-  local lspconfig  = require('lspconfig') 
-  local mason = require('mason')
-  local mason_lspconfig = require('mason-lspconfig')
-
-  local default_setup = function(server)
-    lspconfig[server].setup({
-      capabilities = lsp_capabilities,
-    })
-  end
-
--- williamboman/mason.nvim {{{2
--- Easily install and manage LSP servers, DAP servers, linters, and formatters.
---local mason_loaded, mason = pcall(require, 'mason')
---if mason_loaded then
-  mason.setup({
-    ui = {
-      icons = {
-        package_installed = "✓",
-        package_pending = "➜",
-        package_uninstalled = "✗"
-      }
-    }
-  })
---end
-
--- williamboman/mason-lspconfig.nvim {{{2
--- mason-lspconfig bridges mason.nvim with the lspconfig plugin
---local mason_lspconfig_loaded, mason_lspconfig = pcall(require, 'mason-lspconfig')
---if mason_lspconfig_loaded then
-  mason_lspconfig.setup({
-    ensure_installed = {},
-    handlers = {
-      default_setup,
-      lua_ls  = function()
-        lspconfig.lua_ls.setup {
-          capabilities = lsp_capabilities,
-          settings = {
-            Lua = {
-              runtime = {
-                version = 'LuaJIT'
-              },
-              diagnostics = {
-                globals = { "vim"}
-              },
-              workspace = {
-                library = {
-                  vim.env.VIMRUNTIME,
-                },
-              },
-            },
-          },
-        }
-      end
-    },
-  })
-
-  cmp.setup({
-      sources = {
-        {name = 'nvim_lsp'},
-      },
-      mapping = cmp.mapping.preset.insert({
-        -- Enter key confirms completion item
-        ['<CR>'] = cmp.mapping.confirm({select = false}),
-        -- Ctrl + space triggers completion menu
-        ['<C-Space>'] = cmp.mapping.complete(),
-      }),
-      snippet = {
-        expand = function(args)
-          require('luasnip').lsp_expand(args.body)
-      end,
-    },
-  })
-
-end
-
--- neovim/nvim-lspconfig {{{2
---local lspconfig_loaded, lspconfig = pcall(require, 'lspconfig')
---if lspconfig_loaded then
---  local lspconfig  = require('lspconfig') 
---  lspconfig.lua_ls.setup {
---    capabilities = lsp_capabilities,
---    settings = {
---      Lua = {
---        runtime = {
---          version = 'LuaJIT'
---        }
---        diagnostics = {
---          globals = { "vim"}
---        }
---        workspace = {
---          library = {
---            vim.env.VIMRUNTIME,
---          }
---        }
---      }
---    }
---  }
---end
-
-
-
-
 -- utils {{{1
 
 -- expand or minimize current buffer in a more natural direction (tmux-like)
@@ -1016,7 +2055,6 @@ local function relative_resize(vertical, margin)
   -- go (possibly) right
   vim.cmd(string.format('wincmd %s', vertical and 'l' or 'j'))
   local new_win = vim.api.nvim_get_current_win()
-
   -- determine direction cond on increase and existing right-hand buffer
   local not_last = not (cur_win == new_win)
   local sign = margin > 0
@@ -1040,7 +2078,7 @@ local function sudo_exec(cmd, print_output)
   local password = vim.fn.inputsecret("Password: ")
   vim.fn.inputrestore()
   if not password or #password == 0 then
-      warn("Invalid password, sudo aborted")
+      vim.notify('Invalid password, sudo aborted', vim.log.levels.ERROR)
       return false
   end
   local out = vim.fn.system(string.format("sudo -p '' -S %s", cmd), password)
@@ -1067,7 +2105,7 @@ local function sudo_write(tmpfile, filepath)
     vim.fn.shellescape(tmpfile),
     vim.fn.shellescape(filepath))
   -- no need to check error as this fails the entire function
-  vim.api.nvim_exec(string.format("write! %s", tmpfile), true)
+  vim.api.nvim_exec2(string.format("write! %s", tmpfile), { output = false })
   if sudo_exec(cmd) then
     print(string.format('\r\n"%s" written', filepath))
     vim.cmd("e!")
@@ -1075,11 +2113,60 @@ local function sudo_write(tmpfile, filepath)
   vim.fn.delete(tmpfile)
 end
 
+-- auto commands {{{1
+
+local aucmd = vim.api.nvim_create_autocmd
+
+local function augroup(name, fnc)
+  fnc(vim.api.nvim_create_augroup(name, { clear = true }))
+end
+
+augroup('NewlineNoAutoComments', function()
+  aucmd("FileType", {
+    pattern = '*',
+    command = "setlocal formatoptions-=o"
+  })
+end)
+
+-- remove search highlights while in insert mode
+augroup('ToggleSearchHL', function(g)
+  aucmd("InsertEnter",
+  {
+    group = g,
+    pattern = '*',
+    command = ':nohl | redraw'
+  })
+end)
+
+-- hide line numbers  in terminal mode
+augroup('TermOptions', function(g)
+  aucmd("TermOpen",
+  {
+    group = g,
+    pattern = '*',
+    command = 'setlocal listchars= nonumber norelativenumber | exec "normal! i"'
+  })
+end)
+
+-- different folding methods for different files 
+augroup('FoldingMethods', function()
+  aucmd( {"BufEnter", "BufWinEnter"} ,
+  {
+    pattern = {'init.lua', '.zshrc'},
+    command = 'setlocal foldmethod=marker',
+  })
+end)
+
 -- key mapping {{{1
 
 local map = vim.keymap.set
 
 -- convenience mappings {{{2
+
+map('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>')
+map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
+map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>')
+
 
 -- <ctrl-s> to Save
 map({ 'n', 'v', 'i'}, '<C-S>', '<C-c>:update<cr>', { silent = true })
@@ -1131,8 +2218,8 @@ map('c', '<C-e>', '<end>' , {})
 -- terminal mappings {{{2
 --map('t', '<M-[>', [[<C-\><C-n>]],      {})
 --map('t', '<C-w>', [[<C-\><C-n><C-w>]], {})
---map('t', '<M-r>', [['<C-\><C-N>"'.nr2char(getchar()).'pi']], { expr = true })
 
+map('t', '<A-r>', [['<C-\><C-N>"'.nr2char(getchar()).'pi']], { expr = true })
 
 
 -- tmux like directional window resizes
@@ -1141,7 +2228,6 @@ map('c', '<C-e>', '<end>' , {})
 --map('n', '<leader><Left>',  function() relative_resize(true,  -5) end, { silent = true })
 --map('n', '<leader><Right>', function() relative_resize(true,   5) end, { silent = true })
 --map('n', '<leader>=', '<C-w>=', { silent = true })
-
 -- navigation {{{2
 
 -- navigate buffers {{{3
@@ -1183,11 +2269,31 @@ map("n", "<C-j>", "<C-w>j")
 map("n", "<C-k>", "<C-w>k")
 map("n", "<C-l>", "<C-w>l")
 
+map("t", "<C-h>", "<C-\\><C-N><C-w>h")
+map("t", "<C-j>", "<C-\\><C-N><C-w>j")
+map("t", "<C-k>", "<C-\\><C-N><C-w>k")
+map("t", "<C-l>", "<C-\\><C-N><C-w>l")
+
+map("i", "<C-h>", "<C-\\><C-N><C-w>h")
+map("i", "<C-j>", "<C-\\><C-N><C-w>j")
+map("i", "<C-k>", "<C-\\><C-N><C-w>k")
+map("i", "<C-l>", "<C-\\><C-N><C-w>l")
+
 -- split resize
 map("n", "<A-k>", ":resize -2<CR>", {silent = true})
 map("n", "<A-j>", ":resize +2<CR>", {silent = true})
 map("n", "<A-h>", ":vertical resize -2<CR>")
 map("n", "<A-l>", ":vertical resize +2<CR>")
+
+map("t", "<A-k>", "<C-\\><C-N>:resize -2<CR>i", {silent = true})
+map("t", "<A-j>", "<C-\\><C-N>:resize +2<CR>i", {silent = true})
+map("t", "<A-h>", "<C-\\><C-N>:vertical resize -2<CR>i")
+map("t", "<A-l>", "<C-\\><C-N>:vertical resize +2<CR>i")
+
+map("i", "<A-k>", "<C-\\><C-N>:resize -2<CR>i", {silent = true})
+map("i", "<A-j>", "<C-\\><C-N>:resize +2<CR>i", {silent = true})
+map("i", "<A-h>", "<C-\\><C-N>:vertical resize -2<CR>i")
+map("i", "<A-l>", "<C-\\><C-N>:vertical resize +2<CR>i")
 
 -- quickfix list mappings {{{3
 --map('n', '<leader>q', "<cmd>lua require'utils'.toggle_qf('q')<CR>", {})
@@ -1207,21 +2313,21 @@ map('n', ']L', ':llast<CR>',          {})
 map({'n', 'v'}, '<leader>m', '<cmd>messages<CR>',  {})
 map({'n', 'v'}, '<leader>M', '<cmd>mes clear|echo "cleared :messages"<CR>', {})
 
--- plugin mappings {{{3
+-- plugin mappings {{{2
 
 if possession_loaded then
-  map("n", "<leader>ss", function() possession.list() end)
-  map("n", "<leader>sn", function() possession.new() end)
-  map("n", "<leader>su", function() possession.update() end)
-  map("n", "<leader>sd", function() possession.delete() end)
+  map('n', '<leader>ss', function() possession.list() end)
+  map('n', '<leader>sn', function() possession.new() end)
+  map('n', '<leader>su', function() possession.update() end)
+  map('n', '<leader>sd', function() possession.delete() end)
 end
 
 if neoscroll_loaded then
   local keymap = {
-    ["J"] = function() neoscroll.ctrl_u({ duration = 250 }) end;
-    ["K"] = function() neoscroll.ctrl_d({ duration = 250 }) end;
-    ["gj"] = function() neoscroll.ctrl_b({ duration = 450 }) end;
-    ["gk"] = function() neoscroll.ctrl_f({ duration = 450 }) end;
+    ['gk'] = function() neoscroll.ctrl_u({ duration = 250 }) end;
+    ['gj'] = function() neoscroll.ctrl_d({ duration = 250 }) end;
+    ['gK'] = function() neoscroll.ctrl_b({ duration = 450 }) end;
+    ['gJ'] = function() neoscroll.ctrl_f({ duration = 450 }) end;
     --["<C-y>"] = function() neoscroll.scroll(-0.1, { move_cursor=false; duration = 100 }) end;
     --["<C-e>"] = function() neoscroll.scroll(0.1, { move_cursor=false; duration = 100 }) end;
     --["zt"]    = function() neoscroll.zt({ half_win_duration = 250 }) end;
@@ -1230,16 +2336,25 @@ if neoscroll_loaded then
   }
   local modes = { 'n', 'v', 'x' }
   for key, func in pairs(keymap) do
-    vim.keymap.set(modes, key, func)
+    map(modes, key, func)
   end
 end
 
+if hop_loaded then
+  map({'n', 'v'}, '<leader>hh', '<cmd>HopChar1<CR>',{})
+  map({'n', 'v'}, '<leader>hc', '<cmd>HopCurrentline<CR>',{})
+  map({'n', 'v'}, '<leader>hl', '<cmd>HopLine<CR>',{})
+  map({'n', 'v'}, '<leader>hs', '<cmd>HopLineStart<CR>',{})
+  map({'n', 'v'}, '<leader>hp', '<cmd>HopPattern<CR>',{})
+end
 
---  map("n", "<leader>ss", function() require("nvim-possession").list() end)
---  map("n", "<leader>sn", function() possession.new() end)
---  map("n", "<leader>su", function() possession.update() end)
---  map("n", "<leader>sd", function() possession.delete() end)
---end
+if telescope_loaded then
+  local builtin = require('telescope.builtin')
+  map('n', '<leader>ff', builtin.find_files, {})
+  map('n', '<leader>fg', builtin.live_grep, {})
+  map('n', '<leader>fb', builtin.buffers, {})
+  map('n', '<leader>fh', builtin.help_tags, {})
+end
 
 -- <leader>v|<leader>s act as <cmd-v>|<cmd-s>
 -- <leader>p|P paste from yank register (0)
@@ -1366,4 +2481,3 @@ end --]]
 --fugitive_command(0,   "YRemove",     "GRemove")
 --fugitive_command(0,   "YUnlink",     "GUnlink")
 --fugitive_command(0,   "YDelete",     "GDelete")
-
