@@ -502,7 +502,7 @@ bindkey "^S" beginning-of-line
 
 # autosuggest
 zle -N autosuggest-accept
-bindkey '^l' autosuggest-accept
+bindkey '^]' autosuggest-accept
 zle -N autosuggest-execute
 bindkey '^\' autosuggest-execute
 
