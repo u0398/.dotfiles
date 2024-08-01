@@ -112,6 +112,12 @@ alignment = "left"
 newline = true
 
   [[blocks.segments]]
+  type = "session"
+  style = "plain"
+  template = "{{ if .Root }}<p:red>{{ else }}<p:lavender>{{ end }}{{ .UserName }}</>{{ if .SSHSession }}<p:text>@</><p:mauve>{{ .HostName }}</>{{ end }} "
+  
+
+  [[blocks.segments]]
   type = "status"
   style = "plain"
   foreground = "p:green"
