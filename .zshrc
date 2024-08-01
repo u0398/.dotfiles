@@ -578,6 +578,8 @@ alias sudo='sudo '
 
 alias cmx='cmatrix -ab -u 3'
 
+alias bat='batcat'
+
 alias fzf='fzf --height=80% --reverse --preview-window "right:70%:nohidden" --bind="ctrl-p:toggle-preview" --preview "batcat --style numbers,changes --color=always {} | head -500"'
 alias vf='v $(find . -type f | fzf)'
 
