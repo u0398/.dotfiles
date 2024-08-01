@@ -587,8 +587,8 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && (echo terminal; exit 
 
 ## Git Aliases {{{2
 
-alias dotgit='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-alias dotlazy='/usr/local/bin/lazygit -w $HOME -g $HOME/.dotfiles'
+alias dotgit='/usr/bin/git --git-dir=$HOME/.dotfiles/'
+alias dotlazy='/usr/local/bin/lazygit -g $HOME/.dotfiles'
 
 #dotgit shortcuts
 alias dst='dotgit status'
