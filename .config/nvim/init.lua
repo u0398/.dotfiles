@@ -1684,6 +1684,10 @@ if wk_enabled then
     { '<leader>sn', desc = 'Possession New' },
     { '<leader>su', desc = 'Possession Update' },
     { '<leader>sd', desc = 'Possession Delete' },
+    { '<leader>ff', desc = 'Telescope Files' },
+    { '<leader>fg', desc = 'Telescope Grep' },
+    { '<leader>fb', desc = 'Telescope Buffers' },
+    { '<leader>fh', desc = 'Telescope Help' },
   }
 end
 
