@@ -1,4 +1,7 @@
-# u0398's dotfiles
+<img width="500" alt="dotfiles_preview" src="https://github.com/user-attachments/assets/8c0cb69a-0702-455d-baaa-7deffaabd587">
+
+## u0398's dotfiles
+
 
 A collection of dotfiles for a number of programs:
 
