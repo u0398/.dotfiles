@@ -1697,10 +1697,10 @@ if wk_enabled then
     { 'gJ', desc = 'Scroll Down (450)' },
     { 'gk', desc = 'Scroll Up (250)' },
     { 'gK', desc = 'Scroll Up (450)' },
-    { '<leader>ss', desc = 'Possession List' },
-    { '<leader>sn', desc = 'Possession New' },
-    { '<leader>su', desc = 'Possession Update' },
-    { '<leader>sd', desc = 'Possession Delete' },
+    { '<leader>fss', desc = 'Possession List' },
+    { '<leader>fsn', desc = 'Possession New' },
+    { '<leader>fsu', desc = 'Possession Update' },
+    { '<leader>fsd', desc = 'Possession Delete' },
     { '<leader>ff', desc = 'Telescope Files' },
     { '<leader>fg', desc = 'Telescope Grep' },
     { '<leader>fb', desc = 'Telescope Buffers' },
@@ -2197,7 +2197,7 @@ map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>')
 map({ 'n', 'v', 'i'}, '<C-S>', '<C-c>:update<cr>', { silent = true })
 
 -- open Nvim Tree
-map("n", "<C-n>", ":NvimTreeToggle<CR>")
+map("n", "<leader>ft", ":NvimTreeToggle<CR>")
 
 -- turn off search matches with double-<Esc>
 map('n', '<Esc><Esc>', '<Esc>:nohlsearch<CR>', { silent = true })
@@ -2269,8 +2269,8 @@ map('n', ']b', ':bnext<CR>',          {})
 map('n', '[B', ':bfirst<CR>',         {})
 map('n', ']B', ':blast<CR>',          {})
 
-map("n", "<Tab>", ":bnext<CR>",       {})
-map("n", "<S-Tab>", ":bprevious<CR>", {})
+-- map("n", "<Tab>", ":bnext<CR>",       {})
+-- map("n", "<S-Tab>", ":bprevious<CR>", {})
 
 map("n", "<A-.>", ":bnext<CR>",       {})
 map("n", "<A-,>", ":bprevious<CR>",   {})
@@ -2341,10 +2341,10 @@ map({'n', 'v'}, '<leader>M', '<cmd>mes clear|echo "cleared :messages"<CR>', {})
 -- plugin mappings {{{2
 
 if possession_loaded then
-  map('n', '<leader>ss', function() possession.list() end)
-  map('n', '<leader>sn', function() possession.new() end)
-  map('n', '<leader>su', function() possession.update() end)
-  map('n', '<leader>sd', function() possession.delete() end)
+  map('n', '<leader>fss', function() possession.list() end)
+  map('n', '<leader>fsn', function() possession.new() end)
+  map('n', '<leader>fsu', function() possession.update() end)
+  map('n', '<leader>fsd', function() possession.delete() end)
 end
 
 if neoscroll_loaded then
@@ -2383,15 +2383,14 @@ end
 
 -- <leader>v|<leader>s act as <cmd-v>|<cmd-s>
 -- <leader>p|P paste from yank register (0)
--- <leader>y|Y yank into clipboard/OSCyank
 map({'n', 'v'}, '<leader>v', '"+p',   {})
 map({'n', 'v'}, '<leader>V', '"+P',   {})
---map({'n', 'v'}, '<leader>s', '"*p',   {})
---map({'n', 'v'}, '<leader>S', '"*P',   {})
+map({'n', 'v'}, '<leader>s', '"*p',   {})
+map({'n', 'v'}, '<leader>S', '"*P',   {})
 map({'n', 'v'}, '<leader>p', '"0p',   {})
 map({'n', 'v'}, '<leader>P', '"0P',   {})
-map({'n', 'v'}, '<leader>y', '<cmd>OSCYankReg 0<CR>', {})
--- map({'n', 'v'}, '<leader>y', '<cmd>let @+=@0<CR>', {})
+-- copy current file path to the clipboard
+map({'n', 'v'}, '<leader>y', '<cmd>let @+=@0<CR>', {})
 
 -- overloads for 'd|c' that don't pollute the unnamed registers
 map('n', '<leader>D',  '"_D',         {})
