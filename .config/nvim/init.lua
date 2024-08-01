@@ -1274,10 +1274,12 @@ if heirline_loaded then
   local heir_git_modifier = {
     condition = heir_conditions.is_git_repo,
   }
+
   local heir_git_spacer = heir_utils.insert(
     heir_git_modifier,
     heir_block_spacer
   )
+
   local heir_git_prefix_modifier = {
     hl = function()
       if heir_conditions.is_active() then
@@ -1287,6 +1289,7 @@ if heirline_loaded then
       end
     end
   }
+
   local heir_git_prefix = heir_utils.insert(
     heir_git_prefix_modifier,
     heir_block_prefix
@@ -1933,7 +1936,7 @@ if fidget_loaded then
       display = {
         render_limit = 16,          -- How many LSP messages to show at once
         done_ttl = 4,               -- How long a message should persist after completion
-        done_icon = " ",            -- Icon shown when all LSP progress tasks are complete
+        done_icon = "  ",          -- Icon shown when all LSP progress tasks are complete
         done_style = "Constant",    -- Highlight group for completed LSP tasks
         progress_ttl = math.huge,   -- How long a message should persist when in progress
         progress_icon =             -- Icon shown when LSP progress tasks are in progress
