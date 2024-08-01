@@ -1680,6 +1680,10 @@ if wk_enabled then
     { 'gJ', desc = 'Scroll Down (450)' },
     { 'gk', desc = 'Scroll Up (250)' },
     { 'gK', desc = 'Scroll Up (450)' },
+    { '<leader>ss', desc = 'Possession List' },
+    { '<leader>sn', desc = 'Possession New' },
+    { '<leader>su', desc = 'Possession Update' },
+    { '<leader>sd', desc = 'Possession Delete' },
   }
 end
 
