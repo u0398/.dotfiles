@@ -314,6 +314,23 @@ require('lazy').setup {
           require('nvim-surround').setup()
         end
     },
+    { 'tversteeg/registers.nvim',
+      cmd = 'Registers',
+      config = function()
+        local registers = require("registers")
+        registers.setup {
+          window = {
+            border = 'rounded',
+            transparency = 0,
+          }
+        }
+      end,
+      keys = {
+        { '"',     mode = { 'n', 'v' } },
+        { '<C-R>', mode = 'i' }
+      },
+      name = "registers",
+    },
     { 'smoka7/hop.nvim', version = 'v2.*' },
     { 'luukvbaal/statuscol.nvim' },
     { 'echasnovski/mini.nvim', version = '*' },
