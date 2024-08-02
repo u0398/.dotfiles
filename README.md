@@ -32,6 +32,10 @@ fzf requires installation. The config files need no modification, so use `--bin`
 cd ~/.config/fzf
 ./install --bin
 ```
+Build batcat's binary cache for custom catppuccin themes.
+```
+bat cache --build
+```
 Finally, switch to zsh shell, and reconnect.
 ```
 chsh -s /bin/zsh
