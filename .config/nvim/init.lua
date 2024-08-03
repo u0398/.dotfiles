@@ -2289,7 +2289,6 @@ map('n', '<leader>O',
     ':<C-u>call append(line(".")-1, repeat([""], v:count1))<CR>',
     { silent = true })
 
-
 --- w!! to save with sudo
 map('c', 'w!!', function() sudo_write() end, { silent = true })
 
@@ -2450,9 +2449,6 @@ map('v', '>', '>gv', {})
 -- Move selected lines up/down in visual mode
 --map('x', 'K', ":move '<-2<CR>gv=gv", {})
 --map('x', 'J', ":move '>+1<CR>gv=gv", {})
-
--- Select last pasted/yanked text
-map('n', 'g<C-v>', '`[v`]', {})
 
 -- Keep matches center screen when cycling with n|N
 map('n', 'n', 'nzzzv', {})
