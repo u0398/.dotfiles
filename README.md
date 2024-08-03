@@ -50,3 +50,6 @@ Then use the`dotgit`and`dotlazy`(lazygit) to work with the repository.
 - lazygit
 - neovim (unstable)
 - fzf
+- batcat
+- ripgrep
+- fd
