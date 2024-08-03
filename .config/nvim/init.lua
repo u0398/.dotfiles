@@ -2316,7 +2316,8 @@ end
 --map('t', '<M-[>', [[<C-\><C-n>]],      {})
 --map('t', '<C-w>', [[<C-\><C-n><C-w>]], {})
 
-map('t', '<A-r>', [['<C-\><C-N>"'.nr2char(getchar()).'pi']], { expr = true })
+-- paste any register into a terminal with Alt-p <register>
+map('t', '<A-p>', [['<C-\><C-N>"'.nr2char(getchar()).'pi']], { expr = true })
 
 -- navigation {{{2
 
