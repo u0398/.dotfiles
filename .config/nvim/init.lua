@@ -2268,11 +2268,6 @@ local map = vim.keymap.set
 
 -- convenience mappings {{{2
 
-map('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>')
-map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
-map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>')
-
-
 -- <ctrl-s> to Save
 map({ 'n', 'v', 'i'}, '<C-S>', '<C-c>:update<cr>', { silent = true })
 
@@ -2295,7 +2290,6 @@ map({'n', 'v'}, '<leader>m', '<cmd>messages<CR>',  {})
 map({'n', 'v'}, '<leader>M', '<cmd>mes clear|echo "cleared :messages"<CR>', {})
 
 -- Change current working dir (:pwd) to curent file's folder
---map('n', '<leader>%', '<Esc>:lua require"utils".set_cwd()<CR>', { silent = true })
 map('n', '<leader>%', function() set_cwd() end, { silent = true })
 
 -- Map <leader>o & <leader>O to newline without insert mode
@@ -2327,6 +2321,50 @@ for k, v in pairs({ ['<down>'] = '<C-n>', ['<up>'] = '<C-p>' }) do
    return vim.fn.wildmenumode() and v or k
  end, {expr=true})
 end
+
+-- <leader>v|<leader>s act as <cmd-v>|<cmd-s>
+-- <leader>p|P paste from yank register (0)
+map({'n', 'v'}, '<leader>v', '"+p',   {})
+map({'n', 'v'}, '<leader>V', '"+P',   {})
+map({'n', 'v'}, '<leader>s', '"*p',   {})
+map({'n', 'v'}, '<leader>S', '"*P',   {})
+map({'n', 'v'}, '<leader>p', '"0p',   {})
+map({'n', 'v'}, '<leader>P', '"0P',   {})
+-- copy current file path to the clipboard
+map({'n', 'v'}, '<leader>y', '<cmd>let @+=@0<CR>', {})
+
+-- overloads for 'd|c' that don't pollute the unnamed registers
+map('n', '<leader>D',  '"_D',         {})
+map('n', '<leader>C',  '"_C',         {})
+map({'n', 'v'}, '<leader>c',  '"_c',  {})
+
+-- keep visual selection when (de)indenting
+map('v', '<', '<gv', {})
+map('v', '>', '>gv', {})
+
+-- Move selected lines up/down in visual mode
+--map('x', 'K', ":move '<-2<CR>gv=gv", {})
+--map('x', 'J', ":move '>+1<CR>gv=gv", {})
+
+-- Keep matches center screen when cycling with n|N
+map('n', 'n', 'nzzzv', {})
+map('n', 'N', 'Nzzzv', {})
+
+-- any jump over 5 modifies the jumplist
+-- so we can use <C-o> <C-i> to jump back and forth
+--for _, c in ipairs({'j', 'k'}) do
+--  map('n', c, ([[(v:count > 5 ? "m'" . v:count : "") . '%s']]):format(c),
+--    { expr = true, silent = true})
+--end
+
+-- move along visual lines, not numbered ones
+-- without interferring with {count}<down|up>
+--for _, m in ipairs({'n', 'v'}) do
+--  for _, c in ipairs({ {'<up>','k'}, {'<down>','j'} }) do
+--    map(m, c[1], ([[v:count == 0 ? 'g%s' : '%s']]):format(c[2], c[2]),
+--        { expr = true, silent = true})
+--  end
+--end
 
 -- terminal mappings {{{2
 --map('t', '<M-[>', [[<C-\><C-n>]],      {})
@@ -2387,6 +2425,12 @@ map({'n', 't', 'i'}, '<A-j>', function() relative_resize(false,  2) end, { silen
 map({'n', 't', 'i'}, '<A-h>', function() relative_resize(true,  -2) end, { silent = true })
 map({'n', 't', 'i'}, '<A-l>', function() relative_resize(true,   2) end, { silent = true })
 
+-- unimpaired-like mappings {{{2
+
+-- diagnostic list mappings {{{3
+map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
+map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>')
+
 -- quickfix list mappings {{{3
 --map('n', '<leader>q', "<cmd>lua require'utils'.toggle_qf('q')<CR>", {})
 map('n', '[q', ':cprevious<CR>',      {})
@@ -2402,7 +2446,6 @@ map('n', '[L', ':lfirst<CR>',         {})
 map('n', ']L', ':llast<CR>',          {})
 
 -- plugin mappings {{{2
-
 if possession_loaded then
   map('n', '<leader>fss', function() possession.list() end)
   map('n', '<leader>fsn', function() possession.new() end)
@@ -2442,50 +2485,6 @@ if telescope_loaded then
   map('n', '<leader>fb', builtin.buffers, {})
   map('n', '<leader>fh', builtin.help_tags, {})
 end
-
--- <leader>v|<leader>s act as <cmd-v>|<cmd-s>
--- <leader>p|P paste from yank register (0)
-map({'n', 'v'}, '<leader>v', '"+p',   {})
-map({'n', 'v'}, '<leader>V', '"+P',   {})
-map({'n', 'v'}, '<leader>s', '"*p',   {})
-map({'n', 'v'}, '<leader>S', '"*P',   {})
-map({'n', 'v'}, '<leader>p', '"0p',   {})
-map({'n', 'v'}, '<leader>P', '"0P',   {})
--- copy current file path to the clipboard
-map({'n', 'v'}, '<leader>y', '<cmd>let @+=@0<CR>', {})
-
--- overloads for 'd|c' that don't pollute the unnamed registers
-map('n', '<leader>D',  '"_D',         {})
-map('n', '<leader>C',  '"_C',         {})
-map({'n', 'v'}, '<leader>c',  '"_c',  {})
-
--- keep visual selection when (de)indenting
-map('v', '<', '<gv', {})
-map('v', '>', '>gv', {})
-
--- Move selected lines up/down in visual mode
---map('x', 'K', ":move '<-2<CR>gv=gv", {})
---map('x', 'J', ":move '>+1<CR>gv=gv", {})
-
--- Keep matches center screen when cycling with n|N
-map('n', 'n', 'nzzzv', {})
-map('n', 'N', 'Nzzzv', {})
-
--- any jump over 5 modifies the jumplist
--- so we can use <C-o> <C-i> to jump back and forth
---for _, c in ipairs({'j', 'k'}) do
---  map('n', c, ([[(v:count > 5 ? "m'" . v:count : "") . '%s']]):format(c),
---    { expr = true, silent = true})
---end
-
--- move along visual lines, not numbered ones
--- without interferring with {count}<down|up>
---for _, m in ipairs({'n', 'v'}) do
---  for _, c in ipairs({ {'<up>','k'}, {'<down>','j'} }) do
---    map(m, c[1], ([[v:count == 0 ? 'g%s' : '%s']]):format(c[2], c[2]),
---        { expr = true, silent = true})
---  end
---end
 
 -- Search and Replace {{{3
 
