@@ -1,4 +1,4 @@
--- bootstrap lazy.nvim {{{1
+-- bootstrap lazy.nvim & early setup {{{1
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = "https://github.com/folke/lazy.nvim.git"
@@ -39,18 +39,6 @@ vim.diagnostic.config {
     float = true,
   },
 }
-
-      -- [vim.diagnostic.severity.ERROR] = "",
-      -- [vim.diagnostic.severity.WARN] = "",
-      -- [vim.diagnostic.severity.INFO] = "",
-      -- [vim.diagnostic.severity.HINT] = "",
-
--- local symbols = { Error = "󰅙", Info = "󰋼", Hint = "󰌵", Warn = "" }
---
--- for name, icon in pairs(symbols) do
---     local hl = "DiagnosticSign" .. name
---     vim.fn.sign_define(hl, { text = icon, numhl = hl, texthl = hl })
--- end
 
 -- options {{{1
 
@@ -105,7 +93,8 @@ o.wrap              = true      -- wrap long lines
 o.breakindent       = true      -- start wrapped lines indented
 o.linebreak         = true      -- do not break words on line wrap
 
-o.fillchars         = 'foldsep: '
+-- o.fillchars         = [[foldsep: ,foldopen:󰛀,foldclose:󰛂]]
+o.fillchars         = [[foldsep: ,foldopen:,foldclose:]]
 
 -- Characters to display on ':set list',explore glyphs using:
 -- `xfd -fa "InputMonoNerdFont:style:Regular"` or
@@ -583,7 +572,7 @@ if statuscol_loaded then
     segments = {
       { text = { builtin.foldfunc }, colwidth = 1, click = "v:lua.ScFa" },
       {
-        sign = { namespace = { "diagnostic/signs" }, maxwidth = 1, auto = true },
+        sign = { namespace = { "diagnostic/signs" }, maxwidth = 1, foldclosed = false, auto = true },
         click = "v:lua.ScSa",
       },
       { text = { builtin.lnumfunc }, click = "v:lua.ScLa", },
@@ -806,6 +795,7 @@ if catppuccin_loaded then
         Folded = { bg = 'NONE' },
         TermCursorNC = { fg = colors.base, bg = colors.subtext0 },
         VirtColumn = { fg = colors.surface0 },
+        FoldColumn = { fg = colors.blue },
 }
     end,
     default_integrations = true,
