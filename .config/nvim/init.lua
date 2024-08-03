@@ -1830,6 +1830,7 @@ if mason_loaded then
             workspace = {
               library = {
                 vim.env.VIMRUNTIME,
+                '${3rd}/luv/library', -- squashes the fs_stat Lazy warning 
               }
             }
           }
