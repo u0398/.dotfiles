@@ -2297,6 +2297,11 @@ map('c', 'w!!', function() sudo_write() end, { silent = true })
 map('c', '<C-a>', '<home>', {})
 map('c', '<C-e>', '<end>' , {})
 
+-- Break undo chain on punctuation, parenthesis, quotes, and carriage return
+-- so we can use 'u' to undo sections of an edit
+for _, c in ipairs({',', '.', '(', '[', '{', '=', '\\', '"', '\'', '<CR>'}) do
+   map('i', c, c .. "<C-g>u", { noremap = true })
+end
 
 -- not sure this is needed anymore
 -- Arrows in command line mode (':') menus
@@ -2452,13 +2457,6 @@ map('n', 'g<C-v>', '`[v`]', {})
 -- Keep matches center screen when cycling with n|N
 map('n', 'n', 'nzzzv', {})
 map('n', 'N', 'Nzzzv', {})
-
--- Break undo chain on punctuation so we can
--- use 'u' to undo sections of an edit
--- DISABLED, ALL KINDS OF ODDITIES
---[[ for _, c in ipairs({',', '.', '!', '?', ';'}) do
-   map('i', c, c .. "<C-g>u", {})
-end --]]
 
 -- any jump over 5 modifies the jumplist
 -- so we can use <C-o> <C-i> to jump back and forth
