@@ -1101,7 +1101,7 @@ if heirline_loaded then
   local heir_file_name = {
     provider = function(self)
       local filename = vim.fn.fnamemodify(self.filename, ":.")
-      if filename == "" then return '[No Name]' end
+      if filename == "" then return ' [No Name]' end
       if not heir_conditions.width_percent_below(#filename, 0.25) then
         filename = vim.fn.pathshorten(filename)
       end
