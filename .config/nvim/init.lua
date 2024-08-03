@@ -2303,15 +2303,14 @@ for _, c in ipairs({',', '.', '(', '[', '{', '=', '\\', '"', '\'', '<CR>'}) do
    map('i', c, c .. "<C-g>u", { noremap = true })
 end
 
--- not sure this is needed anymore
 -- Arrows in command line mode (':') menus
---map('c', '<down>', '(wildmenumode() ? "\\<C-n>" : "\\<down>")', { expr = true })
---map('c', '<up>',   '(wildmenumode() ? "\\<C-p>" : "\\<up>")',   { expr = true })
---for k, v in pairs({ ['<down>'] = '<C-n>', ['<up>'] = '<C-p>' }) do
---  map('c', k, function()
---    return vim.fn.wildmenumode() and v or k
---  end, {expr=true})
---end
+map('c', '<down>', '(wildmenumode() ? "\\<C-n>" : "\\<down>")', { expr = true })
+map('c', '<up>',   '(wildmenumode() ? "\\<C-p>" : "\\<up>")',   { expr = true })
+for k, v in pairs({ ['<down>'] = '<C-n>', ['<up>'] = '<C-p>' }) do
+ map('c', k, function()
+   return vim.fn.wildmenumode() and v or k
+ end, {expr=true})
+end
 
 -- terminal mappings {{{2
 --map('t', '<M-[>', [[<C-\><C-n>]],      {})
