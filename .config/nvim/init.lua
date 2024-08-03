@@ -287,6 +287,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
 -- load plugins with lazy.nvim {{{1
+
 require('lazy').setup {
   spec = {
     { 'nvim-lua/plenary.nvim', lazy = false, },
@@ -2307,40 +2308,11 @@ map('n', '<leader>O',
 --- w!! to save with sudo
 map('c', 'w!!', function() sudo_write() end, { silent = true })
 
--- Beginning and end of line in `:` command mode
-map('c', '<C-s>', '<home>', {})
-map('c', '<C-e>', '<end>' , {})
-
 -- Break undo chain on punctuation, parenthesis, quotes, and carriage return
 -- so we can use 'u' to undo sections of an edit
 for _, c in ipairs({',', '.', '(', '[', '{', '=', '\\', '"', '\'', '<CR>'}) do
    map('i', c, c .. "<C-g>u", { noremap = true })
 end
-
--- Arrows in command line mode (':') menus
-map('c', '<down>', '(wildmenumode() ? "\\<C-n>" : "\\<down>")', { expr = true })
-map('c', '<up>',   '(wildmenumode() ? "\\<C-p>" : "\\<up>")',   { expr = true })
-for k, v in pairs({ ['<down>'] = '<C-n>', ['<up>'] = '<C-p>' }) do
- map('c', k, function()
-   return vim.fn.wildmenumode() and v or k
- end, {expr=true})
-end
-
--- <leader>v|<leader>s act as <cmd-v>|<cmd-s>
--- <leader>p|P paste from yank register (0)
-map({'n', 'v'}, '<leader>v', '"+p',   {})
-map({'n', 'v'}, '<leader>V', '"+P',   {})
-map({'n', 'v'}, '<leader>s', '"*p',   {})
-map({'n', 'v'}, '<leader>S', '"*P',   {})
-map({'n', 'v'}, '<leader>p', '"0p',   {})
-map({'n', 'v'}, '<leader>P', '"0P',   {})
--- copy current file path to the clipboard
-map({'n', 'v'}, '<leader>y', '<cmd>let @+=@0<CR>', {})
-
--- overloads for 'd|c' that don't pollute the unnamed registers
-map('n', '<leader>D',  '"_D',         {})
-map('n', '<leader>C',  '"_C',         {})
-map({'n', 'v'}, '<leader>c',  '"_c',  {})
 
 -- keep visual selection when (de)indenting
 map('v', '<', '<gv', {})
@@ -2353,6 +2325,39 @@ map('v', '>', '>gv', {})
 -- Keep matches center screen when cycling with n|N
 map('n', 'n', 'nzzzv', {})
 map('n', 'N', 'Nzzzv', {})
+
+-- <leader>v|<leader>s act as <cmd-v>|<cmd-s>
+-- <leader>p|P paste from yank register (0)
+map({'n', 'v'}, '<leader>v', '"+p',   {})
+map({'n', 'v'}, '<leader>V', '"+P',   {})
+map({'n', 'v'}, '<leader>s', '"*p',   {})
+map({'n', 'v'}, '<leader>S', '"*P',   {})
+map({'n', 'v'}, '<leader>p', '"0p',   {})
+map({'n', 'v'}, '<leader>P', '"0P',   {})
+
+-- copy current file path to the clipboard
+map({'n', 'v'}, '<leader>y', '<cmd>let @+=@0<CR>', {})
+
+-- command line key bindings {{{2
+
+-- Beginning and end of line in `:` command mode
+map('c', '<C-s>', '<home>', {})
+map('c', '<C-e>', '<end>' , {})
+
+-- Arrows in command line mode (':') menus
+map('c', '<down>', '(wildmenumode() ? "\\<C-n>" : "\\<down>")', { expr = true })
+map('c', '<up>',   '(wildmenumode() ? "\\<C-p>" : "\\<up>")',   { expr = true })
+for k, v in pairs({ ['<down>'] = '<C-n>', ['<up>'] = '<C-p>' }) do
+ map('c', k, function()
+   return vim.fn.wildmenumode() and v or k
+ end, {expr=true})
+end
+
+-- not sure what this does
+-- overloads for 'd|c' that don't pollute the unnamed registers
+-- map('n', '<leader>D',  '"_D',         {})
+-- map('n', '<leader>C',  '"_C',         {})
+-- map({'n', 'v'}, '<leader>c',  '"_c',  {})
 
 -- any jump over 5 modifies the jumplist
 -- so we can use <C-o> <C-i> to jump back and forth
@@ -2371,8 +2376,9 @@ map('n', 'N', 'Nzzzv', {})
 --end
 
 -- terminal mappings {{{2
---map('t', '<M-[>', [[<C-\><C-n>]],      {})
---map('t', '<C-w>', [[<C-\><C-n><C-w>]], {})
+
+-- switch to normal mode
+map('t', '<M-[>', [[<C-\><C-n>]], {})
 
 -- paste any register into a terminal with Alt-p <register>
 map('t', '<A-p>', [['<C-\><C-N>"'.nr2char(getchar()).'pi']], { expr = true })
@@ -2413,6 +2419,7 @@ map('n', '<Leader>tO', ':tabfirst<CR>:tabonly<CR>', {})
 --map('n', '<Leader>tz',  "<cmd>lua require'utils'.tabZ()<CR>", {})
 
 -- split navigation {{{3
+
 map('n', '<C-h>', '<C-w>h')
 map('n', '<C-j>', '<C-w>j')
 map('n', '<C-k>', '<C-w>k')
@@ -2431,18 +2438,18 @@ map({'n', 't', 'i'}, '<A-l>', function() relative_resize(true,   2) end, { silen
 
 -- unimpaired-like mappings {{{2
 
--- diagnostic list mappings {{{3
+-- diagnostic list mappings
 map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
 map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>')
 
--- quickfix list mappings {{{3
+-- quickfix list mappings
 --map('n', '<leader>q', "<cmd>lua require'utils'.toggle_qf('q')<CR>", {})
 map('n', '[q', ':cprevious<CR>',      {})
 map('n', ']q', ':cnext<CR>',          {})
 map('n', '[Q', ':cfirst<CR>',         {})
 map('n', ']Q', ':clast<CR>',          {})
 
--- location list mappings {{{3
+-- location list mappings
 --map('n', '<leader>Q', "<cmd>lua require'utils'.toggle_qf('l')<CR>", {})
 map('n', '[l', ':lprevious<CR>',      {})
 map('n', ']l', ':lnext<CR>',          {})
@@ -2450,6 +2457,7 @@ map('n', '[L', ':lfirst<CR>',         {})
 map('n', ']L', ':llast<CR>',          {})
 
 -- plugin mappings {{{2
+
 if possession_loaded then
   map('n', '<leader>fss', function() possession.list() end)
   map('n', '<leader>fsn', function() possession.new() end)
@@ -2490,7 +2498,7 @@ if telescope_loaded then
   map('n', '<leader>fh', builtin.help_tags, {})
 end
 
--- Search and Replace {{{3
+-- old and unused key bindings {{{2
 
 -- 'c.' for word, 'c>' for WORD
 -- 'c.' in visual mode for selection
