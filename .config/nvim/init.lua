@@ -560,7 +560,7 @@ if ufo_loaded then
   }
 end
 
--- smoka7/hop.nvim
+-- smoka7/hop.nvim {{{2
 -- an EasyMotion-like plugin allowing you to jump anywhere in a document
 local hop_loaded, hop =pcall(require, 'hop')
 if hop_loaded then
