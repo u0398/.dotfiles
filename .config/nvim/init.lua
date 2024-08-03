@@ -2274,6 +2274,10 @@ map('n', '<leader>|',
     ':execute "set colorcolumn=" . (&colorcolumn == "" ? "81" : "")<CR>',
     { silent = true })
 
+-- shortcut to view :messages
+map({'n', 'v'}, '<leader>m', '<cmd>messages<CR>',  {})
+map({'n', 'v'}, '<leader>M', '<cmd>mes clear|echo "cleared :messages"<CR>', {})
+
 -- Change current working dir (:pwd) to curent file's folder
 --map('n', '<leader>%', '<Esc>:lua require"utils".set_cwd()<CR>', { silent = true })
 
@@ -2375,10 +2379,6 @@ map('n', '[l', ':lprevious<CR>',      {})
 map('n', ']l', ':lnext<CR>',          {})
 map('n', '[L', ':lfirst<CR>',         {})
 map('n', ']L', ':llast<CR>',          {})
-
--- shortcut to view :messages
-map({'n', 'v'}, '<leader>m', '<cmd>messages<CR>',  {})
-map({'n', 'v'}, '<leader>M', '<cmd>mes clear|echo "cleared :messages"<CR>', {})
 
 -- plugin mappings {{{2
 
