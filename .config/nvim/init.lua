@@ -2139,27 +2139,27 @@ end
 -- can get confusing as left might actually be right, etc
 -- the below can be mapped to arrows and will work similar to the tmux binds
 -- map to: "<cmd>lua require'utils'.resize(false, -5)<CR>"
--- local function relative_resize(vertical, margin)
---   local cur_win = vim.api.nvim_get_current_win()
---   -- go (possibly) right
---   vim.cmd(string.format('wincmd %s', vertical and 'l' or 'j'))
---   local new_win = vim.api.nvim_get_current_win()
---   -- determine direction cond on increase and existing right-hand buffer
---   local not_last = not (cur_win == new_win)
---   local sign = margin > 0
---   -- go to previous window if required otherwise flip sign
---   if not_last == true then
---     vim.cmd [[wincmd p]]
---
---   else
---     sign = not sign
---   end
---
---   local sign_char = sign and '+' or '-'
---   local dir = vertical and 'vertical ' or ''
---   local cmd = dir .. 'resize ' .. sign_char .. math.abs(margin) .. '<CR>'
---   vim.cmd(cmd)
--- end
+local function relative_resize(vertical, margin)
+  local cur_win = vim.api.nvim_get_current_win()
+  -- go (possibly) right
+  vim.cmd(string.format('wincmd %s', vertical and 'l' or 'j'))
+  local new_win = vim.api.nvim_get_current_win()
+  -- determine direction cond on increase and existing right-hand buffer
+  local not_last = not (cur_win == new_win)
+  local sign = margin > 0
+  -- go to previous window if required otherwise flip sign
+  if not_last == true then
+    vim.cmd [[wincmd p]]
+
+  else
+    sign = not sign
+  end
+
+  local sign_char = sign and '+' or '-'
+  local dir = vertical and 'vertical ' or ''
+  local cmd = dir .. 'resize ' .. sign_char .. math.abs(margin) .. '<CR>'
+  vim.cmd(cmd)
+end
 
 -- sudo execution
 local function sudo_exec(cmd, print_output)
@@ -2310,13 +2310,6 @@ map('c', '<C-e>', '<end>' , {})
 
 map('t', '<A-r>', [['<C-\><C-N>"'.nr2char(getchar()).'pi']], { expr = true })
 
-
--- tmux like directional window resizes
---map('n', '<leader><Up>',    function() relative_resize(false, -5) end, { silent = true })
---map('n', '<leader><Down>',  function() relative_resize(false,  5) end, { silent = true })
---map('n', '<leader><Left>',  function() relative_resize(true,  -5) end, { silent = true })
---map('n', '<leader><Right>', function() relative_resize(true,   5) end, { silent = true })
---map('n', '<leader>=', '<C-w>=', { silent = true })
 -- navigation {{{2
 
 -- navigate buffers {{{3
@@ -2353,36 +2346,21 @@ map('n', '<Leader>tO', ':tabfirst<CR>:tabonly<CR>', {})
 --map('n', '<Leader>tz',  "<cmd>lua require'utils'.tabZ()<CR>", {})
 
 -- split navigation {{{3
-map("n", "<C-h>", "<C-w>h")
-map("n", "<C-j>", "<C-w>j")
-map("n", "<C-k>", "<C-w>k")
-map("n", "<C-l>", "<C-w>l")
+map('n', '<C-h>', '<C-w>h')
+map('n', '<C-j>', '<C-w>j')
+map('n', '<C-k>', '<C-w>k')
+map('n', '<C-l>', '<C-w>l')
 
-map("t", "<C-h>", "<C-\\><C-N><C-w>h")
-map("t", "<C-j>", "<C-\\><C-N><C-w>j")
-map("t", "<C-k>", "<C-\\><C-N><C-w>k")
-map("t", "<C-l>", "<C-\\><C-N><C-w>l")
+map({'t', 'i'}, '<C-h>', '<C-\\><C-N><C-w>h')
+map({'t', 'i'}, '<C-j>', '<C-\\><C-N><C-w>j')
+map({'t', 'i'}, '<C-k>', '<C-\\><C-N><C-w>k')
+map({'t', 'i'}, '<C-l>', '<C-\\><C-N><C-w>l')
 
-map("i", "<C-h>", "<C-\\><C-N><C-w>h")
-map("i", "<C-j>", "<C-\\><C-N><C-w>j")
-map("i", "<C-k>", "<C-\\><C-N><C-w>k")
-map("i", "<C-l>", "<C-\\><C-N><C-w>l")
-
--- split resize
-map("n", "<A-k>", ":resize -2<CR>", {silent = true})
-map("n", "<A-j>", ":resize +2<CR>", {silent = true})
-map("n", "<A-h>", ":vertical resize -2<CR>")
-map("n", "<A-l>", ":vertical resize +2<CR>")
-
-map("t", "<A-k>", "<C-\\><C-N>:resize -2<CR>i", {silent = true})
-map("t", "<A-j>", "<C-\\><C-N>:resize +2<CR>i", {silent = true})
-map("t", "<A-h>", "<C-\\><C-N>:vertical resize -2<CR>i")
-map("t", "<A-l>", "<C-\\><C-N>:vertical resize +2<CR>i")
-
-map("i", "<A-k>", "<C-\\><C-N>:resize -2<CR>i", {silent = true})
-map("i", "<A-j>", "<C-\\><C-N>:resize +2<CR>i", {silent = true})
-map("i", "<A-h>", "<C-\\><C-N>:vertical resize -2<CR>i")
-map("i", "<A-l>", "<C-\\><C-N>:vertical resize +2<CR>i")
+-- split resize with tmux-like directional resizes
+map({'n', 't', 'i'}, '<A-k>', function() relative_resize(false, -2) end, { silent = true })
+map({'n', 't', 'i'}, '<A-j>', function() relative_resize(false,  2) end, { silent = true })
+map({'n', 't', 'i'}, '<A-h>', function() relative_resize(true,  -2) end, { silent = true })
+map({'n', 't', 'i'}, '<A-l>', function() relative_resize(true,   2) end, { silent = true })
 
 -- quickfix list mappings {{{3
 --map('n', '<leader>q', "<cmd>lua require'utils'.toggle_qf('q')<CR>", {})
