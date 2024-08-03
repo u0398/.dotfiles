@@ -1578,6 +1578,7 @@ if heirline_loaded then
   }
 
   local heir_statusline = {
+    hl = { fg = 'NONE', bg = 'NONE' },
     fallthrough = false,
 
     heir_help_statusline,
