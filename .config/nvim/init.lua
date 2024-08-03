@@ -333,7 +333,8 @@ require('lazy').setup {
     },
     { 'smoka7/hop.nvim', version = 'v2.*', event = 'VeryLazy' },
     { 'luukvbaal/statuscol.nvim' },
-    -- { 'echasnovski/mini.nvim', version = '*' },
+    { "lukas-reineke/virt-column.nvim", opts = {} },
+-- { 'echasnovski/mini.nvim', version = '*' },
     { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
     { 'lewis6991/gitsigns.nvim' },
     { 'nvim-treesitter/nvim-treesitter' },
@@ -593,6 +594,17 @@ if statuscol_loaded then
   }
 end
 
+-- lukas-reineke/virt-column.nvim {{{2
+-- display a character as the colorcolumn
+local virt_column_loaded, virt_column = pcall(require, 'virt-column')
+if virt_column_loaded then
+  virt_column.setup {
+    char = '▏'
+,
+    highlight = 'VirtColumn',
+  }
+end
+
 -- lukas-reineke/indent-blankline.nvim {{{2
 -- adds indentation guides to Neovim
 local ibl_loaded, ibl = pcall(require, 'ibl')
@@ -792,7 +804,8 @@ if catppuccin_loaded then
         -- NormalNC = { bg = colors.mantle },
         Folded = { bg = 'NONE' },
         TermCursorNC = { fg = colors.base, bg = colors.subtext0 },
-      }
+        VirtColumn = { fg = colors.surface0 },
+}
     end,
     default_integrations = true,
     integrations = {
