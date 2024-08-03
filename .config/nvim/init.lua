@@ -2201,6 +2201,23 @@ local function sudo_write(tmpfile, filepath)
   vim.fn.delete(tmpfile)
 end
 
+-- change the current working directory
+local function set_cwd(pwd)
+  if not pwd then
+    local path = vim.fn.expand('%:p:h')
+    vim.cmd('cd ' .. path)
+    vim.notify("pwd set to " .. path, vim.log.levels.INFO)
+  else
+    if vim.loop.fs_stat(pwd) then
+      vim.cmd("cd " .. pwd)
+      vim.notify("pwd set to " .. vim.fn.shellescape(pwd), vim.log.levels.INFO)
+    else
+      vim.notify("Unable to set pwd to " .. vim.fn.shellescape(pwd) ..
+                 ", directory is not accessible", vim.log.levels.WARN)
+    end
+  end
+end
+
 -- auto commands {{{1
 
 local aucmd = vim.api.nvim_create_autocmd
@@ -2279,6 +2296,7 @@ map({'n', 'v'}, '<leader>M', '<cmd>mes clear|echo "cleared :messages"<CR>', {})
 
 -- Change current working dir (:pwd) to curent file's folder
 --map('n', '<leader>%', '<Esc>:lua require"utils".set_cwd()<CR>', { silent = true })
+map('n', '<leader>%', function() set_cwd() end, { silent = true })
 
 -- Map <leader>o & <leader>O to newline without insert mode
 map('n', '<leader>o',
