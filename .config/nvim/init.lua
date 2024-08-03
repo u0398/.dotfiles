@@ -520,7 +520,6 @@ end
 -- make Neovim's fold look modern and keep high performance
 local ufo_loaded, ufo = pcall(require, 'ufo')
 if ufo_loaded then
-
   local fold_handler = function(virtText, lnum, endLnum, width, truncate)
     local newVirtText = {}
     local suffix = (' 󰁂 %d'):format(endLnum - lnum)
