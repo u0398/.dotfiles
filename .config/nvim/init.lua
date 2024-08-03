@@ -940,6 +940,7 @@ if heirline_loaded then
   local heir_conditions = require("heirline.conditions")
   local heir_utils = require("heirline.utils")
 
+  -- apply colors from the color scheme palette to a semantic color table
   local colorscheme_colors = require("catppuccin.palettes").get_palette "macchiato"
   local heir_colors = {
     mode_normal    = colorscheme_colors.blue,
@@ -951,8 +952,10 @@ if heirline_loaded then
     mode_executing = colorscheme_colors.red,
     mode_terminal  = colorscheme_colors.yellow,
 
-    statusline           = colorscheme_colors.base,
-    statusline_inactive  = colorscheme_colors.mantle,
+    statusline                   = 'NONE',
+    statusline_inactive          = 'NONE',
+    -- statusline           = colorscheme_colors.base,
+    -- statusline_inactive  = colorscheme_colors.mantle,
     bg                   = colorscheme_colors.surface0,
     bg_inactive          = colorscheme_colors.surface0,
     text                 = colorscheme_colors.text,
