@@ -1775,6 +1775,10 @@ if wk_enabled then
     { '<leader>fg', desc = 'Telescope Grep' },
     { '<leader>fb', desc = 'Telescope Buffers' },
     { '<leader>fh', desc = 'Telescope Help' },
+    { '<leader>j', desc = 'Hop Anywhere'},
+    { '<leader>J', desc = 'Hop Current Line'},
+    { '<leader>h', desc = 'Hop Line Start'},
+    { '<leader>H', desc = 'Hop Line'},
   }
 end
 
@@ -2436,11 +2440,10 @@ if neoscroll_loaded then
 end
 
 if hop_loaded then
-  map({'n', 'v'}, '<leader>hh', '<cmd>HopChar1<CR>',{})
-  map({'n', 'v'}, '<leader>hc', '<cmd>HopCurrentline<CR>',{})
-  map({'n', 'v'}, '<leader>hl', '<cmd>HopLine<CR>',{})
-  map({'n', 'v'}, '<leader>hs', '<cmd>HopLineStart<CR>',{})
-  map({'n', 'v'}, '<leader>hp', '<cmd>HopPattern<CR>',{})
+  map({'n', 'v'}, '<leader>j', '<cmd>HopChar1MW<CR>',{})
+  map({'n', 'v'}, '<leader>J', function() hop.hint_char1({ current_line_only = true }) end,{})
+  map({'n', 'v'}, '<leader>h', '<cmd>HopLineStartMW<CR>',{})
+  map({'n', 'v'}, '<leader>H', '<cmd>HopLineMW<CR>',{})
 end
 
 if telescope_loaded then
