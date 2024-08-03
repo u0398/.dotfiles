@@ -2289,6 +2289,10 @@ map('n', '<leader>|',
 map({'n', 'v'}, '<leader>m', '<cmd>messages<CR>',  {})
 map({'n', 'v'}, '<leader>M', '<cmd>mes clear|echo "cleared :messages"<CR>', {})
 
+-- shortcut to view fidget history
+map({'n', 'v'}, '<leader>n', '<cmd>Fidget history<CR>',  {})
+map({'n', 'v'}, '<leader>N', '<cmd>Fidget clear_history<CR>', {})
+
 -- Change current working dir (:pwd) to curent file's folder
 map('n', '<leader>%', function() set_cwd() end, { silent = true })
 
