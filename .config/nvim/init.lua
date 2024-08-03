@@ -2294,7 +2294,7 @@ map('n', '<leader>O',
 map('c', 'w!!', function() sudo_write() end, { silent = true })
 
 -- Beginning and end of line in `:` command mode
-map('c', '<C-a>', '<home>', {})
+map('c', '<C-s>', '<home>', {})
 map('c', '<C-e>', '<end>' , {})
 
 -- Break undo chain on punctuation, parenthesis, quotes, and carriage return
