@@ -66,7 +66,8 @@ return {
           }
           h:option {
             key = 't',
-            option = 'cursorcolumn',
+            option = 'showtabline',
+            values = { [true] = 2, [false] = 0 }
           }
           h:option {
             key = 'u',
