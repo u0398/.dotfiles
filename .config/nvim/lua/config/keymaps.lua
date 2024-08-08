@@ -119,6 +119,7 @@ map('n', '<leader><tab>l',       ':tablast<CR>',     {})
 map('n', '<Leader><tab>n',       ':tabnew<CR>',      {})
 map('n', '<Leader><tab>c',       ':tabclose<CR>',    {})
 map('n', '<Leader><tab>o',       ':tabonly<CR>',     {})
+map('n', '<Leader><tab>z',       function() utils.tabz() end,     {})
 
 map('n', '[b', ':bprevious<CR>',      {})
 map('n', ']b', ':bnext<CR>',          {})
