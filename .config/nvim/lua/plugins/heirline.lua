@@ -41,6 +41,13 @@ return {
         git_changed       = colorscheme_colors.yellow,
         git_parenthese    = colorscheme_colors.overlay0,
         file_properties   = colorscheme_colors.mauve,
+        buff              = colorscheme_colors.blue,
+        buff_active       = colorscheme_colors.peach,
+        buff_text         = colorscheme_colors.subtext0,
+        buff_text_active  = colorscheme_colors.text,
+        tab               = colorscheme_colors.teal,
+        tab_text          = colorscheme_colors.subtext0,
+        tab_text_active   = colorscheme_colors.teal,
 
         ERROR = colorscheme_colors.red,
         WARN  = colorscheme_colors.peach,
@@ -62,6 +69,10 @@ return {
         end
       }
 
+      local heir_block_prefix_raw = heir_utils.insert( heir_block_prefix )
+      local heir_block_suffix_raw = heir_utils.insert( heir_block_suffix )
+
+      heir_block_suffix = heir_utils.insert( heir_block_suffix_modifier, heir_block_suffix )
       heir_block_suffix = heir_utils.insert( heir_block_suffix_modifier, heir_block_suffix )
 
       local heir_mode = {
@@ -184,8 +195,10 @@ return {
           hl = function()
             if heir_conditions.is_active() then
               return { fg = 'file_name' }
+            else
+              return { fg = 'text_inactive' }
             end
-          end,
+        end,
         },
         {
           condition = function()
@@ -581,6 +594,254 @@ return {
         end,
       }
 
+      local heir_tab_buffer_num = {
+        provider = function(self)
+          return tostring(self.bufnr) .. ' '
+        end,
+        hl = function(self)
+          if self.is_active then
+            return { fg = 'prefix_text', bg = 'buff_active' }
+          else
+            return { fg = 'prefix_text', bg = 'buff' }
+          end
+        end
+      }
+
+      local heir_tab_file_name = {
+        provider = function(self)
+          -- self.filename will be defined later, just keep looking at the example!
+          local filename = self.filename
+          filename = filename == '' and ' [No Name]' or vim.fn.fnamemodify(filename, ":t")
+          return ' ' .. filename
+        end,
+        hl = function(self)
+          if vim.api.nvim_get_option_value('modified', { buf = self.bufnr }) then
+            return { fg = 'file_name' }
+          end
+        end,
+      }
+
+      local heir_tab_file_name_flags = {
+        { condition = function(self)
+          return vim.api.nvim_get_option_value("modified", { buf = self.bufnr })
+        end,
+        provider = '+',
+        hl = { fg = 'file_name' },
+        },
+        { condition = function(self)
+            return not vim.api.nvim_get_option_value("modifiable", { buf = self.bufnr })
+                    or vim.api.nvim_get_option_value("readonly", { buf = self.bufnr })
+          end,
+          provider = '  ',
+          hl = { fg = "file_name_locked" },
+        },
+      }
+
+      local heir_tab_buf_prefix_modifier = {
+        init = function(self)
+          self.filename = vim.api.nvim_buf_get_name(self.bufnr)
+        end,
+        hl = function(self)
+          if self.is_active then
+            return { fg = 'buff_active', bg = 'statusline' }
+          else
+            return { fg = 'buff', bg = 'statusline_inactive' }
+          end
+        end
+      }
+
+      local heir_tab_buf_prefix = {
+        heir_utils.insert(heir_tab_buf_prefix_modifier, heir_block_prefix)
+      }
+
+      local heir_tab_close_btn = {
+        condition = function(self)
+          return not vim.api.nvim_get_option_value("modified", { buf = self.bufnr })
+        end,
+        { provider = ' ' },
+        { provider = '',
+          hl = { fg = 'text_inactive' },
+          on_click = {
+            callback = function(_, minwid)
+              vim.schedule(function()
+                vim.api.nvim_buf_delete(minwid, { force = false })
+                vim.cmd.redrawtabline()
+              end)
+            end,
+            minwid = function(self)
+              return self.bufnr
+            end,
+            name = "heirline_tabline_close_buffer_callback",
+          },
+        },
+      }
+
+      local heir_tab_buf_suffix_modifier = {
+        hl = function(self)
+          if self.is_active then
+            return { fg = 'bg', bg = 'statusline' }
+          else
+            return { fg = 'bg_inactive', bg = 'statusline_inactive' }
+          end
+        end
+      }
+
+      local heir_tab_buf_suffix = heir_utils.insert( heir_tab_buf_suffix_modifier, heir_block_suffix_raw, heir_block_spacer )
+
+
+      local heir_tab_buf = {
+        init = function(self)
+          self.filename = vim.api.nvim_buf_get_name(self.bufnr)
+        end,
+        hl = function(self)
+          if self.is_active then
+            return { fg = 'buff_text_active', bg = 'bg' }
+          else
+            return { fg = 'buff_text', bg = 'bg_inactive' }
+          end
+        end,
+        on_click = {
+          callback = function(_, minwid, _, button)
+            if (button == "m") then -- close on mouse middle click
+              vim.schedule(function()
+                vim.api.nvim_buf_delete(minwid, { force = false })
+              end)
+            else
+              vim.api.nvim_win_set_buf(0, minwid)
+            end
+          end,
+          minwid = function(self)
+            return self.bufnr
+          end,
+          name = "heirline_tabline_buffer_callback",
+        },
+        heir_tab_buf_prefix,
+        heir_tab_buffer_num,
+        heir_tab_file_name,
+        heir_tab_file_name_flags,
+        heir_tab_close_btn,
+        heir_tab_buf_suffix,
+      }
+      local buflist_cache = {}
+
+      local get_bufs = function()
+        return vim.tbl_filter(function(bufnr)
+          return vim.api.nvim_get_option_value("buflisted", { buf = bufnr })
+        end, vim.api.nvim_list_bufs())
+      end
+
+
+      vim.api.nvim_create_autocmd({ "VimEnter", "UIEnter", "BufAdd", "BufDelete" }, {
+        callback = function()
+          vim.schedule(function()
+            local buffers = get_bufs()
+            for i, v in ipairs(buffers) do
+              buflist_cache[i] = v
+            end
+            for i = #buffers + 1, #buflist_cache do
+              buflist_cache[i] = nil
+            end
+            -- check how many buffers we have and set showtabline accordingly
+            -- if #buflist_cache > 1 then
+            --   vim.o.showtabline = 2 -- always
+            -- elseif vim.o.showtabline ~= 1 then -- don't reset the option if it's already at default value
+            --   vim.o.showtabline = 1 -- only when #tabpages > 1
+            -- end
+          end)
+        end,
+      })
+
+      local heir_buffer_line = heir_utils.make_buflist(
+        heir_tab_buf,
+        { provider = " ", hl = { fg = "buff" } },
+        { provider = " ", hl = { fg = "buff" } },
+        -- out buf_func simply returns the buflist_cache
+        function()
+          return buflist_cache
+        end,
+        -- no cache, as we're handling everything ourselves
+        false
+      )
+
+      local heir_tab_page_prefix_modifier = {
+        hl = { fg = 'tab', bg = 'statusline' }
+      }
+
+      local heir_tab_page_prefix = {
+        heir_utils.insert(heir_tab_page_prefix_modifier, heir_block_prefix)
+      }
+
+      local heir_tab_page = {
+        provider = function(self)
+          if ( self.tabnr == vim.fn.tabpagenr('$') ) then
+            return "%" .. self.tabnr .. "T" .. self.tabpage .. "%T"
+          else
+            return "%" .. self.tabnr .. "T" .. self.tabpage .. " %T"
+          end
+        end,
+        hl = function(self)
+          if not self.is_active then
+            return { fg = "tab_text" }
+          else
+            return { fg = "tab_text_active" }
+          end
+        end,
+      }
+
+      local heir_tab_pages = {
+        -- only show this component if there's 2 or more tabpages
+        condition = function()
+          return #vim.api.nvim_list_tabpages() >= 2
+        end,
+        hl = { bg = 'bg' },
+        heir_tab_page_prefix,
+        { provider = '󰓩 ',
+          hl = { fg = 'prefix_text', bg = 'tab' },
+        },
+        { provider = ' ' },
+        heir_utils.make_tablist( heir_tab_page ),
+        heir_block_suffix,
+      }
+
+      local heir_tab_line_offset = {
+        condition = function(self)
+          local win = vim.api.nvim_tabpage_list_wins(0)[1]
+          local bufnr = vim.api.nvim_win_get_buf(win)
+          self.winid = win
+
+          if vim.bo[bufnr].filetype == "NvimTree" then
+            self.title = "NvimTree"
+            return true
+          end
+        end,
+
+        provider = function(self)
+          local title = self.title
+          local width = vim.api.nvim_win_get_width(self.winid)
+          local pad = math.ceil((width - #title) / 2)
+          return string.rep(" ", pad) .. title .. string.rep(" ", pad)
+        end,
+
+        hl = function(self)
+          if vim.api.nvim_get_current_win() == self.winid then
+            return "buff_active"
+          else
+            return "buff"
+          end
+        end,
+      }
+
+      local heir_alignment = {
+        provider = '%='
+      }
+
+      local heir_tabline = {
+        heir_tab_line_offset,
+        heir_buffer_line,
+        heir_alignment,
+        heir_tab_pages
+      }
+
       local heir_file_properties_spacer = heir_utils.insert(
         heir_file_properties_modifier,
         heir_block_spacer
@@ -592,10 +853,6 @@ return {
         heir_file_properties,
         heir_block_suffix
       )
-
-      local heir_alignment = {
-        provider = '%='
-      }
 
       local heir_default_statusline = {
         heir_mode,
@@ -678,8 +935,10 @@ return {
         opts = {
           colors = heir_colors,
         },
-        statusline = heir_statusline
+        statusline = heir_statusline,
+        tabline = heir_tabline,
       }
+      vim.cmd([[au FileType * if index(['wipe', 'delete'], &bufhidden) >= 0 | set nobuflisted | endif]])
     end,
   },
 }
