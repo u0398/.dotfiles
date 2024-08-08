@@ -1,0 +1,77 @@
+-- gennaro-tedesco/nvim-possession {{{2
+-- no-nonsense session manager
+return {
+  'gennaro-tedesco/nvim-possession',
+  lazy = false,
+  dependencies = {
+    { 'tiagovla/scope.nvim',
+      lazy = false,
+      config = true,
+    },
+    { 'ibhagwan/fzf-lua',
+      lazy = false,
+    },
+  },
+  keys = {
+      { '<leader>fss',
+        function()
+          require'nvim-possession'.list()
+        end,
+        desc = 'list'
+      },
+      { '<leader>fsn',
+        function()
+          require'nvim-possession'.new()
+        end,
+        desc = 'new'
+      },
+      { '<leader>fsu',
+        function()
+          require'nvim-possession'.update()
+        end,
+        desc = 'update'
+      },
+      { '<leader>fsd',
+        function()
+          require'nvim-possession'.delete()
+        end,
+        desc = 'delete'
+      },
+
+  },
+  config = function()
+    require'nvim-possession'.setup {
+      sessions = {
+      --sessions_path =     '' -- folder to look for sessions, must be a valid existing path
+      --sessions_variable = '' -- defines vim.g[sessions_variable] when a session is loaded
+      --sessions_icon =     '' -- string: shows icon both in the prompt and in the statusline
+      --sessions_prompt =   '' -- fzf prompt string
+      },
+      autoload = true,    -- whether to autoload sessions in the cwd at startup
+      autosave = true,    -- whether to autosave loaded sessions before quitting
+      autoswitch = {
+        enable = true,     -- whether to enable autoswitch
+        exclude_ft = {},  -- list of filetypes to exclude from autoswitch
+      },
+      save_hook = function()
+                    vim.cmd([[ScopeSaveState]]) -- Scope.nvim saving
+                  end,
+      post_hook = function()
+                    vim.cmd([[ScopeLoadState]]) -- Scope.nvim loading
+                  end,
+                        -- callback, function to execute after loading a session
+                        -- useful to restore file trees, file managers or terminals
+                        -- function()
+                        --   require('FTerm').open()
+                        --   require('nvim-tree').toggle(false, true)
+                        -- end
+      fzf_winopts = {
+        -- any valid fzf-lua winopts options, for instance
+        width = 0.5,
+        preview = {
+            vertical = "right:30%"
+        },
+      }
+    }
+  end
+}
