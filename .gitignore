@@ -12,3 +12,4 @@
 .sdkman
 .ssh
 .zcompdump
+.config/nvim/lazy-lock.json
