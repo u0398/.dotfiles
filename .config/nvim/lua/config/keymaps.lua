@@ -150,24 +150,38 @@ map('n', '<leader><tab>l',       ':tablast<CR>',        {})
 map('n', '<Leader><tab>n',       ':tabnew<CR>',         {})
 map('n', '<Leader><tab>c',       ':tabclose<CR>',       {})
 map('n', '<Leader><tab>o',       ':tabonly<CR>',        {})
+
+-- fancy tmux-like windowed-buffer zoom
+map('n', '<Leader><tab>z', function() utils.tabz() end, {})
+
+-- navigate buffers
+map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
+map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+map("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
+map("n", "<leader>bd", utils.bufremove, { desc = "Delete Buffer" })
+map("n", "<leader>bD", "<cmd>:bd<cr>", { desc = "Delete Buffer and Window" })
+
+-- map('n', '[b', ':bprevious<CR>',      {})
+-- map('n', ']b', ':bnext<CR>',          {})
+-- map('n', '[B', ':bfirst<CR>',         {})
+-- map('n', ']B', ':blast<CR>',          {})
+
 -- map("n", "<Tab>", ":bnext<CR>",       {})
 -- map("n", "<S-Tab>", ":bprevious<CR>", {})
 
-map("n", "<A-.>", ":bnext<CR>",       {})
-map("n", "<A-,>", ":bprevious<CR>",   {})
+-- map("n", "<A-.>", ":bnext<CR>",       {})
+-- map("n", "<A-,>", ":bprevious<CR>",   {})
 
-map("n", "<A->>", ":BufferMoveNext<CR>", {})
-map("n", "<A-<>", ":BufferMovePrevious<CR>", {})
+-- map("n", "<A->>", ":BufferMoveNext<CR>", {})
+-- map("n", "<A-<>", ":BufferMovePrevious<CR>", {})
 
 -- close buffer without loosing the opened window
-map("n", "<C-c>", ":BufferClose<CR>", { silent = true })
+-- map("n", "<C-c>", ":BufferClose<CR>", { silent = true })
 
 -- navigate tabs {{{3
 
 -- Jump to first tab & close all other tabs. Helpful after running Git difftool.
 map('n', '<Leader>tO', ':tabfirst<CR>:tabonly<CR>', {})
--- tmux <c-meta>z like
---map('n', '<Leader>tz',  "<cmd>lua require'utils'.tabZ()<CR>", {})
 
 -- split navigation {{{3
 
