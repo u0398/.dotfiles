@@ -3,8 +3,8 @@ local map = vim.keymap.set
 
 -- convenience mappings {{{2
 
--- <ctrl-s> to Save
-map({ 'n', 'v', 'i'}, '<C-S>', '<C-c>:update<cr>', { silent = true })
+-- <ctrl-s> to increment (tmux uses <ctrl-a>)
+-- map({ 'n' }, '<c-s>', '<c-a>', { noremap = true, silent = true })
 
 -- open Nvim Tree
 -- map("n", "<leader>ft", ":Neotree<CR>")
