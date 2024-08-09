@@ -131,6 +131,7 @@ o.smartcase         = true      -- case sensitive when search includes uppercase
 o.showmatch         = true      -- highlight matching [{()}]
 o.inccommand        = 'nosplit' -- show search and replace in real time
 o.autoread          = true      -- reread a file if it's changed outside of vim
+o.keywordprg        = ':help'
 o.wrapscan          = true      -- begin search from top of the file when nothing is found
 vim.o.cpoptions     = vim.o.cpoptions .. 'x' -- stay on search item when <esc>
 

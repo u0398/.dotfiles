@@ -12,6 +12,14 @@ augroup('NewlineNoAutoComments', function(g)
   })
 end)
 
+augroup('keywordprg', function(g)
+  aucmd('FileType', {
+    group = g,
+    pattern = {'sh', 'bash', 'zsh'},
+    command = 'lua vim.o.keywordprg = ":Man"'
+  })
+end)
+
 -- remove search highlights while in insert mode
 augroup('ToggleSearchHL', function(g)
   aucmd('InsertEnter',
