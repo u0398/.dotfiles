@@ -60,6 +60,9 @@ map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 --- w!! to save with sudo
 map('c', 'w!!', function() utils.sudo_write() end, { silent = true })
 
+--keywordprg
+map("n", "<leader>K", "<cmd>norm! K<cr>", { desc = "Keywordprg" })
+
 -- Break undo chain on punctuation, parenthesis, quotes, and carriage return
 -- so we can use 'u' to undo sections of an edit
 for _, c in ipairs({',', '.', '(', '[', '{', '=', '\\', '"', '\'', '<CR>'}) do
