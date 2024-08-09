@@ -70,10 +70,6 @@ end
 map('v', '<', '<gv', {})
 map('v', '>', '>gv', {})
 
--- Move selected lines up/down in visual mode
---map('x', 'K', ":move '<-2<CR>gv=gv", {})
---map('x', 'J', ":move '>+1<CR>gv=gv", {})
-
 -- Keep matches center screen when cycling with n|N
 -- map('n', 'n', 'nzzzv', {})
 -- map('n', 'N', 'Nzzzv', {})
@@ -182,6 +178,14 @@ map({'t', 'i'}, '<C-h>', '<C-\\><C-N><C-w>h')
 map({'t', 'i'}, '<C-j>', '<C-\\><C-N><C-w>j')
 map({'t', 'i'}, '<C-k>', '<C-\\><C-N><C-w>k')
 map({'t', 'i'}, '<C-l>', '<C-\\><C-N><C-w>l')
+
+-- Move Lines
+map("n", "<A-j>", "<cmd>m .+1<cr>==", { desc = "Move Down" })
+map("n", "<A-k>", "<cmd>m .-2<cr>==", { desc = "Move Up" })
+map("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move Down" })
+map("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Up" })
+map("v", "<A-j>", ":m '>+1<cr>gv=gv", { desc = "Move Down" })
+map("v", "<A-k>", ":m '<-2<cr>gv=gv", { desc = "Move Up" })
 
 -- split resize with tmux-like directional resizes
 map({'n', 't', 'i'}, '<A-k>', function() utils.relative_resize(false, -2) end, { silent = true })
