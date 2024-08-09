@@ -1,13 +1,28 @@
 local utils = require'config.utils'
 local map = vim.keymap.set
 
--- convenience mappings
+-- save
+map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 
--- <ctrl-s> to increment (tmux uses <ctrl-a>)
--- map({ 'n' }, '<c-s>', '<c-a>', { noremap = true, silent = true })
+--- w!! to save with sudo
+map('c', 'w!!', function() utils.sudo_write() end, { silent = true })
 
--- open Nvim Tree
--- map("n", "<leader>ft", ":Neotree<CR>")
+-- new file
+map("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })
+
+-- lazy
+map("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
+
+--keywordprg
+map("n", "<leader>K", "<cmd>norm! K<cr>", { desc = "Keywordprg" })
+
+-- view :messages
+map({'n', 'v'}, '<leader>m', '<cmd>messages<CR>',  {})
+map({'n', 'v'}, '<leader>M', '<cmd>mes clear|echo "cleared :messages"<CR>', {})
+
+-- view fidget history
+map({'n', 'v'}, '<leader>n', '<cmd>Fidget history<CR>',  {})
+map({'n', 'v'}, '<leader>N', '<cmd>Fidget clear_history<CR>', {})
 
 -- clear highlight search with <esc>
 map( {'i', 'n' }, '<esc>', '<cmd>noh<cr><esc>', { desc = 'Escape and Clear hlsearch' })
@@ -18,20 +33,17 @@ map( 'n',           -- Clear search, diff update and redraw
      { desc = 'Redraw / Clear hlsearch / Diff Update' } )
 
 -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
-map("n", "n", "'Nn'[v:searchforward].'zv'", { expr = true, desc = "Next Search Result" })
-map("x", "n", "'Nn'[v:searchforward]",      { expr = true, desc = "Next Search Result" })
-map("o", "n", "'Nn'[v:searchforward]",      { expr = true, desc = "Next Search Result" })
-map("n", "N", "'nN'[v:searchforward].'zv'", { expr = true, desc = "Prev Search Result" })
-map("x", "N", "'nN'[v:searchforward]",      { expr = true, desc = "Prev Search Result" })
-map("o", "N", "'nN'[v:searchforward]",      { expr = true, desc = "Prev Search Result" })
+map('n', 'n', "'Nn'[v:searchforward].'zv'", { expr = true, desc = "Next Search Result" })
+map('x', 'n', "'Nn'[v:searchforward]",      { expr = true, desc = "Next Search Result" })
+map('o', 'n', "'Nn'[v:searchforward]",      { expr = true, desc = "Next Search Result" })
+map('n', 'N', "'nN'[v:searchforward].'zv'", { expr = true, desc = "Prev Search Result" })
+map('x', 'N', "'nN'[v:searchforward]",      { expr = true, desc = "Prev Search Result" })
+map('o', 'N', "'nN'[v:searchforward]",      { expr = true, desc = "Prev Search Result" })
 
--- shortcut to view :messages
-map({'n', 'v'}, '<leader>m', '<cmd>messages<CR>',  {})
-map({'n', 'v'}, '<leader>M', '<cmd>mes clear|echo "cleared :messages"<CR>', {})
-
--- shortcut to view fidget history
-map({'n', 'v'}, '<leader>n', '<cmd>Fidget history<CR>',  {})
-map({'n', 'v'}, '<leader>N', '<cmd>Fidget clear_history<CR>', {})
+-- Conflicts with n/N mappings above
+-- Keep matches center screen when cycling with n|N
+-- map('n', 'n', 'nzzzv', {})
+-- map('n', 'N', 'Nzzzv', {})
 
 -- Change current working dir (:pwd) to curent file's folder
 map('n', '<leader>%', function() utils.set_cwd() end, { silent = true })
@@ -48,21 +60,6 @@ map('n', '<leader>O',
 map("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Below" })
 map("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Above" })
 
--- lazy
-map("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
-
--- new file
-map("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })
-
--- save
-map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
-
---- w!! to save with sudo
-map('c', 'w!!', function() utils.sudo_write() end, { silent = true })
-
---keywordprg
-map("n", "<leader>K", "<cmd>norm! K<cr>", { desc = "Keywordprg" })
-
 -- Break undo chain on punctuation, parenthesis, quotes, and carriage return
 -- so we can use 'u' to undo sections of an edit
 for _, c in ipairs({',', '.', '(', '[', '{', '=', '\\', '"', '\'', '<CR>'}) do
@@ -72,10 +69,6 @@ end
 -- keep visual selection when (de)indenting
 map('v', '<', '<gv', {})
 map('v', '>', '>gv', {})
-
--- Keep matches center screen when cycling with n|N
--- map('n', 'n', 'nzzzv', {})
--- map('n', 'N', 'Nzzzv', {})
 
 -- <leader>v|<leader>s act as <cmd-v>|<cmd-s>
 -- <leader>p|P paste from yank register (0)
@@ -88,8 +81,6 @@ map({'n', 'v'}, '<leader>P', '"0P',   {})
 
 -- copy current file path to the clipboard
 map({'n', 'v'}, '<leader>y', '<cmd>let @+=@0<CR>', {})
-
--- command line key bindings
 
 -- Beginning and end of line in `:` command mode
 map('c', '<C-s>', '<home>', {})
@@ -104,37 +95,11 @@ for k, v in pairs({ ['<down>'] = '<C-n>', ['<up>'] = '<C-p>' }) do
  end, {expr=true})
 end
 
--- not sure what this does
--- overloads for 'd|c' that don't pollute the unnamed registers
--- map('n', '<leader>D',  '"_D',         {})
--- map('n', '<leader>C',  '"_C',         {})
--- map({'n', 'v'}, '<leader>c',  '"_c',  {})
-
--- any jump over 5 modifies the jumplist
--- so we can use <C-o> <C-i> to jump back and forth
---for _, c in ipairs({'j', 'k'}) do
---  map('n', c, ([[(v:count > 5 ? "m'" . v:count : "") . '%s']]):format(c),
---    { expr = true, silent = true})
---end
-
--- move along visual lines, not numbered ones
--- without interferring with {count}<down|up>
---for _, m in ipairs({'n', 'v'}) do
---  for _, c in ipairs({ {'<up>','k'}, {'<down>','j'} }) do
---    map(m, c[1], ([[v:count == 0 ? 'g%s' : '%s']]):format(c[2], c[2]),
---        { expr = true, silent = true})
---  end
---end
-
--- terminal mappings
-
 -- switch to normal mode
 map('t', '<M-[>', [[<C-\><C-n>]], {})
 
 -- paste any register into a terminal with Alt-p <register>
 map('t', '<A-p>', [['<C-\><C-N>"'.nr2char(getchar()).'pi']], { expr = true })
-
--- navigation
 
 -- better up/down with visual lines when wrapping
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
@@ -161,25 +126,6 @@ map("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 map("n", "<leader>bd", utils.bufremove, { desc = "Delete Buffer" })
 map("n", "<leader>bD", "<cmd>:bd<cr>", { desc = "Delete Buffer and Window" })
 
--- map('n', '[b', ':bprevious<CR>',      {})
--- map('n', ']b', ':bnext<CR>',          {})
--- map('n', '[B', ':bfirst<CR>',         {})
--- map('n', ']B', ':blast<CR>',          {})
-
--- map("n", "<Tab>", ":bnext<CR>",       {})
--- map("n", "<S-Tab>", ":bprevious<CR>", {})
-
--- map("n", "<A-.>", ":bnext<CR>",       {})
--- map("n", "<A-,>", ":bprevious<CR>",   {})
-
--- map("n", "<A->>", ":BufferMoveNext<CR>", {})
--- map("n", "<A-<>", ":BufferMovePrevious<CR>", {})
-
--- close buffer without loosing the opened window
--- map("n", "<C-c>", ":BufferClose<CR>", { silent = true })
-
--- navigate tabs
-
 -- Jump to first tab & close all other tabs. Helpful after running Git difftool.
 map('n', '<Leader>tO', ':tabfirst<CR>:tabonly<CR>', {})
 
@@ -189,6 +135,7 @@ map("n", "<C-j>", "<C-w>j", { desc = "Go to Lower Window", remap = true })
 map("n", "<C-k>", "<C-w>k", { desc = "Go to Upper Window", remap = true })
 map("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window", remap = true })
 
+-- split navigations from term and insert modes
 map({'t', 'i'}, '<C-h>', '<C-\\><C-N><C-w>h')
 map({'t', 'i'}, '<C-j>', '<C-\\><C-N><C-w>j')
 map({'t', 'i'}, '<C-k>', '<C-\\><C-N><C-w>k')
@@ -208,28 +155,30 @@ map({'n', 't', 'i'}, '<C-down>', function() utils.relative_resize(false,  2) end
 map({'n', 't', 'i'}, '<C-left>', function() utils.relative_resize(true,  -2) end, { silent = true })
 map({'n', 't', 'i'}, '<C-right>', function() utils.relative_resize(true,   2) end, { silent = true })
 
--- unimpaired-like mappings
 
--- diagnostic list mappings
--- map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
--- map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>')
+-- old and unused key bindings
 
--- quickfix list mappings
---map('n', '<leader>q', "<cmd>lua require'utils'.toggle_qf('q')<CR>", {})
--- map('n', '[q', ':cprevious<CR>',      {})
--- map('n', ']q', ':cnext<CR>',          {})
--- map('n', '[Q', ':cfirst<CR>',         {})
--- map('n', ']Q', ':clast<CR>',          {})
+-- not sure what this does
+-- overloads for 'd|c' that don't pollute the unnamed registers
+-- map('n', '<leader>D',  '"_D',         {})
+-- map('n', '<leader>C',  '"_C',         {})
+-- map({'n', 'v'}, '<leader>c',  '"_c',  {})
 
--- location list mappings
---map('n', '<leader>Q', "<cmd>lua require'utils'.toggle_qf('l')<CR>", {})
--- map('n', '[l', ':lprevious<CR>',      {})
--- map('n', ']l', ':lnext<CR>',          {})
--- map('n', '[L', ':lfirst<CR>',         {})
--- map('n', ']L', ':llast<CR>',          {})
+-- any jump over 5 modifies the jumplist
+-- so we can use <C-o> <C-i> to jump back and forth
+--for _, c in ipairs({'j', 'k'}) do
+--  map('n', c, ([[(v:count > 5 ? "m'" . v:count : "") . '%s']]):format(c),
+--    { expr = true, silent = true})
+--end
 
-
--- old and unused key bindings {{{2
+-- move along visual lines, not numbered ones
+-- without interferring with {count}<down|up>
+--for _, m in ipairs({'n', 'v'}) do
+--  for _, c in ipairs({ {'<up>','k'}, {'<down>','j'} }) do
+--    map(m, c[1], ([[v:count == 0 ? 'g%s' : '%s']]):format(c[2], c[2]),
+--        { expr = true, silent = true})
+--  end
+--end
 
 -- 'c.' for word, 'c>' for WORD
 -- 'c.' in visual mode for selection
