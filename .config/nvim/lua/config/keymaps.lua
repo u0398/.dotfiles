@@ -104,10 +104,10 @@ map('t', '<M-[>', [[<C-\><C-n>]], {})
 map('t', '<A-p>', [['<C-\><C-N>"'.nr2char(getchar()).'pi']], { expr = true })
 
 -- better up/down with visual lines when wrapping
-map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
+map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'",      { desc = "Down", expr = true, silent = true })
 map({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
-map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
-map({ "n", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
+map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'",      { desc = "Up", expr = true, silent = true })
+map({ "n", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'",   { desc = "Up", expr = true, silent = true })
 
 -- navigate tabs
 map('n', '<leader><tab><s-tab>', ':tabprevious<CR>',    {})
@@ -123,10 +123,10 @@ map('n', '<Leader><tab>z', function() utils.tabz() end, {})
 
 -- navigate buffers
 map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
-map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
-map("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
+map("n", "<S-l>", "<cmd>bnext<cr>",     { desc = "Next Buffer" })
+map("n", "<leader>bb", "<cmd>e #<cr>",  { desc = "Switch to Other Buffer" })
 map("n", "<leader>bd", utils.bufremove, { desc = "Delete Buffer" })
-map("n", "<leader>bD", "<cmd>:bd<cr>", { desc = "Delete Buffer and Window" })
+map("n", "<leader>bD", "<cmd>:bd<cr>",  { desc = "Delete Buffer and Window" })
 
 -- Jump to first tab & close all other tabs. Helpful after running Git difftool.
 map('n', '<Leader>tO', ':tabfirst<CR>:tabonly<CR>', {})
@@ -144,17 +144,17 @@ map({'t', 'i'}, '<C-k>', '<C-\\><C-N><C-w>k')
 map({'t', 'i'}, '<C-l>', '<C-\\><C-N><C-w>l')
 
 -- Move Lines
-map("n", "<A-j>", "<cmd>m .+1<cr>==", { desc = "Move Down" })
-map("n", "<A-k>", "<cmd>m .-2<cr>==", { desc = "Move Up" })
+map("n", "<A-j>", "<cmd>m .+1<cr>==",        { desc = "Move Down" })
+map("n", "<A-k>", "<cmd>m .-2<cr>==",        { desc = "Move Up" })
 map("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move Down" })
 map("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Up" })
-map("v", "<A-j>", ":m '>+1<cr>gv=gv", { desc = "Move Down" })
-map("v", "<A-k>", ":m '<-2<cr>gv=gv", { desc = "Move Up" })
+map("v", "<A-j>", ":m '>+1<cr>gv=gv",        { desc = "Move Down" })
+map("v", "<A-k>", ":m '<-2<cr>gv=gv",        { desc = "Move Up" })
 
 -- split resize with tmux-like directional resizes
-map({'n', 't', 'i'}, '<C-up>', function() utils.relative_resize(false, -2) end, { silent = true })
-map({'n', 't', 'i'}, '<C-down>', function() utils.relative_resize(false,  2) end, { silent = true })
-map({'n', 't', 'i'}, '<C-left>', function() utils.relative_resize(true,  -2) end, { silent = true })
+map({'n', 't', 'i'}, '<C-up>',    function() utils.relative_resize(false, -2) end, { silent = true })
+map({'n', 't', 'i'}, '<C-down>',  function() utils.relative_resize(false,  2) end, { silent = true })
+map({'n', 't', 'i'}, '<C-left>',  function() utils.relative_resize(true,  -2) end, { silent = true })
 map({'n', 't', 'i'}, '<C-right>', function() utils.relative_resize(true,   2) end, { silent = true })
 
 
