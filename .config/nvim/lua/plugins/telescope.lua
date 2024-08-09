@@ -45,12 +45,6 @@ return {
         end,
         desc = 'recent files',
       },
-      { '<leader>fs', mode = { 'n' },
-        function()
-          vim.cmd('Telescope spell_suggest')
-        end,
-        desc = 'spelling',
-      },
       { '<leader>ld', mode = { 'n' },
         function()
           vim.cmd('Telescope diagnostics')
