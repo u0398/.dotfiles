@@ -4,16 +4,17 @@ local function augroup(name, fnc)
   fnc(vim.api.nvim_create_augroup(name, { clear = true }))
 end
 
-augroup('NewlineNoAutoComments', function()
-  aucmd("FileType", {
+augroup('NewlineNoAutoComments', function(g)
+  aucmd('FileType', {
+    group = g,
     pattern = '*',
-    command = "setlocal formatoptions-=o"
+    command = 'setlocal formatoptions-=o'
   })
 end)
 
 -- remove search highlights while in insert mode
 augroup('ToggleSearchHL', function(g)
-  aucmd("InsertEnter",
+  aucmd('InsertEnter',
   {
     group = g,
     pattern = '*',
@@ -23,7 +24,7 @@ end)
 
 -- hide line numbers  in terminal mode
 augroup('TermOptions', function(g)
-  aucmd("TermOpen",
+  aucmd('TermOpen',
   {
     group = g,
     pattern = '*',
@@ -32,9 +33,10 @@ augroup('TermOptions', function(g)
 end)
 
 -- different folding methods for different files 
-augroup('FoldingMethods', function()
-  aucmd( {"BufEnter", "BufWinEnter"} ,
+augroup('FoldingMethods', function(g)
+  aucmd( {'BufEnter', 'BufWinEnter'} ,
   {
+    group = g,
     pattern = {'init.lua', '.zshrc'},
     command = 'setlocal foldmethod=marker',
   })
