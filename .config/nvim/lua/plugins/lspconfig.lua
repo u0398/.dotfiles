@@ -1,4 +1,7 @@
 return     {
+-- neovim/nvim-lspconfig
+-- configs for the nvim LSP client
+return {
   'neovim/nvim-lspconfig',
   lazy = false,
   dependencies = {

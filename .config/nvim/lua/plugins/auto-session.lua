@@ -1,3 +1,5 @@
+-- rmagatti/auto-session
+-- seamless automatic session management
 return {
   'rmagatti/auto-session',
   lazy = false,

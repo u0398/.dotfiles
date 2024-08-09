@@ -1,3 +1,5 @@
+-- nvimdev/dashboard-nvim
+-- fancy and blazing Fast start screen plugin of neovim
 return {
   { 'nvimdev/dashboard-nvim',
     lazy = false,

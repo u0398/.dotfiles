@@ -1,3 +1,5 @@
+-- hrsh7th/nvim-cmp
+-- completion engine plugin for neovim written in Lua
 return {
   'hrsh7th/nvim-cmp',
   event = "InsertEnter",
