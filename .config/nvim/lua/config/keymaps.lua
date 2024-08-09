@@ -196,8 +196,8 @@ map({'n', 't', 'i'}, '<C-right>', function() utils.relative_resize(true,   2) en
 -- unimpaired-like mappings {{{2
 
 -- diagnostic list mappings
-map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
-map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>')
+-- map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
+-- map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>')
 
 -- quickfix list mappings
 --map('n', '<leader>q', "<cmd>lua require'utils'.toggle_qf('q')<CR>", {})
