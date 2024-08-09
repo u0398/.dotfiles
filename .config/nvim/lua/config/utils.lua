@@ -24,6 +24,37 @@ function M.git_root(cwd, noerr)
   return output[1]
 end
 
+function M.is_win()
+  return vim.uv.os_uname().sysname:find("Windows") ~= nil
+end
+
+-- returns the root directory based on:
+-- * lsp workspace folders
+-- * lsp root_dir
+-- * root pattern of filename of the current buffer
+-- * root pattern of cwd
+function M.get(opts)
+  opts = opts or {}
+  local buf = opts.buf or vim.api.nvim_get_current_buf()
+  local ret = M.cache[buf]
+  if not ret then
+    local roots = M.detect({ all = false, buf = buf })
+    ret = roots[1] and roots[1].paths[1] or vim.uv.cwd()
+    M.cache[buf] = ret
+  end
+  if opts and opts.normalize then
+    return ret
+  end
+  return M.is_win() and ret:gsub("/", "\\") or ret
+end
+
+function M.git()
+  local root = M.get()
+  local git_root = vim.fs.find(".git", { path = root, upward = true })[1]
+  local ret = git_root and vim.fn.fnamemodify(git_root, ":h") or root
+  return ret
+end
+
 -- expand or minimize current buffer in a more natural direction (tmux-like)
 -- ':resize <+-n>' or ':vert resize <+-n>' increases or decreasese current
 -- window horizontally or vertically. when mapped to '<leader><arrow>' this
