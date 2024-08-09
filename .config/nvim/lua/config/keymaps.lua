@@ -44,6 +44,10 @@ map('n', '<leader>O',
     ':<C-u>call append(line(".")-1, repeat([""], v:count1))<CR>',
     { silent = true })
 
+-- newline with comments
+map("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Below" })
+map("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Above" })
+
 --- w!! to save with sudo
 map('c', 'w!!', function() utils.sudo_write() end, { silent = true })
 
