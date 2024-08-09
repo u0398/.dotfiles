@@ -58,13 +58,13 @@ return {
       ['<Up>'] = require'cmp'.mapping.select_prev_item(select_opts),
       ['<Down>'] = require'cmp'.mapping.select_next_item(select_opts),
 
-      ['<C-p>'] = require'cmp'.mapping.select_prev_item(select_opts),
-      ['<C-n>'] = require'cmp'.mapping.select_next_item(select_opts),
+      ['<C-k>'] = require'cmp'.mapping.select_prev_item(select_opts),
+      ['<C-j>'] = require'cmp'.mapping.select_next_item(select_opts),
 
       ['<C-u>'] = require'cmp'.mapping.scroll_docs(-4),
       ['<C-d>'] = require'cmp'.mapping.scroll_docs(4),
 
-      ['<C-e>'] = require'cmp'.mapping.abort(),
+      ['<C-h>'] = require'cmp'.mapping.abort(),
       ['<C-y>'] = require'cmp'.mapping.confirm({select = true}),
       ['<CR>'] = require'cmp'.mapping.confirm({select = false}),
 
