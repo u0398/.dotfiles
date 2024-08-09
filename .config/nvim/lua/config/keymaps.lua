@@ -61,6 +61,13 @@ for _, c in ipairs({',', '.', '(', '[', '{', '=', '\\', '"', '\'', '<CR>'}) do
    map('i', c, c .. "<C-g>u", { noremap = true })
 end
 
+-- Use operator pending mode to visually select entire buffer, e.g.
+--    d<A-a> = delete entire buffer
+--    y<A-a> = yank entire buffer
+--    v<A-a> = visual select entire buffer
+map('o', '<A-a>', ':<C-U>normal! mzggVG<CR>`z')
+map('x', '<A-a>', ':<C-U>normal! ggVG<CR>')
+
 -- keep visual selection when (de)indenting
 map('v', '<', '<gv', {})
 map('v', '>', '>gv', {})
