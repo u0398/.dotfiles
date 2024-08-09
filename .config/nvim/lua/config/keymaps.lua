@@ -188,10 +188,10 @@ map("v", "<A-j>", ":m '>+1<cr>gv=gv", { desc = "Move Down" })
 map("v", "<A-k>", ":m '<-2<cr>gv=gv", { desc = "Move Up" })
 
 -- split resize with tmux-like directional resizes
-map({'n', 't', 'i'}, '<A-k>', function() utils.relative_resize(false, -2) end, { silent = true })
-map({'n', 't', 'i'}, '<A-j>', function() utils.relative_resize(false,  2) end, { silent = true })
-map({'n', 't', 'i'}, '<A-h>', function() utils.relative_resize(true,  -2) end, { silent = true })
-map({'n', 't', 'i'}, '<A-l>', function() utils.relative_resize(true,   2) end, { silent = true })
+map({'n', 't', 'i'}, '<C-up>', function() utils.relative_resize(false, -2) end, { silent = true })
+map({'n', 't', 'i'}, '<C-down>', function() utils.relative_resize(false,  2) end, { silent = true })
+map({'n', 't', 'i'}, '<C-left>', function() utils.relative_resize(true,  -2) end, { silent = true })
+map({'n', 't', 'i'}, '<C-right>', function() utils.relative_resize(true,   2) end, { silent = true })
 
 -- unimpaired-like mappings {{{2
 
