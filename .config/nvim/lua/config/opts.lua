@@ -74,7 +74,7 @@ o.completeopt       = {'menu', 'menuone', 'noselect'}
 o.wildmenu          = true
 o.wildmode          = 'longest:full,full'
 o.wildoptions       = 'pum'     -- Show completion items using the pop-up-menu (pum)
-o.pumblend          = 15        -- completion menu transparency
+o.pumblend          = 0         -- completion menu transparency
 
 o.joinspaces        = true      -- insert spaces after '.?!' when joining lines
 o.autoindent        = true      -- copy indent from current line on newline
