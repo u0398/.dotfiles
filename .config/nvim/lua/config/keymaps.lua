@@ -134,23 +134,22 @@ map('t', '<M-[>', [[<C-\><C-n>]], {})
 -- paste any register into a terminal with Alt-p <register>
 map('t', '<A-p>', [['<C-\><C-N>"'.nr2char(getchar()).'pi']], { expr = true })
 
--- navigation {{{2
+-- navigation
 
--- navigate buffers {{{3
-map('n', '<leader><tab><s-tab>', ':tabprevious<CR>', {})
-map('n', '<leader><tab><tab>',   ':tabnext<CR>',     {})
-map('n', '<leader><tab>f',       ':tabfirst<CR>',    {})
-map('n', '<leader><tab>l',       ':tablast<CR>',     {})
-map('n', '<Leader><tab>n',       ':tabnew<CR>',      {})
-map('n', '<Leader><tab>c',       ':tabclose<CR>',    {})
-map('n', '<Leader><tab>o',       ':tabonly<CR>',     {})
-map('n', '<Leader><tab>z',       function() utils.tabz() end,     {})
+-- better up/down with visual lines when wrapping
+map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
+map({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
+map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
+map({ "n", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
 
-map('n', '[b', ':bprevious<CR>',      {})
-map('n', ']b', ':bnext<CR>',          {})
-map('n', '[B', ':bfirst<CR>',         {})
-map('n', ']B', ':blast<CR>',          {})
-
+-- navigate tabs
+map('n', '<leader><tab><s-tab>', ':tabprevious<CR>',    {})
+map('n', '<leader><tab><tab>',   ':tabnext<CR>',        {})
+map('n', '<leader><tab>f',       ':tabfirst<CR>',       {})
+map('n', '<leader><tab>l',       ':tablast<CR>',        {})
+map('n', '<Leader><tab>n',       ':tabnew<CR>',         {})
+map('n', '<Leader><tab>c',       ':tabclose<CR>',       {})
+map('n', '<Leader><tab>o',       ':tabonly<CR>',        {})
 -- map("n", "<Tab>", ":bnext<CR>",       {})
 -- map("n", "<S-Tab>", ":bprevious<CR>", {})
 
