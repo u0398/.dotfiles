@@ -9,8 +9,13 @@ map({ 'n', 'v', 'i'}, '<C-S>', '<C-c>:update<cr>', { silent = true })
 -- open Nvim Tree
 -- map("n", "<leader>ft", ":Neotree<CR>")
 
--- turn off search matches with double-<Esc>
--- map('n', '<Esc><Esc>', '<Esc>:nohlsearch<CR>', { silent = true })
+-- clear highlight search with <esc>
+map( {'i', 'n' }, '<esc>', '<cmd>noh<cr><esc>', { desc = 'Escape and Clear hlsearch' })
+
+map( 'n',           -- Clear search, diff update and redraw
+     '<esc><esc>',  -- taken from runtime/lua/_editor.lua
+     '<cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><cr>',
+     { desc = 'Redraw / Clear hlsearch / Diff Update' } )
 
 -- shortcut to view :messages
 map({'n', 'v'}, '<leader>m', '<cmd>messages<CR>',  {})
