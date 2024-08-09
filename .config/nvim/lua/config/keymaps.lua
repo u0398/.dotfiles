@@ -1,7 +1,7 @@
 local utils = require'config.utils'
 local map = vim.keymap.set
 
--- convenience mappings {{{2
+-- convenience mappings
 
 -- <ctrl-s> to increment (tmux uses <ctrl-a>)
 -- map({ 'n' }, '<c-s>', '<c-a>', { noremap = true, silent = true })
@@ -36,7 +36,7 @@ map({'n', 'v'}, '<leader>N', '<cmd>Fidget clear_history<CR>', {})
 -- Change current working dir (:pwd) to curent file's folder
 map('n', '<leader>%', function() utils.set_cwd() end, { silent = true })
 
--- Map <leader>o & <leader>O to newline without insert mode
+-- newline without insert mode
 map('n', '<leader>o',
     ':<C-u>call append(line("."), repeat([""], v:count1))<CR>',
     { silent = true })
@@ -89,7 +89,7 @@ map({'n', 'v'}, '<leader>P', '"0P',   {})
 -- copy current file path to the clipboard
 map({'n', 'v'}, '<leader>y', '<cmd>let @+=@0<CR>', {})
 
--- command line key bindings {{{2
+-- command line key bindings
 
 -- Beginning and end of line in `:` command mode
 map('c', '<C-s>', '<home>', {})
@@ -126,7 +126,7 @@ end
 --  end
 --end
 
--- terminal mappings {{{2
+-- terminal mappings
 
 -- switch to normal mode
 map('t', '<M-[>', [[<C-\><C-n>]], {})
@@ -178,12 +178,10 @@ map("n", "<leader>bD", "<cmd>:bd<cr>", { desc = "Delete Buffer and Window" })
 -- close buffer without loosing the opened window
 -- map("n", "<C-c>", ":BufferClose<CR>", { silent = true })
 
--- navigate tabs {{{3
+-- navigate tabs
 
 -- Jump to first tab & close all other tabs. Helpful after running Git difftool.
 map('n', '<Leader>tO', ':tabfirst<CR>:tabonly<CR>', {})
-
--- split navigation {{{3
 
 -- split navigation
 map("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window", remap = true })
@@ -210,7 +208,7 @@ map({'n', 't', 'i'}, '<C-down>', function() utils.relative_resize(false,  2) end
 map({'n', 't', 'i'}, '<C-left>', function() utils.relative_resize(true,  -2) end, { silent = true })
 map({'n', 't', 'i'}, '<C-right>', function() utils.relative_resize(true,   2) end, { silent = true })
 
--- unimpaired-like mappings {{{2
+-- unimpaired-like mappings
 
 -- diagnostic list mappings
 -- map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
