@@ -75,8 +75,8 @@ map('v', '>', '>gv', {})
 --map('x', 'J', ":move '>+1<CR>gv=gv", {})
 
 -- Keep matches center screen when cycling with n|N
-map('n', 'n', 'nzzzv', {})
-map('n', 'N', 'Nzzzv', {})
+-- map('n', 'n', 'nzzzv', {})
+-- map('n', 'N', 'Nzzzv', {})
 
 -- <leader>v|<leader>s act as <cmd-v>|<cmd-s>
 -- <leader>p|P paste from yank register (0)
