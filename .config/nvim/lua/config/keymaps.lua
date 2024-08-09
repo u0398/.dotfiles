@@ -33,17 +33,12 @@ map( 'n',           -- Clear search, diff update and redraw
      { desc = 'Redraw / Clear hlsearch / Diff Update' } )
 
 -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
-map('n', 'n', "'Nn'[v:searchforward].'zv'", { expr = true, desc = "Next Search Result" })
-map('x', 'n', "'Nn'[v:searchforward]",      { expr = true, desc = "Next Search Result" })
-map('o', 'n', "'Nn'[v:searchforward]",      { expr = true, desc = "Next Search Result" })
-map('n', 'N', "'nN'[v:searchforward].'zv'", { expr = true, desc = "Prev Search Result" })
-map('x', 'N', "'nN'[v:searchforward]",      { expr = true, desc = "Prev Search Result" })
-map('o', 'N', "'nN'[v:searchforward]",      { expr = true, desc = "Prev Search Result" })
-
--- Conflicts with n/N mappings above
--- Keep matches center screen when cycling with n|N
--- map('n', 'n', 'nzzzv', {})
--- map('n', 'N', 'Nzzzv', {})
+map('n', 'n', "'Nn'[v:searchforward].'zzzv'", { expr = true, desc = "Next Search Result" })
+map('x', 'n', "'Nn'[v:searchforward]",        { expr = true, desc = "Next Search Result" })
+map('o', 'n', "'Nn'[v:searchforward]",        { expr = true, desc = "Next Search Result" })
+map('n', 'N', "'nN'[v:searchforward].'zzzv'", { expr = true, desc = "Prev Search Result" })
+map('x', 'N', "'nN'[v:searchforward]",        { expr = true, desc = "Prev Search Result" })
+map('o', 'N', "'nN'[v:searchforward]",        { expr = true, desc = "Prev Search Result" })
 
 -- Change current working dir (:pwd) to curent file's folder
 map('n', '<leader>%', function() utils.set_cwd() end, { silent = true })
