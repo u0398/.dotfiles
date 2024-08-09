@@ -169,10 +169,11 @@ map('n', '<Leader>tO', ':tabfirst<CR>:tabonly<CR>', {})
 
 -- split navigation {{{3
 
-map('n', '<C-h>', '<C-w>h')
-map('n', '<C-j>', '<C-w>j')
-map('n', '<C-k>', '<C-w>k')
-map('n', '<C-l>', '<C-w>l')
+-- split navigation
+map("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window", remap = true })
+map("n", "<C-j>", "<C-w>j", { desc = "Go to Lower Window", remap = true })
+map("n", "<C-k>", "<C-w>k", { desc = "Go to Upper Window", remap = true })
+map("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window", remap = true })
 
 map({'t', 'i'}, '<C-h>', '<C-\\><C-N><C-w>h')
 map({'t', 'i'}, '<C-j>', '<C-\\><C-N><C-w>j')
