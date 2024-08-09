@@ -28,6 +28,9 @@ function M.is_win()
   return vim.uv.os_uname().sysname:find("Windows") ~= nil
 end
 
+-- From LazyGit:
+-- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/util/root.lua
+--
 -- returns the root directory based on:
 -- * lsp workspace folders
 -- * lsp root_dir
