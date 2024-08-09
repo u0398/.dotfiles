@@ -48,6 +48,8 @@ map('n', '<leader>O',
 map("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Below" })
 map("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Above" })
 
+-- lazy
+map("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
 --- w!! to save with sudo
 map('c', 'w!!', function() utils.sudo_write() end, { silent = true })
 
