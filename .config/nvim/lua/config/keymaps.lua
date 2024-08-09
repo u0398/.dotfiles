@@ -184,17 +184,9 @@ map({'n', 't', 'i'}, '<C-right>', function() utils.relative_resize(true,   2) en
 
 -- 'c.' for word, 'c>' for WORD
 -- 'c.' in visual mode for selection
---map('n', 'c.', [[:%s/\<<C-r><C-w>\>//g<Left><Left>]], {})
---map('n', 'c>', [[:%s/\V<C-r><C-a>//g<Left><Left>]], {})
---map('x', 'c.', [[:<C-u>%s/\V<C-r>=luaeval("require'utils'.get_visual_selection(true)")<CR>//g<Left><Left>]], {})
-
-
--- Use operator pending mode to visually select entire buffer, e.g.
---    d<A-a> = delete entire buffer
---    y<A-a> = yank entire buffer
---    v<A-a> = visual select entire buffer
---map('o', '<A-a>', ':<C-U>normal! mzggVG<CR>`z')
---map('x', '<A-a>', ':<C-U>normal! ggVG<CR>')
+-- map('n', 'c.', [[:%s/\<<C-r><C-w>\>//g<Left><Left>]], {})
+-- map('n', 'c>', [[:%s/\V<C-r><C-a>//g<Left><Left>]], {})
+-- map('x', 'c.', [[:<C-u>%s/\V<C-r>=luaeval("require'utils'.get_visual_selection(true)")<CR>//g<Left><Left>]], {})
 
 -- LuaSnip keybindings
 --vim.keymap.set({"i"}, "<C-K>", function() require("luasnip").expand() end, {silent = true})
