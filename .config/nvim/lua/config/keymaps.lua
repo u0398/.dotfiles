@@ -17,6 +17,14 @@ map( 'n',           -- Clear search, diff update and redraw
      '<cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><cr>',
      { desc = 'Redraw / Clear hlsearch / Diff Update' } )
 
+-- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
+map("n", "n", "'Nn'[v:searchforward].'zv'", { expr = true, desc = "Next Search Result" })
+map("x", "n", "'Nn'[v:searchforward]",      { expr = true, desc = "Next Search Result" })
+map("o", "n", "'Nn'[v:searchforward]",      { expr = true, desc = "Next Search Result" })
+map("n", "N", "'nN'[v:searchforward].'zv'", { expr = true, desc = "Prev Search Result" })
+map("x", "N", "'nN'[v:searchforward]",      { expr = true, desc = "Prev Search Result" })
+map("o", "N", "'nN'[v:searchforward]",      { expr = true, desc = "Prev Search Result" })
+
 -- shortcut to view :messages
 map({'n', 'v'}, '<leader>m', '<cmd>messages<CR>',  {})
 map({'n', 'v'}, '<leader>M', '<cmd>mes clear|echo "cleared :messages"<CR>', {})
