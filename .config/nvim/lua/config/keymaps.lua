@@ -17,8 +17,8 @@ map("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
 map("n", "<leader>K", "<cmd>norm! K<cr>", { desc = "Keywordprg" })
 
 -- view :messages
-map({'n', 'v'}, '<leader>m', '<cmd>messages<CR>',  {})
-map({'n', 'v'}, '<leader>M', '<cmd>mes clear|echo "cleared :messages"<CR>', {})
+map({'n', 'v'}, '<leader>m', '<cmd>messages<CR>',  { desc = 'Messages' })
+map({'n', 'v'}, '<leader>M', '<cmd>mes clear|echo "cleared :messages"<CR>', { desc = 'Clear Messages' })
 
 -- view fidget history
 map({'n', 'v'}, '<leader>n', '<cmd>Fidget history<CR>',  {})
@@ -41,15 +41,15 @@ map('x', 'N', "'nN'[v:searchforward]",        { expr = true, desc = "Prev Search
 map('o', 'N', "'nN'[v:searchforward]",        { expr = true, desc = "Prev Search Result" })
 
 -- Change current working dir (:pwd) to curent file's folder
-map('n', '<leader>%', function() utils.set_cwd() end, { silent = true })
+map('n', '<leader>%', function() utils.set_cwd() end, { desc = 'Set cwd to file directory', silent = true })
 
 -- newline without insert mode
 map('n', '<leader>o',
     ':<C-u>call append(line("."), repeat([""], v:count1))<CR>',
-    { silent = true })
+    { desc = 'New line below', silent = true })
 map('n', '<leader>O',
     ':<C-u>call append(line(".")-1, repeat([""], v:count1))<CR>',
-    { silent = true })
+    { desc = 'New line above', silent = true })
 
 -- newline with comments
 map("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Below" })
@@ -69,8 +69,8 @@ map('o', '<A-a>', ':<C-U>normal! mzggVG<CR>`z')
 map('x', '<A-a>', ':<C-U>normal! ggVG<CR>')
 
 -- keep visual selection when (de)indenting
-map('v', '<', '<gv', {})
-map('v', '>', '>gv', {})
+map('v', '<', '<gv', { desc = 'deindent' })
+map('v', '>', '>gv', { desc = 'indent' })
 
 -- <leader>v|<leader>s act as <cmd-v>|<cmd-s>
 -- <leader>p|P paste from yank register (0)
@@ -110,13 +110,14 @@ map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'",      { desc = "Up", expr = t
 map({ "n", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'",   { desc = "Up", expr = true, silent = true })
 
 -- navigate tabs
-map('n', '<leader><tab><s-tab>', ':tabprevious<CR>',    {})
-map('n', '<leader><tab><tab>',   ':tabnext<CR>',        {})
-map('n', '<leader><tab>f',       ':tabfirst<CR>',       {})
-map('n', '<leader><tab>l',       ':tablast<CR>',        {})
-map('n', '<Leader><tab>n',       ':tabnew<CR>',         {})
-map('n', '<Leader><tab>c',       ':tabclose<CR>',       {})
-map('n', '<Leader><tab>o',       ':tabonly<CR>',        {})
+map('n', '<leader><tab><s-tab>', ':tabprevious<CR>',    { desc = 'Previous' })
+map('n', '<leader><tab><tab>',   ':tabnext<CR>',        { desc = 'Next' })
+map('n', '<leader><tab>f',       ':tabfirst<CR>',       { desc = 'First' })
+map('n', '<leader><tab>l',       ':tablast<CR>',        { desc = 'Last' })
+map('n', '<Leader><tab>n',       ':tabnew<CR>',         { desc = 'New' })
+map('n', '<Leader><tab>c',       ':tabclose<CR>',       { desc = 'Close' })
+map('n', '<Leader><tab>o',       ':tabonly<CR>',        { desc = 'Close other tabs' })
+map('n', '<Leader><tab>O', ':tabfirst<CR>:tabonly<CR>', { desc = 'First & close others' })
 
 -- fancy tmux-like windowed-buffer zoom
 map('n', '<Leader><tab>z', function() utils.tabz() end, {})
@@ -128,8 +129,6 @@ map("n", "<leader>bb", "<cmd>e #<cr>",  { desc = "Switch to Other Buffer" })
 map("n", "<leader>bd", utils.bufremove, { desc = "Delete Buffer" })
 map("n", "<leader>bD", "<cmd>:bd<cr>",  { desc = "Delete Buffer and Window" })
 
--- Jump to first tab & close all other tabs. Helpful after running Git difftool.
-map('n', '<Leader>tO', ':tabfirst<CR>:tabonly<CR>', {})
 
 -- split navigation
 map("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window", remap = true })
