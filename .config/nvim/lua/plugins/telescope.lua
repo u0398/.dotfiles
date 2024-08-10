@@ -45,6 +45,12 @@ return {
         end,
         desc = 'recent files',
       },
+      { '<leader>fs', mode = { 'n' },
+        function()
+          vim.cmd('Telescope spell_suggest')
+        end,
+        desc = 'type definitions',
+      },
       { '<leader>ld', mode = { 'n' },
         function()
           vim.cmd('Telescope diagnostics')
@@ -85,8 +91,8 @@ return {
         defaults = {
           layout_strategy = 'vertical',
           layout_config = {
-            height = 0.9,
-            width = 0.9,
+            height = 0.8,
+            width = 0.8,
           },
         },
         pickers = {
@@ -98,6 +104,12 @@ return {
           },
           live_grep = {
             additional_args = {"--hidden"},
+          },
+          spell_suggest = {
+            layout_config = {
+              height = 20,
+              width = 40,
+            },
           },
         },
       }
