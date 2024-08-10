@@ -58,6 +58,8 @@ return {
       ['<Up>'] = require'cmp'.mapping.select_prev_item(select_opts),
       ['<Down>'] = require'cmp'.mapping.select_next_item(select_opts),
 
+      ['<C-p>'] = require'cmp'.mapping.select_prev_item(select_opts),
+      ['<C-n>'] = require'cmp'.mapping.select_next_item(select_opts),
       ['<C-k>'] = require'cmp'.mapping.select_prev_item(select_opts),
       ['<C-j>'] = require'cmp'.mapping.select_next_item(select_opts),
 
