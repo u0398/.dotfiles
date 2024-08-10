@@ -74,12 +74,12 @@ map('v', '>', '>gv', {})
 
 -- <leader>v|<leader>s act as <cmd-v>|<cmd-s>
 -- <leader>p|P paste from yank register (0)
-map({'n', 'v'}, '<leader>v', '"+p',   {})
-map({'n', 'v'}, '<leader>V', '"+P',   {})
-map({'n', 'v'}, '<leader>s', '"*p',   {})
-map({'n', 'v'}, '<leader>S', '"*P',   {})
-map({'n', 'v'}, '<leader>p', '"0p',   {})
-map({'n', 'v'}, '<leader>P', '"0P',   {})
+map({'n', 'v'}, '<leader>rv', '"+p',   { desc = 'Paste from +' } )
+map({'n', 'v'}, '<leader>rV', '"+P',   { desc = 'Append from +' } )
+map({'n', 'v'}, '<leader>rs', '"*p',   { desc = 'Paste from *' } )
+map({'n', 'v'}, '<leader>rS', '"*P',   { desc = 'Append from *' } )
+map({'n', 'v'}, '<leader>rp', '"0p',   { desc = 'Paste from 0' } )
+map({'n', 'v'}, '<leader>rP', '"0P',   { desc = 'Append from 0' } )
 
 -- copy current file path to the clipboard
 map({'n', 'v'}, '<leader>y', '<cmd>let @+=@0<CR>', {})

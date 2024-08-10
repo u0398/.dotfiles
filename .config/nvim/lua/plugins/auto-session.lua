@@ -12,11 +12,11 @@ return {
   },
   keys = {
     -- Will use Telescope if installed or a vim.ui.select picker otherwise
-    { '<leader>fss', '<cmd>SessionSearch<CR>', desc = 'search' },
-    { '<leader>fsS', '<cmd>SessionSave<CR>', desc = 'save' },
-    { '<leader>fsd', '<cmd>SessionDelete<CR>', desc = 'delete session' },
-    { '<leader>fsp', '<cmd>SessionPurgeOrphaned<CR>', desc = 'purge orphaned' },
-    { '<leader>fsa', '<cmd>SessionToggleAutoSave<CR>', desc = 'toggle autosave' },
+    { '<leader>ss', '<cmd>SessionSearch<CR>', desc = 'search' },
+    { '<leader>sS', '<cmd>SessionSave<CR>', desc = 'save' },
+    { '<leader>sd', '<cmd>SessionDelete<CR>', desc = 'delete session' },
+    { '<leader>sp', '<cmd>SessionPurgeOrphaned<CR>', desc = 'purge orphaned' },
+    { '<leader>sa', '<cmd>SessionToggleAutoSave<CR>', desc = 'toggle autosave' },
   },
   config = function()
     require'auto-session'.setup {
