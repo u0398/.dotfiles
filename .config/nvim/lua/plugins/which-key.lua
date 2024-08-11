@@ -7,11 +7,12 @@ return {
     defaults = {},
     spec = {
       {
+        { '<leader>b',     group = 'Buffers' },
         { '<leader>f',     group = 'Find' },
-        { '<leader>l',     group = 'LSP' },
+        { '<leader>l',     group = 'LSP', icon = { icon = '󱚊', color = 'cyan' } },
         { '<leader><tab>', group = 'Tabs' },
         { '<leader>s',     group = 'Sessions' },
-        { '<leader>r',     group = 'Registers' },
+        { '<leader>r',     group = 'Registers', icon = { icon = '', color = 'orange' } }
       },
     },
     delay = 1000,
