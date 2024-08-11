@@ -21,8 +21,8 @@ map({'n', 'v'}, '<leader>m', '<cmd>messages<CR>',  { desc = 'Messages' })
 map({'n', 'v'}, '<leader>M', '<cmd>mes clear|echo "cleared :messages"<CR>', { desc = 'Clear Messages' })
 
 -- view fidget history
-map({'n', 'v'}, '<leader>n', '<cmd>Fidget history<CR>',  {})
-map({'n', 'v'}, '<leader>N', '<cmd>Fidget clear_history<CR>', {})
+map({'n', 'v'}, '<leader>n', '<cmd>Fidget history<CR>',       { desc = 'Notice history' })
+map({'n', 'v'}, '<leader>N', '<cmd>Fidget clear_history<CR>', { desc = 'Clear notice history' })
 
 -- clear highlight search with <esc>
 map( {'i', 'n' }, '<esc>', '<cmd>noh<cr><esc>', { desc = 'Escape and Clear hlsearch' })
@@ -82,11 +82,11 @@ map({'n', 'v'}, '<leader>rp', '"0p',   { desc = 'Paste from 0' } )
 map({'n', 'v'}, '<leader>rP', '"0P',   { desc = 'Append from 0' } )
 
 -- copy current file path to the clipboard
-map({'n', 'v'}, '<leader>y', '<cmd>let @+=@0<CR>', {})
+map({'n', 'v'}, '<leader>y', '<cmd>let @+=@0<CR>', { desc = 'Copy file path' })
 
 -- Beginning and end of line in `:` command mode
-map('c', '<C-s>', '<home>', {})
-map('c', '<C-e>', '<end>' , {})
+map('c', '<C-s>', '<home>', { desc = 'Start of line' })
+map('c', '<C-e>', '<end>' , { desc = 'End of line' })
 
 -- Arrows in command line mode (':') menus
 map('c', '<down>', '(wildmenumode() ? "\\<C-n>" : "\\<down>")', { expr = true })
@@ -120,7 +120,7 @@ map('n', '<Leader><tab>o',       ':tabonly<CR>',        { desc = 'Close other ta
 map('n', '<Leader><tab>O', ':tabfirst<CR>:tabonly<CR>', { desc = 'First & close others' })
 
 -- fancy tmux-like windowed-buffer zoom
-map('n', '<Leader><tab>z', function() utils.tabz() end, {})
+map('n', '<Leader><tab>z', function() utils.tabz() end, { desc = 'Zoom window (tmux-like)' })
 
 -- navigate buffers
 map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
