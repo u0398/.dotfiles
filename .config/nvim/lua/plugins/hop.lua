@@ -4,6 +4,34 @@ return {
   { 'smoka7/hop.nvim',
     version = 'v2.*',
     keys = {
+      { 'f',
+        function()
+          local directions = require'hop.hint'.HintDirection
+          require'hop'.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true })
+        end, { remap = true },
+        desc = ''
+      },
+      { 'F',
+        function()
+          local directions = require'hop.hint'.HintDirection
+          require'hop'.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true })
+        end, { remap = true },
+        desc = ''
+      },
+      { 't',
+        function()
+          local directions = require'hop.hint'.HintDirection
+          require'hop'.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true, hint_offset = -1 })
+        end, { remap = true },
+        desc = ''
+      },
+      { 'T',
+        function()
+          local directions = require'hop.hint'.HintDirection
+          require'hop'.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true, hint_offset = 1 })
+        end, { remap = true },
+        desc = ''
+      },
       { '<leader>j',
         function()
           require'hop'.hint_char1()
