@@ -40,7 +40,7 @@ return {
       },
       { '<leader>J',
         function()
-          require'hop'.hint_pattern()
+          require'hop'.hint_patterns({ multi_windows = true })
         end,
         desc = 'Hop (search /)'
       },
