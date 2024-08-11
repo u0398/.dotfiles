@@ -53,13 +53,28 @@ return {
       integrations = {
         cmp = true,
         gitsigns = true,
-        nvimtree = true,
-        treesitter = true,
+        dashboard = true,
+        indent_blankline = { enabled = true },
+        mason = true,
+        native_lsp = {
+          enabled = true,
+          underlines = {
+            errors = { "undercurl" },
+            hints = { "undercurl" },
+            warnings = { "undercurl" },
+            information = { "undercurl" },
+          },
+        },
+        neotree = true,
         notify = false,
         mini = {
           enabled = true,
           indentscope_color = "surface0",
         },
+        telescope = true,
+        treesitter = true,
+        treesitter_context = true,
+        which_key = true,
       },
     }
     vim.cmd.colorscheme "catppuccin"
