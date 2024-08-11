@@ -25,7 +25,7 @@ return {
         function()
           vim.cmd('Telescope scope buffers')
         end,
-        desc = 'buffers',
+        desc = 'buffers (all tab scopes)',
       },
       { '<leader>fh', mode = { 'n' },
         function()
