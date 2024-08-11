@@ -34,7 +34,7 @@ return {
       },
       { '<leader>j',
         function()
-          require'hop'.hint_char1()
+          require'hop'.hint_char1({ multi_windows = true })
         end,
         desc = 'Hop (anywhere)'
       },
