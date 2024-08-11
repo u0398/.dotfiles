@@ -36,25 +36,25 @@ return {
         function()
           require'hop'.hint_char1()
         end,
-        desc = 'Hop'
+        desc = 'Hop (anywhere)'
       },
       { '<leader>J',
         function()
-          require'hop'.hint_char1({ current_line_only = true })
+          require'hop'.hint_pattern()
         end,
-        desc = 'Hop (current line)'
+        desc = 'Hop (search /)'
       },
       { '<leader>h',
         function()
           require'hop'.hint_lines_skip_whitespace({ multi_windows = true })
         end,
-        desc = 'Hop (first char)'
+        desc = 'Hop (to first char)'
       },
       { '<leader>H',
         function()
           require'hop'.hint_lines({ multi_windows = true })
         end,
-        desc = 'Hop (line start)'
+        desc = 'Hop (to line start)'
       },
     },
     opts = {
