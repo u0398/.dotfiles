@@ -1,4 +1,4 @@
--- smoka7/hop.nvim {{{2
+-- smoka7/hop.nvim
 -- an EasyMotion-like plugin allowing you to jump anywhere in a document
 return {
   { 'smoka7/hop.nvim',
@@ -22,8 +22,7 @@ return {
         function()
           local directions = require'hop.hint'.HintDirection
           require'hop'.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true, hint_offset = -1 })
-        end, { remap = true },
-        desc = ''
+        end, { remap = true }, desc = ''
       },
       { 'T',
         function()
@@ -38,9 +37,15 @@ return {
         end,
         desc = 'Hop (anywhere)'
       },
+      { '<leader>y',
+        function()
+          require'hop-yank'.yank_char1({ multi_windows = true })
+        end,
+        desc = 'Hop (anywhere)'
+      },
       { '<leader>J',
         function()
-          require'hop'.hint_patterns({ multi_windows = true })
+          require'hop'.hint_patterns({ multi_windows = true, yank_register = '*' })
         end,
         desc = 'Hop (search /)'
       },

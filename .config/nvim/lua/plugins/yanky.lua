@@ -3,9 +3,50 @@ return {
   dependencies = {
     { 'kkharji/sqlite.lua' }
   },
+  opts = {
+    history_length = 100,
+    sync_with_numbered_registers = true,
+    storage = 'sqlite',
+    cancel_event = 'update',
+    ignore_registers = { '_' },
+    update_register_on_cycle = false,
+    system_clipboard = {
+      sync_with_ring = true,
+    },
+  },
   keys = {
-    { '<leader>p', function() require'telescope'.extensions.yank_history.yank_history({ }) end,
-      mode = { 'n', 'x' }, desc = 'Open Yank History' },
+    { '<leader>p',
+      function()
+        local utils = require'yanky.utils'
+        local map = require'yanky.telescope.mapping'
+        local telescope = require'telescope'
+
+        telescope.extensions.yank_history.yank_history({
+          picker = {
+            telescope = {
+              mappings = {
+                default = map.put('p'),
+                i = {
+                  ['<c-j>'] = map.put('p'),
+                  ['<c-k>'] = map.put('P'),
+                  ['<c-h>'] = map.put('gp'),
+                  ['<c-l>'] = map.put('gP'),
+                  ['<c-x>'] = map.delete(),
+                  ['<c-r>'] = map.set_register(utils.get_default_register()),
+                },
+                n = {
+                  p = map.put('p'),
+                  P = map.put('P'),
+                  d = map.delete(),
+                  r = map.set_register(utils.get_default_register())
+                },
+              }
+            }
+          }
+        })
+      end,
+      mode = { 'n', 'x' }, desc = 'Open Yank History'
+    },
     { 'y',     '<Plug>(YankyYank)',       mode = { 'n', 'x' }, desc = 'Yank text' },
     { 'p',     '<Plug>(YankyPutAfter)',   mode = { 'n', 'x' }, desc = 'Put yanked text after cursor' },
     { 'P',     '<Plug>(YankyPutBefore)',  mode = { 'n', 'x' }, desc = 'Put yanked text before cursor' },
@@ -24,41 +65,4 @@ return {
     { '=p',    '<Plug>(YankyPutAfterFilter)',            desc = 'Put after applying a filter' },
     { '=P',    '<Plug>(YankyPutBeforeFilter)',           desc = 'Put before applying a filter' },
   },
-  config = function()
-    local utils = require'yanky.utils'
-    local mapping = require'yanky.telescope.mapping'
-
-    require'yanky'.setup {
-      history_length = 100,
-      storage = 'sqlite',
-      sync_with_numbered_registers = true,
-      cancel_event = 'update',
-      ignore_registers = { '_' },
-      update_register_on_cycle = false,
-      system_clipboard = {
-        sync_with_ring = true,
-      },
-      picker = {
-        telescope = {
-          mappings = {
-            default = mapping.put('p'),
-            i = {
-              ['<c-j>'] = mapping.put('p'),
-              ['<c-k>'] = mapping.put('P'),
-              ['<c-h>'] = mapping.put('gp'),
-              ['<c-l>'] = mapping.put('gP'),
-              ['<c-x>'] = mapping.delete(),
-              ['<c-r>'] = mapping.set_register(utils.get_default_register()),
-            },
-            n = {
-              p = mapping.put('p'),
-              P = mapping.put('P'),
-              d = mapping.delete(),
-              r = mapping.set_register(utils.get_default_register())
-            },
-          }
-        }
-      }
-    }
-  end,
 }
