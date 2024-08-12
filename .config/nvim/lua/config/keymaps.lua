@@ -82,7 +82,7 @@ map({'n', 'v'}, '<leader>rp', '"0p',   { desc = 'Paste from 0' } )
 map({'n', 'v'}, '<leader>rP', '"0P',   { desc = 'Append from 0' } )
 
 -- copy current file path to the clipboard
-map({'n', 'v'}, '<leader>y', '<cmd>let @+=@0<CR>', { desc = 'Copy file path' })
+-- map({'n', 'v'}, '<leader>y', '<cmd>let @+=@0<CR>', { desc = 'Copy file path' })
 
 -- Beginning and end of line in `:` command mode
 map('c', '<C-s>', '<home>', { desc = 'Start of line' })
