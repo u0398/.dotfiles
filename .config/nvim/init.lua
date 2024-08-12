@@ -5,6 +5,7 @@ require('lazy').setup {
     { 'nvim-lua/plenary.nvim', lazy = false, },
     { 'nvim-tree/nvim-web-devicons',  lazy = false },
     { 'windwp/nvim-autopairs', event = 'InsertEnter', config = true },
+    { 'RRethy/vim-illuminate', event = 'InsertEnter' },
     { import = 'plugins.auto-session' },
     { import = 'plugins.catppuccin' },
     { import = 'plugins.cmp' },

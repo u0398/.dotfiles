@@ -39,9 +39,10 @@ return {
 
   end,
   config = function()
-        local lsp_capabilities = require'cmp_nvim_lsp'.default_capabilities()
+    local lsp_capabilities = require'cmp_nvim_lsp'.default_capabilities()
+    lsp_capabilities.textDocument.completion.completionItem.snippetSupport = true
     require'mason-lspconfig'.setup {
-      ensure_installed = { 'lua_ls', 'efm' },
+      ensure_installed = { 'lua_ls' },
       automatic_installation = true,
     }
     require'mason-lspconfig'.setup_handlers {
@@ -71,26 +72,36 @@ return {
           }
         }
       end,
-      [ 'efm' ] = function()
-        require'lspconfig'.efm.setup {
-          init_options = {documentFormatting = true},
-          settings = {
-            rootMarkers = {".git/"},
-            languages = {
-              sh = {
-                { formatCommand = 'shfmt -ci -s -bn' },
-                { formatStdin = true },
-                { lintCommand = 'shellcheck -f gcc -x' },
-                { lintSource = 'shellcheck'},
-                { lintFormats = { '%f:%l:%c: %trror: %m',
-                                '%f:%l:%c: %tarning: %m',
-                                '%f:%l:%c: %tote: %m' } },
-                { LintIgnoreExitCode = true },
-              }
-            }
-          }
-        }
-      end,
+      -- ['jsonls'] = function()
+      --   require'lspconfig'.jsonls.setup {
+      --     capabilities = lsp_capabilities,
+      --   }
+      -- end,
+      -- ['intelephense'] = function()
+      --   require'lspconfig'.intelephense.setup {
+      --     capabilities = lsp_capabilities,
+      --   }
+      -- end,
+      -- [ 'efm' ] = function()
+      --   require'lspconfig'.efm.setup {
+      --     init_options = {documentFormatting = true},
+      --     settings = {
+      --       rootMarkers = {".git/"},
+      --       languages = {
+      --         sh = {
+      --           { formatCommand = 'shfmt -ci -s -bn' },
+      --           { formatStdin = true },
+      --           { lintCommand = 'shellcheck -f gcc -x' },
+      --           { lintSource = 'shellcheck'},
+      --           { lintFormats = { '%f:%l:%c: %trror: %m',
+      --                           '%f:%l:%c: %tarning: %m',
+      --                           '%f:%l:%c: %tote: %m' } },
+      --           { LintIgnoreExitCode = true },
+      --         }
+      --       }
+      --     }
+      --   }
+      -- end,
     }
   end,
 }
