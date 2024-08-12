@@ -55,7 +55,7 @@ return {
       end,
     },
     mapping = {
-      ['<Up>'] = require'cmp'.mapping.select_prev_item(select_opts),
+      ['<Up>']   = require'cmp'.mapping.select_prev_item(select_opts),
       ['<Down>'] = require'cmp'.mapping.select_next_item(select_opts),
 
       ['<C-p>'] = require'cmp'.mapping.select_prev_item(select_opts),
@@ -68,7 +68,7 @@ return {
 
       ['<C-h>'] = require'cmp'.mapping.abort(),
       ['<C-y>'] = require'cmp'.mapping.confirm({select = true}),
-      ['<CR>'] = require'cmp'.mapping.confirm({select = false}),
+      ['<CR>']  = require'cmp'.mapping.confirm({select = false}),
 
       ['<C-f>'] = require'cmp'.mapping(function(fallback)
         if require'luasnip'.jumpable(1) then
