@@ -25,7 +25,7 @@ o.showtabline       = 0
 vim.cmd[[set path=.,,,$PWD/**]] -- recursive :find in current dir
 
 -- vim clipboard copies to system clipboard
-o.clipboard         = 'unnamedplus' -- unamed (uses * register) | unnamedplus (uses + register)
+o.clipboard         = 'unnamedplus' -- unnamed (uses * register) | unnamedplus (uses + register)
 
 o.showmode          = false     -- show current mode (insert, etc) under the cmdline
 o.showcmd           = true      -- show current command under the cmd line
