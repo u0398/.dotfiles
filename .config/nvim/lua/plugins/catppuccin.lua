@@ -47,6 +47,11 @@ return {
           VirtColumn = { fg = colors.surface0 },
           FoldColumn = { fg = colors.blue },
           CursorColumn = { bg = '#303347' },
+          IlluminatedCurWord = { bg = colors.surface0 },
+          IlluminatedWord = { bg = colors.surface0 },
+          IlluminatedWordRead = { bg = colors.surface0 },
+          IlluminatedWordText = { bg = colors.surface0 },
+          IlluminatedWordWrite = { bg = colors.surface0 },
         }
       end,
       default_integrations = true,
