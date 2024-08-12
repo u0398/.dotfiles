@@ -4,16 +4,7 @@ require('lazy').setup {
   spec = {
     { 'nvim-lua/plenary.nvim', lazy = false, },
     { 'nvim-tree/nvim-web-devicons',  lazy = false },
-    -- { 'numToStr/Comment.nvim' },
     { 'windwp/nvim-autopairs', event = 'InsertEnter', config = true },
-    { 'L3MON4D3/LuaSnip',
-      version = 'v2.*',
-      build = 'make install_jsregexp',
-      event = "InsertEnter",
-      dependencies = {
-        'rafamadriz/friendly-snippets'
-      },
-    },
     { import = 'plugins.auto-session' },
     { import = 'plugins.catppuccin' },
     { import = 'plugins.cmp' },
@@ -26,6 +17,7 @@ require('lazy').setup {
     { import = 'plugins.hop' },
     { import = 'plugins.indent-blankline' },
     { import = 'plugins.lspconfig' },
+    { import = 'plugins.luasnip' },
     { import = 'plugins.mason' },
     { import = 'plugins.neo-tree' },
     { import = 'plugins.neoscroll' },
