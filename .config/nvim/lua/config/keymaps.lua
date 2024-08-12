@@ -20,9 +20,8 @@ map("n", "<leader>K", "<cmd>norm! K<cr>", { desc = "Keywordprg" })
 map({'n', 'v'}, '<leader>m', '<cmd>messages<CR>',  { desc = 'Messages' })
 map({'n', 'v'}, '<leader>M', '<cmd>mes clear|echo "cleared :messages"<CR>', { desc = 'Clear Messages' })
 
--- view fidget history
-map({'n', 'v'}, '<leader>n', '<cmd>Fidget history<CR>',       { desc = 'Notice history' })
-map({'n', 'v'}, '<leader>N', '<cmd>Fidget clear_history<CR>', { desc = 'Clear notice history' })
+-- view Noice history
+map({'n', 'v'}, '<leader>n', '<cmd>NoiceHistory<CR>',       { desc = 'Notice history' })
 
 -- clear highlight search with <esc>
 map( {'i', 'n' }, '<esc>', '<cmd>noh<cr><esc>', { desc = 'Escape and Clear hlsearch' })
