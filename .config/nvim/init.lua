@@ -6,6 +6,25 @@ require('lazy').setup {
     { 'nvim-tree/nvim-web-devicons',  lazy = false },
     { 'windwp/nvim-autopairs', event = 'InsertEnter', config = true },
     { 'RRethy/vim-illuminate', event = 'InsertEnter' },
+    {
+      'mrcjkb/rustaceanvim',
+      version = '^5',
+      lazy = false,
+        keys = {
+          { '<leader>r',
+            function()
+              vim.cmd.RustLsp('codeAction')
+            end,
+            { silent = true, buffer = vim.api.nvim_get_current_buf() } },
+        }
+    },
+    { 'mfussenegger/nvim-dap',
+      lazy = false
+    },
+    {
+      'julianolf/nvim-dap-lldb',
+      dependencies = { "mfussenegger/nvim-dap" },
+      -- opts = { codelldb_path = "/path/to/codelldb" },
     },
     { import = 'plugins.auto-session' },
     { import = 'plugins.catppuccin' },

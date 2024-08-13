@@ -72,6 +72,7 @@ return {
           }
         }
       end,
+      ['rust_analyzer'] = function() end,  -- rustaceanvim handles lspconfig setup 
       -- ['jsonls'] = function()
       --   require'lspconfig'.jsonls.setup {
       --     capabilities = lsp_capabilities,
