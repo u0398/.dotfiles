@@ -28,6 +28,7 @@ require('lazy').setup {
     -- { import = 'plugins.nvim-tree' },
     { import = 'plugins.registers' },
     -- { import = 'plugins.startuptime' },
+    { import = 'plugins.snipe' },
     { import = 'plugins.statuscol' },
     { import = 'plugins.surround' },
     { import = 'plugins.telescope' },

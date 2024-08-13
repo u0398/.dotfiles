@@ -15,13 +15,13 @@ return {
         end,
         desc = 'live grep',
       },
-      { '<leader>fb', mode = { 'n' },
+      { '<leader>fB', mode = { 'n' },
         function()
           vim.cmd('Telescope buffers')
         end,
         desc = 'buffers',
       },
-      { '<leader>fB', mode = { 'n' },
+      { '<leader>f<C-B>', mode = { 'n' },
         function()
           vim.cmd('Telescope scope buffers')
         end,

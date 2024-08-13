@@ -9,6 +9,7 @@ return {
       {
         { '<leader>b',     group = 'Buffers' },
         { '<leader>f',     group = 'Find' },
+        { '<leader>fb',     icon = { icon = '󱒄', color = 'red' } },
         { '<leader>l',     group = 'LSP', icon = { icon = '󱚊', color = 'cyan' } },
         { '<leader><tab>', group = 'Tabs' },
         { '<leader>s',     group = 'Sessions' },
