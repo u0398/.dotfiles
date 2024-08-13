@@ -17,6 +17,11 @@ if [ -d "$HOME/.local/bin" ] ; then
   PATH="$HOME/.local/bin:$PATH"
 fi
 
+# Load cargo if it exists
+if [ -d "$HOME/.cargo" ] ; then
+  . "$HOME/.cargo/env"
+fi
+
 # set PATH so it includes homebrew if it exists
 if [ -d "$HOME/.linuxbrew" ] ; then
   PATH="$HOME/.linuxbrew/bin:$PATH"
