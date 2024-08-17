@@ -10,6 +10,7 @@ return {
     'hrsh7th/cmp-nvim-lua',
     'hrsh7th/cmp-nvim-lsp',
     'hrsh7th/cmp-cmdline',
+    'Saecki/crates.nvim',
   },
   config = function()
   local select_opts = {behavior = require'cmp'.SelectBehavior.Select}
@@ -35,12 +36,15 @@ return {
       {name = 'cmdline', keyword_length = 2},
       {name = 'buffer', keyword_length = 3},
       {name = 'luasnip', keyword_length = 2},
+      {name = 'lazydev', keyword_length = 2},
+      {name = 'crates'},
     },
     window = {
       completion = require'cmp'.config.window.bordered(),
       documentation = require'cmp'.config.window.bordered()
     },
     formatting = {
+      expandable_indicator = true,
       fields = {'menu', 'abbr', 'kind'},
       format = function(entry, item)
         local menu_icon = {
