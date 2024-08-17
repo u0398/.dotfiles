@@ -49,6 +49,7 @@ return {
       "python",
       "query",
       "regex",
+      'ron',
       'rust',
       "toml",
       "tsx",
