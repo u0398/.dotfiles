@@ -1,6 +1,7 @@
-<img width="300" alt="dotfiles_preview" src="https://github.com/user-attachments/assets/98976abb-a5e6-41b5-a00d-8b20d7ac766b">
-<img width="300" alt="dotfiles_preview" src="https://github.com/user-attachments/assets/a1a88e51-18b9-4c0f-b17b-795849d5a847">
-<img width="300" alt="dotfiles_preview" src="https://github.com/user-attachments/assets/53ac77f8-bf5b-4b53-8b6f-b01fc5ee95a0">
+<img width="340" alt="dotfiles_preview" src="https://github.com/user-attachments/assets/935ab85f-5eaa-4cf0-8d76-46bdba92480b">
+<img width="340" alt="dotfiles_preview" src="https://github.com/user-attachments/assets/98976abb-a5e6-41b5-a00d-8b20d7ac766b">
+<img width="340" alt="dotfiles_preview" src="https://github.com/user-attachments/assets/a1a88e51-18b9-4c0f-b17b-795849d5a847">
+<img width="340" alt="dotfiles_preview" src="https://github.com/user-attachments/assets/53ac77f8-bf5b-4b53-8b6f-b01fc5ee95a0">
 
 ## u0398's dotfiles
 
