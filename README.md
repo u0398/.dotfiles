@@ -14,6 +14,13 @@ A collection of dotfiles for a number of programs:
 
 Both Bash and Zsh shell configurations include some degree of completion and git support.
 
+## tmux
+
+The tmux theme is a [fork](https://github.com/u0398/tmux-catppuccin) of the [Catpputtin tmux plugin](https://github.com/catppuccin/tmux). Combined with a [fork](https://github.com/u0398/tmux-continuum) of the [Continuum plugin](https://github.com/tmux-plugins/tmux-continuum), it's possible to display the interval and duration of automatic saves of the tmux environment.
+
+![continuum](https://github.com/user-attachments/assets/95dc0c3e-63de-4a89-85ae-1a2b945d6e41)
+
+
 ## Installation
 
 The dotfiles are intended to be used in a detached worktree:
