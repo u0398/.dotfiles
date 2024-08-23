@@ -20,6 +20,22 @@ The tmux theme is a [fork](https://github.com/u0398/tmux-catppuccin) of the [Cat
 
 ![continuum](https://github.com/user-attachments/assets/95dc0c3e-63de-4a89-85ae-1a2b945d6e41)
 
+## NeoVim
+
+Noteable features:
+
+- [rebelot/heirline.nvim](https://github.com/rebelot/heirline.nvim) to produce a fully customized statusline (and optional tabline) that matches the tmux theme.
+- [idanarye/nvim-impairative](https://github.com/idanarye/nvim-impairative) to provide functionality like that of [tpope/vim-unimpaired](https://github.com/tpope/vim-unimpaired) plugin, and more.
+- [rmagatti/auto-session](https://github.com/rmagatti/auto-session) for automatic session management.
+- [smoka7/hop.nvim](https://github.com/smoka7/hop.nvim) to improve the f/F and t/T motions, and to make jumping anywhere, even across windows, a snap.
+- [gbprod/yanky.nvim](https://github.com/gbprod/yanky.nvim) for improved yank functionality, and for the yank-ring (similar to the Emacs "kill-ring" feature).
+
+### Acknowledgments
+
+Sources and acknowledgments are noted in code comments, but some notible sources include:
+
+- [LazyVim's](https://www.lazyvim.org/) documentation was invaluable. Many of my configurations were based on code provided in LazyVim's documentation.
+- The sudo save and execution utility functions are someone else's hard work, but I was unable to find their original author. If you know who wrote them, I would very much like to acknowledge their work.
 
 ## Installation
 
