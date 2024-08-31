@@ -30,14 +30,15 @@ return {
       end
     },
     sources = {
-      {name = 'path', keyword_length = 2},
+      {name = 'buffer', keyword_length = 3},
+      {name = 'cmdline', keyword_length = 2},
+      {name = 'crates'},
+      {name = 'lazydev', keyword_length = 2},
+      {name = 'luasnip', keyword_length = 2},
       {name = 'nvim_lsp', keyword_length = 2},
       {name = 'nvim_lua', keyword_length = 2},
-      {name = 'cmdline', keyword_length = 2},
-      {name = 'buffer', keyword_length = 3},
-      {name = 'luasnip', keyword_length = 2},
-      {name = 'lazydev', keyword_length = 2},
-      {name = 'crates'},
+      {name = 'orgmode'},
+      {name = 'path', keyword_length = 2},
     },
     window = {
       completion = require'cmp'.config.window.bordered(),
