@@ -28,6 +28,7 @@ require'lazy'.setup {
     { import = 'plugins.neo-tree' },
     { import = 'plugins.neoscroll' },
     { import = 'plugins.noice' },
+    -- { import = 'plugins.orgmode' },
     { import = 'plugins.registers' },
     { import = 'plugins.rustaceanvim' },
     -- { import = 'plugins.startuptime' },
@@ -47,4 +48,31 @@ require'lazy'.setup {
     lazy = true,
     version = false,
   },
+	ui = {
+		size = {
+			width = 0.9,
+			height = 0.9
+		},
+		border = 'rounded',
+		title = ' 💤 Lazy.nvim ',
+		wrap = false,
+		icons = {
+			cmd =        '  ',
+			config =     '  ',
+			event =      '  ',
+			ft =         '   ',
+			init =       '  ',
+			imports =    '  ',
+			keys =       '  ',
+			lazy =       ' ',
+			loaded =     ' ',
+			not_loaded = ' ',
+			plugin =     '  ',
+			runtime =    '  ',
+			require =    '  ',
+			source =     ' ',
+			start =      '',
+			task =       '  '
+		}
+	}
 }
