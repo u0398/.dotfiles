@@ -792,6 +792,6 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
 xsource ~/.config/profile.sh
 
 # oh-my-posh prompt
-eval "$(~/.local/bin/oh-my-posh init zsh --config ~/.config/zsh/catppuccin.omp.toml)"
+eval "$(~/.local/bin/oh-my-posh init zsh --config ~/.config/zsh/catppuccin.omp.json)"
 
 ## EOF
