@@ -325,22 +325,38 @@ function dco() {
 
 function lsl() {
   str="$*"
-  ls --color=always $str | less -R
+  if ! ls_loc="($type -p "lsd")" || [[ -z $lsd_loc ]]; then
+    lsd --color=always $str | less -R
+  else
+    ls --color=always $str | less -R
+  fi
 }
 
 function lal() {
   str="$*"
-  ls -CFa --color=always $str | less -R
+  if ! ls_loc="($type -p "lsd")" || [[ -z $lsd_loc ]]; then
+    lsd -Fa --color=always $str | less -R
+  else
+    ls -CFa --color=always $str | less -R
+  fi
 }
 
 function lll() {
   str="$*"
-  ls -lF --color=always $str | less -R
+  if ! ls_loc="($type -p "lsd")" || [[ -z $lsd_loc ]]; then
+    lsd -lF --color=always $str | less -R
+  else
+    ls -lF --color=always $str | less -R
+  fi
 }
 
 function llal() {
   str=""$*
-  ls -lFa --color=always $str | less -R
+  if ! ls_loc="($type -p "lsd")" || [[ -z $lsd_loc ]]; then
+    lsd -lFa --color=always $str | less -R
+  else
+    ls -lFa --color=always $str | less -R
+  fi
 }
 
 ## SUDO Functions {{2
@@ -540,7 +556,12 @@ bindkey -M menuselect 'j' vi-down-line-or-history # bottom
 
 alias less='less -R'
 
-alias ls='ls -CF --color=always'
+if ! ls_loc="($type -p "lsd")" || [[ -z $lsd_loc ]]; then
+  alias ls='lsd -F'
+else
+  alias ls='ls -CF --color=always'
+fi
+
 alias lsa='ls -CFa'
 alias ll='ls -lF'
 alias lla='ll -a'
