@@ -558,11 +558,12 @@ alias less='less -R'
 
 if ! ls_loc="($type -p "lsd")" || [[ -z $lsd_loc ]]; then
   alias ls='lsd -F'
+  alias lsa='ls -Fa'
 else
   alias ls='ls -CF --color=always'
+  alias lsa='ls -CFa'
 fi
 
-alias lsa='ls -CFa'
 alias ll='ls -lF'
 alias lla='ll -a'
 #alias lsl (see lsl function)
