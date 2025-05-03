@@ -52,8 +52,8 @@ EMAIL_TO="mcdermottpa@gmail.com"
 # Servers
 
 # Local server, i.e., the one you're running the script on
-LOCAL_SCRIPT_INSTALLATION_DIR="/home/${USER}/.bin" # where you've got this script and the 3 others installed.
-STORAGE_REPORT_ARGS="-d -C -f -a -l -o -t" # change these as you see fit, see storage_report -h for options
+LOCAL_SCRIPT_INSTALLATION_DIR="/home/${USER}/.local/bin" # where you've got this script and the 3 others installed.
+STORAGE_REPORT_ARGS="-d -C -f -a -l -o -t -i" # change these as you see fit, see storage_report -h for options
 email_report="$(printf '%s' ${HOSTNAME} | sed -E 's/\..*//') $(uptime | sed -E 's/.*(up[^,]*),.*/\1/' | sed -E 's/ +/ /') on $(uname -r)"$'\n\n'
 email_report+="$(eval "sudo ${LOCAL_SCRIPT_INSTALLATION_DIR}/storage_report ${STORAGE_REPORT_ARGS}")"$'\n\n'
 email_report+="$(sudo ${LOCAL_SCRIPT_INSTALLATION_DIR}/btrfs_filesystem_report)"$'\n\n'

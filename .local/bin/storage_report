@@ -130,18 +130,8 @@ function check_dependencies {
 	return ${retval}
 }
 
-
 function get_block_devices {
-  devs=`lsblk -l -o NAME,TYPE -n | grep disk | grep sd | sed 's/ .*//' | tr '\n' ' '`
-  #printf "%s " `lsblk -l -o NAME,TYPE -n | grep disk | grep sd | sed 's/ .*//' | tr '\n' ' '`
-  for dev in ${devs[@]}
-  do
-    if smartctl /dev/$dev|grep -q 'ATA device successfully opened'; then
-      devs_checked="$devs_checked $dev"
-    fi
-  done
-
-  printf "%s " $devs_checked
+	printf "%s " `lsblk -l -o NAME,TYPE -n | grep disk | grep sd | sed 's/ .*//' | tr '\n' ' '`
 }
 
 function get_headers {
@@ -370,7 +360,7 @@ function get_days_since_last_tests {
 			printf '%d/---/%s' "${last_short_test_days}" "$([[ "${last_test_result}" -eq 1 ]] && echo -n "." || echo -n "x")"
 		elif [[ $last_extended_test_days != "" ]] && [[ $drive_age_days != "" ]]; then
 			last_extended_test_days=$(printf "%d" $(( $drive_age_days - $last_extended_test_days )) | sed -E "s/[[:space:]]//g" )
-			printf '-/%03d/%s' "${last_extended_test_days}" "$([[ "${last_test_result}" -eq 1 ]] && echo -n "." || echo -n "x")"
+			printf '%s/%03d/%s' "-" "${last_extended_test_days}" "$([[ "${last_test_result}" -eq 1 ]] && echo -n "." || echo -n "x")"
 		else
 			echo "ERROR: Unexpected error while getting test status."
 			exit 7
@@ -471,3 +461,4 @@ else
 	echo "ERROR: Internal error choosing a format option."
 	exit 6
 fi
+
