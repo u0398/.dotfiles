@@ -33,7 +33,7 @@ return {
       {name = 'buffer', keyword_length = 3},
       {name = 'cmdline', keyword_length = 2},
       {name = 'crates'},
-      {name = 'lazydev', keyword_length = 2},
+      {name = 'lazydev', group_index = 0, keyword_length = 2},
       {name = 'luasnip', keyword_length = 2},
       {name = 'nvim_lsp', keyword_length = 2},
       {name = 'nvim_lua', keyword_length = 2},
