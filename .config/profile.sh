@@ -25,6 +25,7 @@ fi
 # Load cargo if it exists
 if [ -d "$HOME/.cargo" ] ; then
   . "$HOME/.cargo/env"
+  PATH="$HOME/.cargo/bin:$PATH"
 fi
 
 # set PATH so it includes homebrew if it exists
