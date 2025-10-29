@@ -1,0 +1,181 @@
+#!/bin/sh
+#
+# NAME      bkp.sh
+# VERSION   2.8.1
+# REQUIRED  sh, awk, du, cut, lscpu, tar, gzip, bzip2, zip, xz, 7z
+#
+
+set -o errexit -o nounset
+
+fn_show_usage()
+{
+    echo "Create a backup using tar"
+    echo "Usage: "`basename $0`" [OPTION]... <object_to_backup> [destination_path]"
+}
+
+fn_show_help()
+{
+    fn_show_usage
+    echo
+    echo "  -h              Show this help"
+    echo "  -t, --tar       Uses tar without compression"
+    echo "  -g, --gzip      Uses tar with gzip compression (default)"
+    echo "      --gzipFast  Uses tar with gzip compression"
+    echo "                  using fast compression"
+    echo "  -j, --bzip2     Uses tar with bzip2 compression"
+    echo "  -z, --zip       Uses tar with zip compression"
+    echo "  -x, --xz        Uses tar with xz compression"
+    echo "  -7, --7zip      Uses tar with 7zip compression"
+    echo "      --7lim      Uses tar with 7zip compression"
+    echo "                  limit 7zip file size to 1GB"
+    echo "      --7limFast  Uses tar with 7zip compression"
+    echo "                  limit 7zip file size to 1GB"
+    echo "                  using fast compression"
+}
+
+####
+# Default vars
+####
+
+POST_COMMAND="gzip"
+EXT=".tar.gz"
+STDOUT="true"
+CORES=$(( $(lscpu | awk '/^Socket/{ print $2 }') * $(lscpu | awk '/^Core/{ print $4 }') ))
+
+####
+# Check
+####
+
+# from http://mywiki.wooledge.org/BashFAQ/035
+
+while test $# -gt 0
+do
+    case "$1" in
+        -h | -\? | --help )
+            fn_show_help
+            exit 0
+            ;;
+        -t | --tar )
+            POST_COMMAND="cat"
+            EXT=".tar"
+            shift
+            ;;
+        -g | --gzip )   # default
+            shift
+            ;;
+        --gzipFast )
+            POST_COMMAND="gzip --fast"
+            EXT=".tar.gz"
+            shift
+            ;;
+        -j | --bzip2 )
+            POST_COMMAND="bzip2"
+            EXT=".tar.bz2"
+            shift
+            ;;
+        -z | --zip )
+            POST_COMMAND="zip - -r -q -"
+            EXT=".zip"
+            shift
+            ;;
+        -x | --xz )
+            POST_COMMAND="xz -z"
+            EXT=".tar.xz"
+            shift
+            ;;
+        -7 | --7zip )
+            POST_COMMAND="7z a -bso0 -bsp0 -si -t7z"
+            EXT=".tar.7z"
+            STDOUT="false"
+            shift
+            ;;
+        --7lim )
+            POST_COMMAND="7z a -bso0 -bsp0 -si -t7z -v1g -m0=LZMA2 -mmt=${CORES}"
+            EXT=".tar.7z"
+            STDOUT="false"
+            shift
+            ;;
+        --7limFast )
+            POST_COMMAND="7z a -bso0 -bsp0 -si -t7z -v1g -m0=LZMA2:d64k:fb32 -ms=8m -mmt=${CORES} -mx=3"
+            EXT=".tar.7z"
+            STDOUT="false"
+            shift
+            ;;
+        *)
+            if test -z "${TARGET_PATH-}"
+            then
+                TARGET_PATH="$1"
+            elif test -z "${DEST_PATH-}"
+            then
+                DEST_PATH="$1"
+            else
+                TOO_MUCH_ARGUMENTS="true"
+            fi
+            shift
+            ;;
+    esac
+done
+
+if test ! -z "${TOO_MUCH_ARGUMENTS-}"
+then
+    echo "Error: too much arguments." >&2
+    fn_show_usage >&2
+    exit 1
+fi
+
+if test ! -e "${TARGET_PATH-}"
+then
+    echo "Error: <object_to_backup> must be specified and must exist." >&2
+    fn_show_usage >&2
+    exit 2
+fi
+
+if test -z "${DEST_PATH-}"
+then
+    DEST_PATH="."
+elif test ! -d "${DEST_PATH}"
+then
+    echo "Error: <destination_path> must exist." >&2
+    fn_show_usage >&2
+    exit 3
+fi
+
+####
+# Execute
+####
+
+# define a name
+TARGET_FILE=`echo ${TARGET_PATH} | awk 'BEGIN {FS="/"} {print $(NF)}'`
+
+if test "${TARGET_FILE}" = ""
+then                    # if $? is empty then "$1" end with /, so
+    TARGET_FILE=`echo ${TARGET_PATH} | awk 'BEGIN {FS="/"} {print $(NF-1)}'`
+fi
+
+DEST_FILE="${DEST_PATH}/${TARGET_FILE}${EXT}"
+
+# add a timestamp if file alredy exist
+if test -f "${DEST_FILE}"
+then
+    rm -f "${DEST_FILE}"
+fi
+
+# compress
+FROMSIZE=`du --block-size=1 --apparent-size --summarize "${TARGET_PATH}" | cut -f 1`
+CHECKPOINT=$((FROMSIZE / 10240 / 50))
+CHECKPOINTACTION=`printf 'ttyout=\b->'`
+echo -n "Progess:   [ "
+if test "${STDOUT}" = "true"
+then
+    tar --warning='no-file-ignored' -c --record-size=10240 --checkpoint="${CHECKPOINT}" --checkpoint-action="${CHECKPOINTACTION}" "${TARGET_PATH}" -f - | ${POST_COMMAND} > "${DEST_FILE}"
+else
+    tar --warning='no-file-ignored' -c --record-size=10240 --checkpoint="${CHECKPOINT}" --checkpoint-action="${CHECKPOINTACTION}" "${TARGET_PATH}" -f - | ${POST_COMMAND} "${DEST_FILE}"
+fi
+
+test "$?" -ne 0 && { echo -e "\nError, exit." >&2 ; exit 4; }
+printf "\b]\n"
+
+# see the result
+#ls --color -hl "${DEST_FILE}"*
+
+# End
