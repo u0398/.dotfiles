@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Create a tmux window to monitor system
+tmux rename-window 'monitor'
+tmux split-window -h -b -l 50%
+tmux split-window -v -b -l 60
+tmux select-pane -R
+tmux send-keys -t 1 'btop' Enter
+tmux send-keys -t 2 'sudo dmesg -Hkuw' Enter
+clear

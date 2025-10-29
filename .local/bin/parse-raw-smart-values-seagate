@@ -1,0 +1,83 @@
+#!/bin/sh
+
+#                                                                                #
+# ███████╗██╗    ██╗███████╗███████╗████████╗ ██████╗  ██████╗  ██████╗ ██████╗  #
+# ██╔════╝██║    ██║██╔════╝██╔════╝╚══██╔══╝██╔════╝ ██╔═══██╗██╔═══██╗██╔══██╗ #
+# ███████╗██║ █╗ ██║█████╗  █████╗     ██║   ██║  ███╗██║   ██║██║   ██║██║  ██║ #
+# ╚════██║██║███╗██║██╔══╝  ██╔══╝     ██║   ██║   ██║██║   ██║██║   ██║██║  ██║ #
+# ███████║╚███╔███╔╝███████╗███████╗   ██║   ╚██████╔╝╚██████╔╝╚██████╔╝██████╔╝ #
+# ╚══════╝ ╚══╝╚══╝ ╚══════╝╚══════╝   ╚═╝    ╚═════╝  ╚═════╝  ╚═════╝ ╚═════╝  #
+#                                                                                #
+#                                      IT-Beratung mit Fokus auf Datensicherheit #
+#                                                                                #
+#                            www.sweetgood.de                                    #
+#                                                                                #
+# Copyright        : All rights reserved!
+# Repository url   : https://codeberg.org/SWEETGOOD/shell-scripts/
+# Author           : SWEETGOOD
+# Filename         : parse-raw-smart-values-seagate.sh
+# Created at       : 13.05.2024
+# Last changed at  : 13.05.2024
+# Version          : 1.0
+# License          : CC BY-SA 4.0 Deed
+# Description      : Checks RAW encoded prefailure values on SEAGATE drives
+#                    Inspiration from: https://www.disktuna.com/big-scary-raw-s-m-a-r-t-values-arent-always-bad-news
+# Requirements     : smartctl bc
+
+# If no parameter was given
+if [ $# = 0 ]
+then
+    exit 255
+fi
+
+#LC_ALL=de_DE.UTF-8
+
+# Function to split a number into two 32-bit integers (created using https://codingfleet.com/code-converter/javascript/bash/)
+split() {
+    # Convert the number to binary string
+    n=$(echo "obase=2; $1" | bc)
+
+    # Pad with zeros to make it 64-bit
+    while [ ${#n} -lt 64 ]; do
+        n="0$n"
+    done
+
+    # Split the binary string into two 32-bit parts
+    lo=$(echo "${n}" | cut -c1-32)
+    hi=$(echo "${n}" | cut -c33-64)
+
+    echo "$lo $hi"
+}
+
+# Check device model
+DEVICE=$(/usr/sbin/smartctl -A -i /dev/"$1" | awk -F ' ' '/Device Model/{print $3}')
+if [ "$(echo "${DEVICE}" | cut -c1-2)" != "ST" ]; then
+        echo "No Seagate drive. Exiting."
+        exit
+fi
+
+RRER=$(split "$(/usr/sbin/smartctl -A -i /dev/"$1" | awk -F ' ' '/Raw_Read_Error_Rate/{print $10}')")
+SER=$(split "$(/usr/sbin/smartctl -A -i /dev/"$1" | awk -F ' ' '/Seek_Error_Rate/{print $10}')")
+HECCR=$(split "$(/usr/sbin/smartctl -A -i /dev/"$1" | awk -F ' ' '/Hardware_ECC_Recovered/{print $10}')")
+CTO=$(split "$(/usr/sbin/smartctl -A -i /dev/"$1" | awk -F ' ' '/Command_Timeout/{print $10}')")
+
+RRER1=$(echo "${RRER}" | awk '{ print $1; }')
+RRER2=$(echo "${RRER}" | awk '{ print $2; }')
+echo "Raw_Read_Error_Rate:    $(echo "ibase=2;obase=A;${RRER1}" | bc) errors in $(numfmt --grouping "$(echo "ibase=2;obase=A;${RRER2}" | bc)") operations."
+
+SER1=$(echo "${SER}" | awk '{ print $1; }')
+SER2=$(echo "${SER}" | awk '{ print $2; }')
+echo "Seek_Error_Rate:        $(echo "ibase=2;obase=A;${SER1}" | bc) errors in $(numfmt --grouping "$(echo "ibase=2;obase=A;${SER2}" | bc)") operations."
+
+HECCR1=$(echo "${HECCR}" | awk '{ print $1; }')
+HECCR2=$(echo "${HECCR}" | awk '{ print $2; }')
+echo "Hardware_ECC_Recovered: $(echo "ibase=2;obase=A;${HECCR1}" | bc) errors in $(numfmt --grouping "$(echo "ibase=2;obase=A;${HECCR2}" | bc)") operations."
+
+CTO1=$(echo "${CTO}" | awk '{ print $1; }')
+CTO2=$(echo "${CTO}" | awk '{ print $2; }')
+echo "Command_Timeout:        $(echo "ibase=2;obase=A;${CTO1}" | bc) errors in $(numfmt --grouping "$(echo "ibase=2;obase=A;${CTO2}" | bc)") operations."
+
+# If there is any error
+if [ "$(echo "ibase=2;obase=A;${RRER1}" | bc)" != 0 ] || [ "$(echo "ibase=2;obase=A;${SER1}" | bc)" != 0 ] || [ "$(echo "ibase=2;obase=A;${HECCR1}" | bc)" != 0 ]; then
+        exit 1
+fi
