@@ -13,7 +13,9 @@ but will see "[sudo]" in the output where priviledges are required.
 '
 
 # get paths
-paths=( `df -T | grep btrfs | grep -v "/var/lib" | sed -E "s/.*% //" | tr '\n' ' '` )
+#paths=( `df -T | grep btrfs | grep -v "/var/lib" | sed -E "s/.*% //" | tr '\n' ' '` )
+# hardcoding paths
+paths=( `echo '/storage-local/.root /storage-attached/.root'` )
 
 scrub_report="BTRFS_PATH SIZE AVAIL USE% SCB ERR"$'\n'
 for path in "${paths[@]}"
@@ -28,4 +30,6 @@ do
   df="$(\df -h -t btrfs --output=size,avail,pcent ${path} | tail -n1)"
   scrub_report="${scrub_report}${path} ${df} ${last_scrub_days} ${summary}"$'\n'
 done
+echo 'BTFS Filesystem Report'
+echo '----------------------------------------------------------------------'
 printf "%s" "${scrub_report}" | sed -E "s/[[:space:]]+/ /g" | column -t -s' '
