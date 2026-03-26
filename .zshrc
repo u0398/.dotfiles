@@ -817,5 +817,3 @@ xsource ~/.config/profile.sh
 eval "$(~/.local/bin/oh-my-posh init zsh --config ~/.config/zsh/catppuccin.omp.toml)"
 
 ## EOF
-export PATH="/home/peterm/.config/herd-lite/bin:$PATH"
-export PHP_INI_SCAN_DIR="/home/peterm/.config/herd-lite/bin:$PHP_INI_SCAN_DIR"
