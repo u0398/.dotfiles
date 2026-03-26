@@ -38,6 +38,7 @@ require'lazy'.setup {
     { import = 'plugins.telescope' },
     { import = 'plugins.treesitter-textobjects' },
     { import = 'plugins.treesitter' },
+    { import = 'plugins.ts-autotag' },
     { import = 'plugins.ufo' },
     { import = 'plugins.virt-column' },
     { import = 'plugins.which-key' },
