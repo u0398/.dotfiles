@@ -16,9 +16,9 @@ return {
           h:manual {
             key = '|',
             name = 'Colored column at 81',
-            enable = ':execute "set colorcolumn=81"<CR>',
-            disable = ':execute "set colorcolumn="<CR>',
-            toggle = ':execute "set colorcolumn=" . (&colorcolumn == "" ? "81" : "")<CR>',
+            enable = ':execute "set colorcolumn=81"',
+            disable = ':execute "set colorcolumn="',
+            toggle = ':execute "set colorcolumn=" . (&colorcolumn == "" ? "81" : "")',
           }
           h:getter_setter {
             key = 'd',
