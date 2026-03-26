@@ -108,8 +108,8 @@ return {
     end
 
     -- Extends dap.configurations with entries read from .vscode/launch.json
-    if vim.fn.filereadable('.vscode/launch.json') then
-      vscode.load_launchjs()
-    end
+    --if vim.fn.filereadable('.vscode/launch.json') then
+    --  vscode.load_launchjs()
+    --end
   end,
 }
