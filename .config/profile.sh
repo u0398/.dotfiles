@@ -18,8 +18,8 @@ if [ -d "$HOME/.local/bin" ] ; then
 fi
 
 # set PATH so it includes user's go/bin if it exists
-if [ -d "$HOME/go/bin" ] ; then
-  PATH="$HOME/go/bin:$PATH"
+if [ -d "/usr/local/go/bin" ] ; then
+  PATH="/usr/local/go/bin:$PATH"
 fi
 
 # Load cargo if it exists
@@ -58,6 +58,12 @@ if [ -d "$HOME/.nvm" ] ; then
   if [ $0 == "/bin/bash" ] ; then # This loads nvm bash_completion
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
   fi
+fi
+
+# Load herd
+if [ -d "$HOME/.config/herd-lite" ] ; then
+  export PATH="$HOME/.config/herd-lite/bin:$PATH"
+  export PHP_INI_SCAN_DIR="$HOME/.config/herd-lite/bin:$PHP_INI_SCAN_DIR"
 fi
 
 # set PATH so it includes fzf if it exists
