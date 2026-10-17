@@ -98,16 +98,26 @@ o.smarttab          = true      -- Use shiftwidths at left margin, tabstops ever
 -- this gets overwritten by ftplugins (:verb set fo)
 -- we use autocmd to remove 'o' in '/lua/autocmd.lua'
 -- borrowed from tjdevries
-o.formatoptions = o.formatoptions
-  - "a" -- Auto formatting is BAD.
-  - "t" -- Don't auto format my code. I got linters for that.
-  + "c" -- In general, I like it when comments respect textwidth
-  + "q" -- Allow formatting comments w/ gq
-  - "o" -- O and o, don't continue comments
-  + "r" -- But do continue when pressing enter.
-  + "n" -- Indent past the formatlistpat, not underneath it.
-  + "j" -- Auto-remove comments if possible.
-  - "2" -- I'm not in gradeschool anymore
+--o.formatoptions = o.formatoptions
+--  - "a" -- Auto formatting is BAD.
+--  - "t" -- Don't auto format my code. I got linters for that.
+--  + "c" -- In general, I like it when comments respect textwidth
+--  + "q" -- Allow formatting comments w/ gq
+--  - "o" -- O and o, don't continue comments
+--  + "r" -- But do continue when pressing enter.
+--  + "n" -- Indent past the formatlistpat, not underneath it.
+--  + "j" -- Auto-remove comments if possible.
+--  - "2" -- I'm not in gradeschool anymore
+o.formatoptions = {
+  a = false, -- Auto formatting is BAD.
+  t = false, -- Don't auto format my code. I got linters for that.
+  c = true, -- In general, I like it when comments respect textwidth
+  q = true, -- Allow formatting comments w/ gq
+  o = false, -- O and o, don't continue comments
+  r = true, -- But do continue when pressing enter.
+  n = true, -- Indent past the formatlistpat, not underneath it.
+  j = true, -- Auto-remove comments if possible.
+  }
 
 o.splitbelow        = true      -- ':new' ':split' below current
 o.splitright        = true      -- ':vnew' ':vsplit' right of current
