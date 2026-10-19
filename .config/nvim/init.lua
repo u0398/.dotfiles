@@ -29,7 +29,7 @@ require'lazy'.setup {
     { import = 'plugins.neoscroll' },
     { import = 'plugins.noice' },
     -- { import = 'plugins.orgmode' },
-    { import = 'plugins.registers' },
+    -- { import = 'plugins.registers' },
     { import = 'plugins.rustaceanvim' },
     -- { import = 'plugins.startuptime' },
     { import = 'plugins.snipe' },
