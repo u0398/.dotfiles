@@ -598,6 +598,9 @@ alias x='exit'
 alias clr='clear'
 alias sudo='sudo '
 
+# Launches tmux outside the Gnome session scope (requires running "loginctl enable-linger $USER")
+alias gmux="systemd-run --scope --user tmux"
+
 alias cmx='cmatrix -ab -u 3'
 
 alias bat='batcat'
