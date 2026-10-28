@@ -1,32 +1,62 @@
-    prefer-no-csd
-    screenshot-path null
-
-    environment {
-        ELECTRON_OZONE_PLATFORM_HINT "auto"
-        QT_QPA_PLATFORM "wayland"
-        QT_QPA_PLATFORMTHEME "gtk3"
-        QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
-        XDG_CURRENT_DESKTOP "niri"
-        XDG_SESSION_TYPE "wayland"
+prefer-no-csd
+screenshot-path null
+ 
+environment {
+  ELECTRON_OZONE_PLATFORM_HINT "auto"
+  QT_QPA_PLATFORM "wayland"
+  QT_QPA_PLATFORMTHEME "gtk3"
+  QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
+  XDG_CURRENT_DESKTOP "niri"
+  XDG_SESSION_TYPE "wayland"
 }
 
-    cursor {
-        xcursor-theme "capitaine-cursors"
-        xcursor-size 24
+cursor {
+  xcursor-theme "capitaine-cursors"
+  xcursor-size 24
 }
 
-    blur {
-        passes 2        // more passes = stronger blur (default: 3)
-        offset 3.0      // sample distance per pass (default: 3.0)
-        noise 0.03      // grain overlay (default: 0.02)
-        saturation 1.0  // color saturation boost (default: 1.5)
+blur {
+  passes 2        // more passes = stronger blur (default: 3)
+  offset 3.0      // sample distance per pass (default: 3.0)
+  noise 0.03      // grain overlay (default: 0.02)
+  saturation 1.0  // color saturation boost (default: 1.5)
 }
 
-    debug {
-        // Allows notification actions and window activation from Noctalia.
-        honor-xdg-activation-with-invalid-serial
+debug {
+  // Allows notification actions and window activation from Noctalia.
+  honor-xdg-activation-with-invalid-serial
 }
 
-    hotkey-overlay {
-       skip-at-startup
+hotkey-overlay {
+  skip-at-startup
+}
+
+recent-windows {
+  debounce-ms 750
+
+  open-delay-ms 150
+
+  highlight {
+    active-color "#cba6f7"
+    urgent-color "#f38ba8"
+    padding 20
+    corner-radius 0
+  }
+
+  previews {
+    max-height 280
+    max-scale 0.5
+  }
+
+  binds {
+    Alt+Tab         { next-window; }
+    Alt+Shift+Tab   { previous-window; }
+    Alt+grave       { next-window     filter="app-id"; }
+    Alt+Shift+grave { previous-window filter="app-id"; }
+
+    Mod+Tab         { next-window; }
+    Mod+Shift+Tab   { previous-window; }
+    Mod+grave       { next-window     filter="app-id"; }
+    Mod+Shift+grave { previous-window filter="app-id"; }
+  }
 }
