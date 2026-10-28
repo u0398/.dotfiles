@@ -1,0 +1,17 @@
+// ────────────── Output Configuration ──────────────
+// You can run `niri msg outputs` to get the correct name for your displays.
+// You will have to remove "/-" and edit it before it takes effect.
+// https://github.com/YaLTeR/niri/wiki/Configuration:-Outputs
+
+output "Dell Inc. DELL P2715Q V7WP9585705L" {
+    mode "3840x2160@59.997" 
+    scale 1.5
+    position x=0 y=0
+}
+output "HKC OVERSEAS LIMITED S2741LM 0000000000001" {
+    mode "3840x2160@144.000"
+    scale 1.5
+    position x=2160 y=0
+    focus-at-startup
+}
+

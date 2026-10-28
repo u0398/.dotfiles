@@ -1,0 +1,9 @@
+// Managed by the Noctalia cursor plugin - edits here are overwritten.
+cursor {
+    xcursor-theme "Bibata-Modern-Ice"
+    xcursor-size 24
+}
+environment {
+    XCURSOR_THEME "Bibata-Modern-Ice"
+    XCURSOR_SIZE "24"
+}

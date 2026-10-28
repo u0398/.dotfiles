@@ -1,0 +1,36 @@
+include "./cfg/animation.kdl"
+include "./cfg/autostart.kdl"
+include "./cfg/keybinds.kdl"
+include "./cfg/input.kdl"
+include "./cfg/display.kdl"
+include "./cfg/layout.kdl"
+include "./cfg/rules.kdl"
+include "./cfg/misc.kdl"
+
+// Managed by the Noctalia cursor plugin - edits here are overwritten.
+include "cursor.kdl"
+
+gestures {
+    hot-corners {
+        off
+    }
+}
+
+layer-rule {
+    match namespace="^noctalia-.*"
+    background-effect {
+        blur false
+        xray false
+    }
+}
+
+layer-rule {
+    match namespace="^waynote*"
+
+    opacity 0.8
+    background-effect {
+        blur false
+        xray false
+    }
+}
+
