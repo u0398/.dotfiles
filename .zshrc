@@ -325,8 +325,9 @@ function dco() {
 
 function lsl() {
   str="$*"
-  if ! ls_loc="($type -p "lsd")" || [[ -z $lsd_loc ]]; then
-    lsd --color=always $str | less -R
+
+  if command -v eza &>/dev/null; then
+    eza --color=always --group-directories-first $str | less -R
   else
     ls --color=always $str | less -R
   fi
@@ -334,8 +335,8 @@ function lsl() {
 
 function lal() {
   str="$*"
-  if ! ls_loc="($type -p "lsd")" || [[ -z $lsd_loc ]]; then
-    lsd -Fa --color=always $str | less -R
+  if command -v eza &>/dev/null; then
+    eza --color=always --group-directories-first -a $str | less -R
   else
     ls -CFa --color=always $str | less -R
   fi
@@ -343,8 +344,8 @@ function lal() {
 
 function lll() {
   str="$*"
-  if ! ls_loc="($type -p "lsd")" || [[ -z $lsd_loc ]]; then
-    lsd -lF --color=always $str | less -R
+  if command -v eza &>/dev/null; then
+    eza --color=always --group-directories-first -l $str | less -R
   else
     ls -lF --color=always $str | less -R
   fi
@@ -352,8 +353,8 @@ function lll() {
 
 function llal() {
   str=""$*
-  if ! ls_loc="($type -p "lsd")" || [[ -z $lsd_loc ]]; then
-    lsd -lFa --color=always $str | less -R
+  if command -v eza &>/dev/null; then
+    eza --color=always --group-directories-first -la $str | less -R
   else
     ls -lFa --color=always $str | less -R
   fi
@@ -563,16 +564,21 @@ bindkey -M menuselect 'j' vi-down-line-or-history # bottom
 
 alias less='less -R'
 
-if ! ls_loc="($type -p "lsd")" || [[ -z $lsd_loc ]]; then
-  alias ls='lsd -F'
-  alias lsa='ls -Fa'
+if command -v eza &>/dev/null; then
+  alias ls='eza --color=always --group-directories-first --icons=always' # preferred listing
+  alias la='ls -a'
+  alias ll='ls -l'
+  alias lla='ll -a'
+  alias lt='ls -T'
+  alias l.="eza -a | grep -e '^\.'"                                     # show only dotfiles
 else
   alias ls='ls -CF --color=always'
-  alias lsa='ls -CFa'
+  alias la='ls -CFa'
+  alias ll='ls -lF'
+  alias lla='ll -a'
+  alias l.="ls -a | grep -e '^\.'"
 fi
 
-alias ll='ls -lF'
-alias lla='ll -a'
 #alias lsl (see lsl function)
 #alias lal (see lal function)
 #alias lll (see lll function)
@@ -597,13 +603,24 @@ alias dus='du | sort -h'
 alias dul='dus | less'
 alias free='free -mt'
 alias ps='ps auxf'
+alias pss='ps | sort -nr -k 4'
 alias psl='ps | less'
+alias pssl='pss | less'
 alias psg='ps aux | grep -v grep | grep -i -e VSZ -e'
 alias mkdir='mkdir -pv'
 alias histg='history | grep'
 alias x='exit'
 alias clr='clear'
 alias sudo='sudo '
+
+if command -v pacman &>/dev/null; then
+  alias pacfix="sudo rm /var/lib/pacman/db.lck"
+  alias pacbig="expac -H M '%m\t%n' | sort -h | nl"              # Sort installed packages according to size in MB
+  alias pacnum='pacman -Q | grep -i "\-git" | wc -l'          # List amount of -git packages
+  alias pacupdate='sudo cachyos-rate-mirrors && sudo pacman -Syu'
+  alias pacmirror='sudo cachyos-rate-mirrors'
+  alias paclean='sudo pacman -Rns (pacman -Qtdq)'
+fi
 
 # Launches tmux outside the Gnome session scope (requires running "loginctl enable-linger $USER")
 alias gmux="systemd-run --scope --user tmux"
