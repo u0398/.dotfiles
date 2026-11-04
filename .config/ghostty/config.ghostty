@@ -25,6 +25,7 @@ palette = 13=#f5c2e7
 palette = 14=#94e2d5
 palette = 15=#bac2de
 
+#font-family = "MesloLGS Nerd Font"
 font-family = "Hack Nerd Font"
 font-size = 12
 
@@ -35,3 +36,29 @@ window-padding-balance = true
 
 background-opacity = 0.90
 #cursor-style = block
+
+keybind = shift+space>space=reload_config
+
+keybind = shift+space>n=new_window
+keybind = shift+space>c=close_window
+
+keybind = shift+space>h=goto_split:left
+keybind = shift+space>j=goto_split:down
+keybind = shift+space>k=goto_split:up
+keybind = shift+space>l=goto_split:right
+
+keybind = shift+space>s>h=new_split:left
+keybind = shift+space>s>j=new_split:down
+keybind = shift+space>s>k=new_split:up
+keybind = shift+space>s>l=new_split:right
+
+keybind = shift+space>r>h=resize_split:left,60
+keybind = shift+space>r>j=resize_split:down,60
+keybind = shift+space>r>k=resize_split:up,60
+keybind = shift+space>r>l=resize_split:right,60
+keybind = shift+space>r>e=equalize_splits
+
+
+keybind = shift+space>z=toggle_split_zoom
+
+#keybind = global:super+`=toggle_quick_terminal
