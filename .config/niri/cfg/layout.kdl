@@ -1,7 +1,7 @@
     layout {
-        gaps 16 // Gap between windows
+        gaps 14 // Gap between windows
         center-focused-column "never" // Don’t auto-center focused column
-        always-center-single-column
+        //always-center-single-column
         background-color "transparent" // <- needed for noctalia-shell to set wallpaper
 
         preset-column-widths {
@@ -18,9 +18,10 @@
           on
           width 4
           active-color "#cba6f7"
+          //active-gradient from="#cba6f7" to="#e5c890" angle=135 in="oklch longer hue"
           inactive-color "#89b4fa"
           urgent-color "#f38ba8"
-          urgent-gradient from="#f38ba8" to="#fab387" angle=180
+          urgent-gradient from="#f38ba8" to="#fab387" angle=135
         }
         
         border { 
@@ -62,7 +63,10 @@
         }
         
         struts { 
-          top -6
+          top -4
+          bottom -2
+          left -2
+          right -2
         }
         
 }
