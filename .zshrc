@@ -590,6 +590,9 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
+#alias cd='z'
+#alias ci='zi'
+
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
@@ -616,10 +619,12 @@ alias sudo='sudo '
 if command -v pacman &>/dev/null; then
   alias pacfix="sudo rm /var/lib/pacman/db.lck"
   alias pacbig="expac -H M '%m\t%n' | sort -h | nl"              # Sort installed packages according to size in MB
-  alias pacnum='pacman -Q | grep -i "\-git" | wc -l'          # List amount of -git packages
+  alias pacnum='pacman -Q | wc -l'          # List amount of -git packages
+  alias pacgit='pacman -Q | grep -i "\-git" | wc -l'          # List amount of -git packages
   alias pacupdate='sudo cachyos-rate-mirrors && sudo pacman -Syu'
   alias pacmirror='sudo cachyos-rate-mirrors'
-  alias paclean='sudo pacman -Rns (pacman -Qtdq)'
+  alias paclean='pacman -Qtdq | sudo pacman -Rns -'
+  alias pacrip="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -200 | nl"
 fi
 
 # Launches tmux outside the Gnome session scope (requires running "loginctl enable-linger $USER")
@@ -842,5 +847,8 @@ xsource ~/.config/profile.sh
 
 # oh-my-posh prompt
 eval "$(~/.local/bin/oh-my-posh init zsh --config ~/.config/zsh/catppuccin.omp.toml)"
+
+# zoxide
+eval "$(zoxide init zsh --cmd cd)"
 
 ## EOF
