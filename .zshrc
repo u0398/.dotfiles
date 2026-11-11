@@ -199,7 +199,7 @@ function fex() {
   --bind='ctrl-d:+refresh-preview' \
   --bind='ctrl-f:change-prompt(   )' \
   --bind='ctrl-f:+reload(find -type f)' \
-  --bind='ctrl-f:+change-preview(batcat --style numbers,changes --color=always {} | head -500)' \
+  --bind='ctrl-f:+change-preview(bat --style numbers,changes --color=always {} | head -500)' \
   --bind='ctrl-f:+refresh-preview' \
   --bind='ctrl-a:select-all' \
   --bind='ctrl-x:deselect-all' \
@@ -632,9 +632,9 @@ alias gmux="systemd-run --scope --user tmux"
 
 alias cmx='cmatrix -ab -u 3'
 
-alias bat='batcat'
+#alias bat='batcat'
 
-alias fzf='fzf --height=80% --reverse --preview-window "right:70%:nohidden" --bind="ctrl-p:toggle-preview" --preview "batcat --style numbers,changes --color=always {} | head -500"'
+alias fzf='fzf --height=80% --reverse --preview-window "right:70%:nohidden" --bind="ctrl-p:toggle-preview" --preview "bat --style numbers,changes --color=always {} | head -500"'
 alias vf='v $(find . -type f | fzf)'
 
 # Add an "alert" alias for long running commands.  Use like so:
@@ -644,7 +644,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && (echo terminal; exit 
 ## Git Aliases {{{2
 
 alias dotgit='/usr/bin/git --git-dir=$HOME/.dotfiles/'
-alias dotlazy='/usr/local/bin/lazygit -g $HOME/.dotfiles'
+alias dotlazy='/usr/bin/lazygit -g $HOME/.dotfiles'
 
 #dotgit shortcuts
 alias dst='dotgit status'
